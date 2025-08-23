@@ -8,6 +8,7 @@
   "spacing": 0,
 
   "modules-left": [
+    "custom/nixos",
     "clock",
     "privacy"
   ],
@@ -75,6 +76,11 @@
     "format-alt": "{:%R %p (%d/%m/%y)}",
     "rotate": 0,
     "tooltip-format": "<span>{calendar}</span>"
+  },
+
+  "custom/nixos": {
+    "format": "\uf313",
+    "on-click": "kitty"
   },
   
   "group/tray-expander": {

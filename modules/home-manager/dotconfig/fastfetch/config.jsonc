@@ -24,7 +24,8 @@
     {
       "type": "title",
       "key": "  \uedc5",
-      "format": "{6}{7}{8}"
+      "format": "{7}{8}"
+      // "format": "{6}{7}{8}"
     },
     "break",
     {
@@ -43,12 +44,14 @@
       "format": "{2}",
       "keyColor": "green"
     },
+    "break",
     {
       "type": "wm",
       "key": "  \uf359 WM      ",
       "format": "{2}",
       "keyColor": "magenta"
     },
+    "break",
     {
       "type": "shell",
       "key": "  \uebca Shell   ",
