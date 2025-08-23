@@ -19,6 +19,7 @@ trap cleanup EXIT
 case "$1" in
 all)
   grim "$TMP_FILE"
+  cp "$TMP_FILE" "$FILENAME"
   ;;
 silent)
   grim - | tee "$SILENT_FILENAME" >/dev/null
@@ -37,8 +38,6 @@ esac
 
 if [ "$1" != "silent" ]; then
   if [ -f "$TMP_FILE" ]; then
-    cp "$TMP_FILE" "$FILENAME"
-
     wl-copy <"$TMP_FILE"
     swappy -f "$TMP_FILE"
 
