@@ -35,11 +35,13 @@ function nixup
         echo "Commands:"
         _print_help_entry apply "Commit, push, and apply the new configuration"
         _print_help_entry boot "Commit, push, and build a new boot generation"
-        _print_help_entry update "Commit, push, update flake inputs, and build"
+        _print_help_entry update "Stage, commit, push, update flake inputs, and build"
         _print_help_entry test "Stage changes and test the configuration"
         _print_help_entry test-commit "Commit, push, then build and test the configuration"
         _print_help_entry log "Show git log of the NixOS configuration"
         _print_help_entry gc "Run garbage collection for user and system"
+        _print_help_entry lazygit "Run lazygit in the NixOS config directory"
+        _print_help_entry cd "Change directory to the NixOS config path"
         _print_help_entry config "Open the NixOS configuration directory in \$EDITOR"
         _print_help_entry "-h, --help" "Display this help message"
     end
@@ -127,6 +129,20 @@ function nixup
             $EDITOR .
             cd -
             return 0
+        case cd
+            cd "$config_dir"
+        case lazygit
+            lazygit -p "$config_dir"
+        case log
+            git -C "$config_dir" log
+            return $status
+        case gc
+            echo (set_color yellow)"Running garbage collection for user..."(set_color normal)
+            nix-collect-garbage -d
+            echo ""
+            echo (set_color yellow)"Running garbage collection for system (sudo)..."(set_color normal)
+            sudo nix-collect-garbage -d
+            return $status
         case test
             echo ""
             echo (set_color yellow)"Staging all changes for the test build..."(set_color normal)
@@ -139,17 +155,51 @@ function nixup
             echo (set_color yellow)"Building and testing current (staged) configuration..."(set_color normal)
             nixos test
             return $status
-        case log
-            git -C "$config_dir" log
-            return $status
-        case gc
-            echo (set_color yellow)"Running garbage collection for user..."(set_color normal)
-            nix-collect-garbage -d
+        case update
+            _nixup_ensure_git_repo "$config_dir"
+            if test $status -ne 0
+                return 1
+            end
+
             echo ""
-            echo (set_color yellow)"Running garbage collection for system (sudo)..."(set_color normal)
-            sudo nix-collect-garbage -d
-            return $status
-        case apply boot update test-commit
+            echo (set_color yellow)"Staging all changes before update..."(set_color normal)
+            fish -c "cd '$config_dir'; and git add ."
+            if test $status -ne 0
+                echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
+                return 1
+            end
+
+            set -l now (date --iso-8601=seconds)
+            set -l commit_message "feat(nixos): configuration update @ $now"
+            _nixup_git_sync "$commit_message" "$config_dir"
+            if test $status -ne 0
+                return 1
+            end
+
+            echo ""
+            echo (set_color yellow)"Updating flake inputs..."(set_color normal)
+            fish -c "cd '$config_dir'; and nix flake update"
+            if test $status -ne 0
+                echo (set_color red)"Flake update failed. Aborting."(set_color normal)
+                return 1
+            end
+
+            echo ""
+            echo (set_color yellow)"Committing updated 'flake.lock' file..."(set_color normal)
+            set -l now_lock (date --iso-8601=seconds)
+            set -l lock_commit_message "chore(nix): update flake.lock @ $now_lock"
+
+            set -l original_dir_update (pwd)
+            cd "$config_dir"
+            git add flake.lock; and git commit -m "$lock_commit_message"; and echo ""; and git push; or begin
+                echo "Could not commit 'flake.lock' (it may be unchanged). Continuing build..."
+            end
+            cd "$original_dir_update"
+
+            echo ""
+            echo (set_color yellow)"Building new boot generation with all packages upgraded..."(set_color normal)
+            sudo nixos-rebuild boot --flake "$config_dir" --upgrade-all
+        case apply boot test-commit
             _nixup_ensure_git_repo "$config_dir"
             if test $status -ne 0
                 return 1
@@ -164,30 +214,7 @@ function nixup
 
             echo ""
 
-            if test $command_to_run = update
-                echo (set_color yellow)"Updating flake inputs..."(set_color normal)
-                fish -c "cd '$config_dir'; and nix flake update"
-                if test $status -ne 0
-                    echo (set_color red)"Flake update failed. Aborting."(set_color normal)
-                    return 1
-                end
-
-                echo ""
-                echo (set_color yellow)"Committing updated 'flake.lock' file..."(set_color normal)
-                set -l now_lock (date --iso-8601=seconds)
-                set -l lock_commit_message "chore(nix): update flake.lock @ $now_lock"
-
-                set -l original_dir_update (pwd)
-                cd "$config_dir"
-                git add flake.lock; and git commit -m "$lock_commit_message"; and echo ""; and git push; or begin
-                    echo "Could not commit 'flake.lock' (it may be unchanged). Continuing build..."
-                end
-                cd "$original_dir_update"
-
-                echo ""
-                echo (set_color yellow)"Building new boot generation with all packages upgraded..."(set_color normal)
-                sudo nixos-rebuild boot --flake "$config_dir" --upgrade-all
-            else if test $command_to_run = boot
+            if test $command_to_run = boot
                 echo (set_color yellow)"Building new boot generation..."(set_color normal)
                 nixos boot
             else if test $command_to_run = test-commit
@@ -204,6 +231,8 @@ function nixup
             return 1
     end
 
-    echo ""
-    echo (set_color green)"Done."(set_color normal)
+    if contains $command_to_run apply boot update test-commit
+        echo ""
+        echo (set_color green)"Done."(set_color normal)
+    end
 end
