@@ -1,0 +1,169 @@
+{
+  "reload_style_on_change": true,
+  
+  "height": 30,
+  "layer": "top",
+  "mode": "dock",
+  "position": "top",
+  "spacing": 0,
+
+  "modules-left": [
+    "clock",
+    "privacy"
+  ],
+  "modules-center": [
+    "hyprland/workspaces"
+  ],
+  "modules-right": [
+    "group/tray-expander",
+    "wireplumber",
+    "wireplumber#source",
+    "network",
+    "bluetooth",
+    "battery"
+  ],
+
+
+  "battery": {
+    "format": "{capacity}% {icon}",
+    "format-charging": "{capacity}% {icon}",
+    "format-discharging": "{capacity}% {icon}",
+    "format-full": "\udb80\udc85",
+    "format-icons": {
+      "charging": [
+        "\udb82\udc9c", "\udb80\udc85", "\udb80\udc87", "\udb80\udc88", "\udb82\udc9d", "\udb80\udc89", "\udb82\udc9e", "\udb80\udc8a", "\udb80\udc8b", "\udb80\udc85"
+      ],
+      "default": [
+        "\uf244", "\uf243", "\uf242", "\uf241", "\uf240"
+      ]
+    },
+    "format-plugged": "{capacity}% \udb81\udea5",
+    "interval": 5,
+    "states": {
+      "critical": 15,
+      "warning": 25
+    },
+    "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
+    "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}% ({time})"
+  },
+  
+  "bluetooth": {
+    "format": "\udb80\udcaf",
+    "format-alt": "{device_battery_percentage} \udb80\udcaf",
+    "format-connected": "\udb80\udcb0",
+    "format-disabled": "\udb80\udcb2",
+    "tooltip-format": "Devices connected: {num_connections}"
+  },
+  
+  "clock": {
+    "actions": {
+      "on-click-right": "mode",
+      "on-scroll-down": "shift_down",
+      "on-scroll-up": "shift_up"
+    },
+    "calendar": {
+      "format": {
+        "months": "<span color='#fab387'><b>{}</b></span>",
+        "today": "<span color='#f38ba8'><b>{}</b></span>",
+        "weekdays": "<span color='#f9e2af'><b>{}</b></span>"
+      },
+      "mode": "month",
+      "mode-mon-col": 3,
+      "on-click-right": "mode"
+    },
+    "format": "{:%I:%M %p}",
+    "format-alt": "{:%R %p (%d/%m/%y)}",
+    "rotate": 0,
+    "tooltip-format": "<span>{calendar}</span>"
+  },
+  
+  "group/tray-expander": {
+    "drawer": {
+      "children-class": "tray-group-item",
+      "transition-duration": 600
+    },
+    "modules": [
+      "custom/expand-icon",
+      "tray"
+    ],
+    "orientation": "inherit"
+  },
+  "custom/expand-icon": {
+    "format": "\uf08b",
+    "tooltip": false
+  },
+  "tray": {
+    "icon-size": 12,
+    "spacing": 12
+  },
+  
+  "hyprland/workspaces": {
+    "on-click": "activate",
+    "persistent-workspaces": {}
+  },
+  
+  "network": {
+    "format": "{icon}",
+    "format-alt": "{bandwidthTotalBytes} {icon}",
+    "format-disconnected": "\udb82\udd2d",
+    "format-ethernet": "\udb80\ude01",
+    "format-icons": ["\udb82\udd2f", "\udb82\udd1f", "\udb82\udd22", "\udb82\udd25", "\udb82\udd28"],
+    "format-wifi": "{icon}",
+    "interval": 3,
+    "nospacing": 1,
+    "tooltip-format-disconnected": "Disconnected",
+    "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
+    "tooltip-format-wifi": "{essid} ({frequency}GHz)\n⇡{bandwidthUpBytes} ⇣{bandwidthDownBytes}\n{ipaddr}"
+  },
+  
+  "privacy": {
+    "icon-size": 12,
+    "icon-spacing": 12,
+    "ignore": [
+      {
+        "name": "obs",
+        "type": "screenshare"
+      }
+    ],
+    "ignore-monitor": true,
+    "modules": [
+      {
+        "tooltip": true,
+        "tooltip-icon-size": 12,
+        "type": "screenshare"
+      },
+      {
+        "tooltip": true,
+        "tooltip-icon-size": 12,
+        "type": "audio-out"
+      },
+      {
+        "tooltip": true,
+        "tooltip-icon-size": 12,
+        "type": "audio-in"
+      }
+    ],
+    "transition-duration": 250
+  },
+  
+  "wireplumber": {
+    "format": "{volume}% {icon}",
+    "format-icons": ["\uf026", "\uf027", "\uf028"],
+    "format-muted": "\ueee8",
+    "node-type": "Audio/Sink",
+    "on-click": "pwvucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+    "reverse-scrolling": true,
+    "tooltip-format": "{node_name} // {source_desc}"
+  },
+  
+  "wireplumber#source": {
+    "format": "{volume}% \uf130",
+    "format-muted": "\uf131",
+    "node-type": "Audio/Source",
+    "on-click": "pwvucontrol",
+    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "reverse-scrolling": true,
+    "tooltip-format": "{node_name} // {source_desc}"
+  }
+}

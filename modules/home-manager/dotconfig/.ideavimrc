@@ -1,0 +1,167 @@
+set clipboard+=unnamedplus
+
+set scrolloff=5
+set incsearch
+
+map Q gq
+
+Plug 'machakann/vim-highlightedyank'
+Plug 'tpope/vim-commentary'
+
+set which-key
+set notimeout
+set timeoutlen=5000
+
+set NERDTree
+set relativenumber
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set ideajoin
+
+let mapleader = " "
+
+inoremap <silent> <C-k> <Up>
+inoremap <silent> <C-l> <Right>
+inoremap <silent> <C-j> <Down>
+inoremap <silent> <C-h> <Left>
+
+nnoremap <leader>e :NERDTreeToggle<CR>
+nnoremap <leader>rf :NERDTreeRefresh<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+nnoremap <leader>nc :NERDTreeClose<CR>
+nnoremap <leader>nn :NERDTreeNewFile<CR>
+nnoremap <leader>nd :NERDTreeDelFile<CR>
+nnoremap <leader>nr :NERDTreeRenameFile<CR>
+
+nnoremap <space><space> :action SearchEverywhere<CR>
+map s <Action>(flash.search)
+nnoremap d "_d
+vnoremap d "_d
+
+nnoremap gd :action GotoDeclaration<CR>
+nnoremap gi :action GotoImplementation<CR>
+nnoremap gt :action GotoTypeDeclaration<CR>
+nnoremap gr :action FindUsages<CR>
+nnoremap cie :action RenameElement<CR>
+nnoremap <leader>ca :action ShowIntentionActions<CR>
+vnoremap <leader>ca :action ShowIntentionActions<CR>
+vnoremap <leader>cs :action SurroundWith<CR>
+nnoremap <leader>cp :action ParameterInfo<CR>
+nnoremap <leader>cl :action com.laravel_idea.plugin.GenerateHelperCodeAction<CR>
+vnoremap <leader>cd :action DiscordBeam.Share<CR>
+
+nnoremap <Down> :action EditorDownWithSelection<CR>
+xnoremap <Down> :action EditorDownWithSelection<CR>
+nnoremap <Up> :action EditorUpWithSelection<CR>
+xnoremap <Up> :action EditorUpWithSelection<CR>
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+nnoremap <A-j> :action MoveLineDown<CR>
+nnoremap <A-k> :action MoveLineUp<CR>
+inoremap <A-j> <Esc>:action MoveLineDown<CR>==gi
+inoremap <A-k> <Esc>:action MoveLineUp<CR>==gi
+vnoremap <A-j> :action MoveLineDown<CR>gv=gv
+vnoremap <A-k> :action MoveLineUp<CR>gv=gv
+
+nnoremap <S-h> :bprevious<CR>
+nnoremap <S-l> :bnext<CR>
+nnoremap [b :bprevious<CR>
+nnoremap ]b :bnext<CR>
+nnoremap <leader>bb :action SwitchToLastViewedTab<CR>
+nnoremap <leader>` :action SwitchToLastViewedTab<CR>
+nnoremap <leader>bd :bdelete<CR>
+nnoremap <leader>bo :action CloseAllEditorsButActive<CR>
+nnoremap <leader>bD :bd<CR>
+
+inoremap <Esc> <Esc>:nohlsearch<CR>
+nnoremap <Esc> :nohlsearch<CR>
+snoremap <Esc> <Esc>:nohlsearch<CR>
+
+nnoremap <leader>ur :nohlsearch<CR>:action RefreshVcsStatuses<CR>:action EditorRedraw<CR>
+
+nnoremap n nzz
+xnoremap n n
+onoremap n n
+nnoremap N Nzz
+xnoremap N N
+onoremap N N
+
+inoremap , ,<C-g>u
+inoremap . .<C-g>u
+inoremap ; ;<C-g>u
+
+inoremap <C-s> <Esc>:w<CR>
+xnoremap <C-s> :w<CR>
+nnoremap <C-s> :w<CR>
+snoremap <C-s> :w<CR>
+
+nnoremap <leader>K :action ExternalDocumentation<CR>
+
+vnoremap < <gv
+vnoremap > >gv
+
+nnoremap gco o<Esc>Vcx<Esc>:action CommentByLineComment<CR>fxa<BS>
+nnoremap gcO O<Esc>Vcx<Esc>:action CommentByLineComment<CR>fxa<BS>
+
+nnoremap <leader>xl :action ShowErrorsInCurrentFile<CR>
+
+nnoremap <leader>xq :action ShowProblemsView<CR>
+nnoremap [q :cprevious<CR>
+nnoremap ]q :cnext<CR>
+
+nnoremap <leader>cf :action ReformatCode<CR>
+vnoremap <leader>cf :action ReformatCode<CR>
+
+nnoremap <leader>cd :action ShowErrorDescription<CR>
+nnoremap ]d :action GotoNextErrorWarning<CR>
+nnoremap [d :action GotoPreviousErrorWarning<CR>
+nnoremap ]e :action GotoNextErrorWarning<CR>
+nnoremap [e :action GotoPreviousErrorWarning<CR>
+nnoremap ]w :action GotoNextErrorWarning<CR>
+nnoremap [w :action GotoPreviousErrorWarning<CR>
+
+nnoremap <leader>us :setlocal spell! <CR>
+nnoremap <leader>uw :setlocal wrap! <CR>
+nnoremap <leader>ul :setlocal relativenumber! <CR>
+nnoremap <leader>ud :action ToggleErrorStripeMarkers<CR>
+nnoremap <leader>uL :setlocal number! <CR>
+nnoremap <leader>uc :setlocal conceallevel=2<CR>
+nnoremap <leader>uA :action ToggleTabsToolbar<CR>
+nnoremap <leader>ub :action ToggleDarculaLaf<CR>
+nnoremap <leader>ug :action ShowIndentLines<CR>
+
+nnoremap <leader>qq :qa<CR>
+
+nnoremap <leader>ui :action ShowPopupMenu<CR>
+nnoremap <leader>uI :action ShowPopupMenu<CR>
+
+
+nnoremap <leader>fT :action Terminal_RunSelectedText<CR>
+nnoremap <leader>ft :action Terminal_RunSelectedText<CR>
+nnoremap <C-/> :action ActivateTerminalToolWindow<CR>
+nnoremap <C-_> :action ActivateTerminalToolWindow<CR>
+tnoremap <C-/> :action HideActiveWindow<CR>
+tnoremap <C-_> :action HideActiveWindow<CR>
+
+nnoremap <leader>wv <C-w>v
+nnoremap <leader>wh <C-w>s
+nnoremap <leader>wd <C-w>c
+nnoremap <leader>wm :action ToggleFullScreen<CR>
+nnoremap <leader>wz :action ToggleZenMode<CR>
+
+nnoremap <leader><tab>l :tablast<CR>
+nnoremap <leader><tab>o :tabonly<CR>
+nnoremap <leader><tab>f :tabfirst<CR>
+nnoremap <leader><tab><tab> :tabnew<CR>
+nnoremap <leader><tab>] :tabnext<CR>
+nnoremap <leader><tab>d :tabclose<CR>
+nnoremap <leader><tab>[ :tabprevious<CR>

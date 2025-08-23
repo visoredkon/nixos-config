@@ -1,0 +1,163 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "~/.home-manager/images/fastfetch/chara3_full1.png",
+    "height": 11,
+    "padding": {
+      "top": 2,
+      "left": 0,
+      "right": 5
+    },
+  },
+  "display": {
+    "separator": " : "
+  },
+  "modules": [
+    {
+      "type": "custom",
+      "format": "\n"
+    },
+    // {
+    //   "type": "custom",
+    //   "format": "\u001b[36m \uedc5  コンピューター"
+    // },
+    {
+      "type": "title",
+      "key": "  \uedc5",
+      "format": "{6}{7}{8}"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "┌───────────────────────────┐"
+    },
+    {
+      "type": "os",
+      "key": "  \uf313 OS      ",
+      "format": "{2}",
+      "keyColor": "green"
+    },
+    {
+      "type": "kernel",
+      "key": "  \uebc6 Kernel  ",
+      "format": "{2}",
+      "keyColor": "green"
+    },
+    {
+      "type": "wm",
+      "key": "  \uf359 WM      ",
+      "format": "{2}",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "shell",
+      "key": "  \uebca Shell   ",
+      "keyColor": "blue"
+    },
+    {
+      "type": "terminal",
+      "key": "  \uf120 Terminal",
+      "keyColor": "blue"
+    },
+    {
+      "type": "custom",
+      "format": "└───────────────────────────┘"
+    },
+    "break"
+    // {
+    //   "type": "title",
+    //   "key": "  \uedc5",
+    //   "format": "{6}{7}{8}"
+    // },
+    // {
+    //   "type": "custom",
+    //   "format": "┌─────────────────────────────────────────────────┐"
+    // },
+    // {
+    //   "type": "os",
+    //   "key": "  \uf313 OS      ",
+    //   "format": "{2}",
+    //   "keyColor": "green"
+    // },
+    // {
+    //   "type": "kernel",
+    //   "key": "  \uebc6 Kernel  ",
+    //   "format": "{2}",
+    //   "keyColor": "green"
+    // },
+    // {
+    //   "type": "wm",
+    //   "key": "  \uf359 WM      ",
+    //   "format": "{2}",
+    //   "keyColor": "magenta"
+    // },
+    // {
+    //   "type": "shell",
+    //   "key": "  \uebca Shell   ",
+    //   "keyColor": "blue"
+    // },
+    // {
+    //   "type": "terminal",
+    //   "key": "  \uf120 Terminal",
+    //   "keyColor": "blue"
+    // },
+    // {
+    //   "type": "packages",
+    //   "key": "  \udb80\udfd7 Packages",
+    //   "keyColor": "yellow"
+    // },
+    // {
+    //   "type": "custom",
+    //   "format": "└──────────────────────────────────────────────────┘"
+    // },
+    // "break",
+    // {
+    //   "type": "chassis",
+    //   "key": "  \udb80\uddfa",
+    //   "format": "{3}"
+    // },
+    // {
+    //   "type": "custom",
+    //   "format": "┌──────────────────────────────────────────────────┐"
+    // },
+    // {
+    //   "type": "cpu",
+    //   "format": "{1}",
+    //   "key": "  \uf4bc CPU     ",
+    //   "keyColor": "green"
+    // },
+    // {
+    //   "type": "gpu",
+    //   "format": "{1} {2}",
+    //   "key": "  \udb80\ude97 GPU     ",
+    //   "keyColor": "green"
+    // },
+    // {
+    //   "type": "memory",
+    //   "key": "  \uefc5 Memory  ",
+    //   "keyColor": "magenta"
+    // },
+    // {
+    //   "type": "disk",
+    //   "key": "  \udb86\udd9f OS Age  ",
+    //   "folders": "/",
+    //   "keyColor": "blue",
+    //   "format": "{days} days"
+    // },
+    // {
+    //   "type": "uptime",
+    //   "key": "  \udb86\udeec Uptime  ",
+    //   "keyColor": "yellow"
+    // },
+    // {
+    //   "type": "custom",
+    //   "format": "└──────────────────────────────────────────────────┘"
+    // },
+    // {
+    //   "type": "colors",
+    //   "paddingLeft": 2,
+    //   "symbol": "circle"
+    // },
+    // "break"
+  ]
+}

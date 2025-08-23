@@ -1,0 +1,114 @@
+@import "mocha.css";
+
+* {
+  border: none;
+  border-radius: 0;
+  font: bold 11px "JetBrainsMono Nerd Font";
+  margin: 0px 0;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+#waybar > box {
+  border-radius: 2px;
+  margin-top: 4px;
+  padding: 0px 6px;
+}
+
+#battery,
+#bluetooth,
+#clock,
+#custom-expand-icon,
+#network,
+#privacy,
+#tray,
+#wireplumber,
+#wireplumber#source {
+  background: @base;
+  border-radius: 5px;
+  margin: 4px 3px;
+  padding: 0 10px;
+  min-width: 16px;
+}
+
+#battery.warning {
+  color: @yellow;
+  animation: yellow_blink 2s infinite ease-out;
+}
+
+#battery.critical {
+  color: @red;
+  animation: red_blink 1s infinite ease-out;
+}
+
+#custom-expand-icon {
+  margin-right: 7px;
+}
+
+#workspaces {
+  background: @base;
+  border-radius: 2px;
+  margin: 4px 0;
+  padding: 0;
+}
+
+#workspaces button {
+  all: initial;
+  border-radius: 5px;
+  box-shadow: inset 2px 2px 0 0 @base, inset -2px -2px 0 0 @base;
+  color: @text;
+  margin: 0;
+  min-width: 18px;
+  padding: 0 8px;
+  transition: all 0.5s ease-out;
+}
+
+#workspaces button:hover,
+#workspaces button.active {
+  background: @surface0;
+  box-shadow: inset 3px 3px 0 0 @base, inset -3px -3px 0 0 @base;
+}
+
+#workspaces button:hover {
+  opacity: 0.5;
+}
+
+#workspaces button.empty {
+  color: @text;
+  opacity: 0.5;
+}
+
+#tray menu,
+tooltip {
+  border-radius: 8px;
+  border: 1px solid @surface0;
+}
+
+tooltip {
+  background: @base;
+}
+
+tooltip label {
+  color: @text;
+  padding: 6px;
+}
+
+@keyframes yellow_blink {
+  50% {
+    text-shadow: 0 0 2px alpha(@yellow, 1);
+  }
+  100% {
+    text-shadow: 0 0 2px alpha(@yellow, 0.5);
+  }
+}
+@keyframes red_blink {
+  50% {
+    text-shadow: 0 0 2px alpha(@red, 1);
+  }
+  100% {
+    text-shadow: 0 0 2px alpha(@red, 0.5);
+  }
+}
