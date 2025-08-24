@@ -7,6 +7,7 @@
     ./git.nix
     ./lazygit.nix
     ./neovim.nix
+    ./nix-index.nix
     ./pay-respects.nix
     ./shell.nix
     ./ssh.nix

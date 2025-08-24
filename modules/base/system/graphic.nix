@@ -9,13 +9,22 @@
   hardware = {
     graphics = {
       enable = true;
+
       extraPackages = with pkgs; [
         vpl-gpu-rt
+        intel-media-driver
       ];
     };
   };
 
-  environment.systemPackages = with pkgs; [
-    mesa
-  ];
+  environment = {
+    sessionVariables = {
+      LIBVA_DRIVER_NAME = "iHD";
+    };
+
+    systemPackages = with pkgs; [
+      libva-utils
+      vulkan-tools
+    ];
+  };
 }
