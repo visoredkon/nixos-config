@@ -24,20 +24,20 @@ function nixup
         function _print_help_entry
             printf "  "
             set_color cyan
-            printf "%-15s" $argv[1]
+            printf "%-18s" $argv[1]
             set_color normal
             printf " %s\n" $argv[2]
         end
-        echo "Usage: nixup [command]"
+        echo "Usage: nixup [command] [--commit | \"message\"]"
         echo
         echo "Manages NixOS configuration with Git integration."
         echo
         echo "Commands:"
-        _print_help_entry apply "Commit, push, and apply the new configuration"
-        _print_help_entry boot "Commit, push, and build a new boot generation"
-        _print_help_entry update "Stage, commit, push, update flake inputs, and build"
-        _print_help_entry test "Stage changes and test the configuration"
-        _print_help_entry test-commit "Commit, push, then build and test the configuration"
+        _print_help_entry "apply [--commit]" "Stage & apply. With --commit, commits on success."
+        _print_help_entry "boot [--commit]" "Stage & build boot. With --commit, commits on success."
+        _print_help_entry "test [--commit]" "Stage & test. With --commit, commits on success."
+        _print_help_entry "update [--commit]" "Update flakes & build. With --commit, commits on success."
+        _print_help_entry "sync [message]" "Stage, commit with an optional message, and push."
         _print_help_entry log "Show git log of the NixOS configuration"
         _print_help_entry gc "Run garbage collection for user and system"
         _print_help_entry lazygit "Run lazygit in the NixOS config directory"
@@ -81,17 +81,17 @@ function nixup
             return 1
         end
 
-        if git diff --quiet HEAD --
-            echo "No manual changes to commit."
+        if git diff --quiet --cached
+            echo "No staged changes to commit."
             cd "$original_dir"
             return 0
         end
 
         echo ""
-        echo (set_color yellow)"Committing and pushing manual changes..."(set_color normal)
-        echo "   Commit message: '"(set_color blue)"$commit_message"(set_color normal)"'"
+        echo (set_color yellow)"Committing and pushing changes..."(set_color normal)
+        echo "  Commit message: '"(set_color blue)"$commit_message"(set_color normal)"'"
 
-        git add .; and git commit -m "$commit_message"; and echo ""; and git push
+        git commit -m "$commit_message"; and echo ""; and git push
         set -l git_status $status
 
         if test $git_status -ne 0
@@ -113,9 +113,13 @@ function nixup
         return 1
     end
 
-    set -l command_to_run $argv[1]
+    set -l command $argv[1]
+    set -l should_commit false
+    if contains -- --commit $argv
+        set should_commit true
+    end
 
-    switch $command_to_run
+    switch $command
         case -h --help
             _nixup_help
             return 0
@@ -143,95 +147,115 @@ function nixup
             echo (set_color yellow)"Running garbage collection for system (sudo)..."(set_color normal)
             sudo nix-collect-garbage -d
             return $status
-        case test
-            echo ""
-            echo (set_color yellow)"Staging all changes for the test build..."(set_color normal)
-            fish -c "cd '$config_dir'; and git add ."
-            if test $status -ne 0
-                echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
-                return 1
-            end
-
-            echo (set_color yellow)"Building and testing current (staged) configuration..."(set_color normal)
-            nixos test
-            return $status
-        case update
+        case sync
             _nixup_ensure_git_repo "$config_dir"
             if test $status -ne 0
                 return 1
             end
 
             echo ""
-            echo (set_color yellow)"Staging all changes before update..."(set_color normal)
+            echo (set_color yellow)"Staging all changes..."(set_color normal)
             fish -c "cd '$config_dir'; and git add ."
             if test $status -ne 0
                 echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
                 return 1
             end
 
-            set -l now (date --iso-8601=seconds)
-            set -l commit_message "feat(nixos): configuration update @ $now"
-            _nixup_git_sync "$commit_message" "$config_dir"
-            if test $status -ne 0
-                return 1
-            end
-
-            echo ""
-            echo (set_color yellow)"Updating flake inputs..."(set_color normal)
-            fish -c "cd '$config_dir'; and nix flake update"
-            if test $status -ne 0
-                echo (set_color red)"Flake update failed. Aborting."(set_color normal)
-                return 1
-            end
-
-            echo ""
-            echo (set_color yellow)"Committing updated 'flake.lock' file..."(set_color normal)
-            set -l now_lock (date --iso-8601=seconds)
-            set -l lock_commit_message "chore(nix): update flake.lock @ $now_lock"
-
-            set -l original_dir_update (pwd)
-            cd "$config_dir"
-            git add flake.lock; and git commit -m "$lock_commit_message"; and echo ""; and git push; or begin
-                echo "Could not commit 'flake.lock' (it may be unchanged). Continuing build..."
-            end
-            cd "$original_dir_update"
-
-            echo ""
-            echo (set_color yellow)"Building new boot generation with all packages upgraded..."(set_color normal)
-            sudo nixos-rebuild boot --flake "$config_dir" --upgrade-all
-        case apply boot test-commit
-            _nixup_ensure_git_repo "$config_dir"
-            if test $status -ne 0
-                return 1
-            end
-
-            set -l now (date --iso-8601=seconds)
-            set -l commit_message "feat(nixos): configuration update @ $now"
-            _nixup_git_sync "$commit_message" "$config_dir"
-            if test $status -ne 0
-                return 1
-            end
-
-            echo ""
-
-            if test $command_to_run = boot
-                echo (set_color yellow)"Building new boot generation..."(set_color normal)
-                nixos boot
-            else if test $command_to_run = test-commit
-                echo (set_color yellow)"Building and testing committed configuration..."(set_color normal)
-                nixos test
+            set -l commit_message
+            if set -q argv[2]; and test -n "$argv[2]"
+                set commit_message $argv[2]
             else
-                echo (set_color yellow)"Applying new configuration..."(set_color normal)
-                nixos apply
+                set -l now (date --iso-8601=seconds)
+                set commit_message "chore(nixos): manual sync @ $now"
+            end
+
+            _nixup_git_sync "$commit_message" "$config_dir"
+            return $status
+        case apply boot test update
+            _nixup_ensure_git_repo "$config_dir"
+            if test $status -ne 0
+                return 1
+            end
+
+            echo ""
+            echo (set_color yellow)"Staging all changes..."(set_color normal)
+            fish -c "cd '$config_dir'; and git add ."
+            if test $status -ne 0
+                echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
+                return 1
+            end
+
+            if test $command = update
+                echo ""
+                echo (set_color yellow)"Updating flake inputs..."(set_color normal)
+                fish -c "cd '$config_dir'; and nix flake update"
+                if test $status -ne 0
+                    echo (set_color red)"Flake update failed. Aborting."(set_color normal)
+                    return 1
+                end
+                fish -c "cd '$config_dir'; and git add flake.lock"
+            end
+
+            if fish -c "cd '$config_dir'; and git diff --quiet --cached"
+                echo "No changes staged. Nothing to build or commit."
+                return 0
+            end
+
+            set -l build_msg
+            set -l build_command_exec
+            switch $command
+                case apply
+                    set build_msg "Applying new configuration (switch)..."
+                    set build_command_exec "nixos switch"
+                case boot
+                    set build_msg "Building new boot generation..."
+                    set build_command_exec "nixos boot"
+                case test
+                    set build_msg "Building and testing current (staged) configuration..."
+                    set build_command_exec "nixos test"
+                case update
+                    set build_msg "Building new boot generation with all packages upgraded..."
+                    set build_command_exec "sudo nixos-rebuild boot --flake '$config_dir' --upgrade-all"
+            end
+
+            echo ""
+            echo (set_color yellow)$build_msg(set_color normal)
+            eval $build_command_exec
+            set -l build_status $status
+
+            if test $build_status -eq 0
+                if $should_commit
+                    echo ""
+                    echo (set_color green)"Build successful."(set_color normal)
+                    set -l now (date --iso-8601=seconds)
+                    set -l commit_message "feat(nixos): configuration update @ $now"
+                    if test $command = update
+                        set commit_message "feat(nixos): update flake inputs and apply changes @ $now"
+                    end
+                    _nixup_git_sync "$commit_message" "$config_dir"
+                    return $status
+                else
+                    return 0
+                end
+            else
+                echo ""
+                echo (set_color red)"Build failed. Changes are staged but not committed."(set_color normal)
+                return $build_status
             end
         case '*'
-            echo (set_color red)"Error: Unknown command \"$command_to_run\""(set_color normal)
+            if string match -q -- "--*" $command
+                echo (set_color red)"Error: Flag \"$command\" must be used with a command (e.g., test, apply)."(set_color normal)
+            else
+                echo (set_color red)"Error: Unknown command \"$command\""(set_color normal)
+            end
             echo
             _nixup_help
             return 1
     end
 
-    if contains $command_to_run apply boot update test-commit
+    if test $command = sync; or begin
+            contains $command apply boot test update; and $should_commit
+        end
         echo ""
         echo (set_color green)"Done."(set_color normal)
     end

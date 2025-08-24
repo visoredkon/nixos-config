@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   services = {
@@ -20,8 +20,4 @@
       };
     };
   };
-
-  hardware.firmware = with pkgs; [
-    sof-firmware
-  ];
 }

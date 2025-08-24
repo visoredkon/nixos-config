@@ -3,6 +3,7 @@
 {
   imports = [
     ./system/boot.nix
+    ./system/firmware.nix
     ./system/locale.nix
     ./system/networking.nix
     ./system/security.nix
