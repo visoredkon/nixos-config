@@ -24,6 +24,17 @@
         ze = "zellij";
       };
       shellAbbrs = {
+        # NixUp
+        config = "nixup config";
+
+        config-lazygit = "nixup lazygit";
+        config-log = "nixup log";
+        config-sync = "nixup sync";
+
+        config-apply = "nixup apply";
+        config-boot = "nixup boot";
+        config-test = "nixup test";
+
         mkdir = "mkdir -p";
       };
 

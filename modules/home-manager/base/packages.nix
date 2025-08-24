@@ -9,6 +9,7 @@
     ripgrep
     tldr
 
+    usbutils
     unzip
     wget
     xz

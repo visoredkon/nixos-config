@@ -9,10 +9,10 @@
     ./system/security.nix
 
     ./system/audio.nix
-    ./system/battery.nix
     ./system/bluetooth.nix
     ./system/graphic.nix
     ./system/nix.nix
+    ./system/power.nix
 
     ./system/shell.nix
     ./system/users.nix
@@ -20,8 +20,7 @@
     ./packages.nix
     ./programs.nix
 
-    ./services/nixos-cli.nix
-    ./services/openssh.nix
+    ./services
 
     ./fonts.nix
 
