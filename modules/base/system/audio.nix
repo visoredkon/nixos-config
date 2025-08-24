@@ -23,6 +23,5 @@
 
   hardware.firmware = with pkgs; [
     sof-firmware
-    linux-firmware
   ];
 }
