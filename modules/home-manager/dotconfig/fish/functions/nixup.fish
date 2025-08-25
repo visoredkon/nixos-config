@@ -206,7 +206,7 @@ function nixup
             switch $command
                 case apply
                     set build_msg "Applying new configuration (switch)..."
-                    set build_command_exec "nixos switch"
+                    set build_command_exec "nixos apply"
                 case boot
                     set build_msg "Building new boot generation..."
                     set build_command_exec "nixos boot"

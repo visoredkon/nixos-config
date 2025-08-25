@@ -8,6 +8,10 @@
           discord
         ];
 
+        entertainments = with pkgs; [
+          spotify
+        ];
+
         devs = with pkgs; [
           jetbrains.jdk
           jetbrains.phpstorm
@@ -37,7 +41,7 @@
 
         nonPkgs = [ ];
       in
-      communications ++ devs ++ gui-utils ++ cli-utils ++ nonPkgs;
+      communications ++ entertainments ++ devs ++ gui-utils ++ cli-utils ++ nonPkgs;
 
     file = {
       ".ideavimrc" = {
