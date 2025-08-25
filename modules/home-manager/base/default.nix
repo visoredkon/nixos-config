@@ -5,7 +5,7 @@
     ./packages.nix
     ./programs
 
-    ./services.nix
+    ./services
 
     ./themes/catppuccin.nix
   ];

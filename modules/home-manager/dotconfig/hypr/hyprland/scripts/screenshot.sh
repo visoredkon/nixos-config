@@ -18,11 +18,12 @@ trap cleanup EXIT
 
 case "$1" in
 all)
-  grim "$TMP_FILE"
-  cp "$TMP_FILE" "$FILENAME"
+  FOCUSED_MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
+  grim -o "$FOCUSED_MONITOR" "$TMP_FILE"
   ;;
 silent)
-  grim - | tee "$SILENT_FILENAME" >/dev/null
+  FOCUSED_MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
+  grim -o "$FOCUSED_MONITOR" - | tee "$SILENT_FILENAME" >/dev/null
   ;;
 rect)
   GEOMETRY=$(slurp)

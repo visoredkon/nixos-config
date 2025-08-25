@@ -15,6 +15,8 @@
         end
 
         batman --export-env | source
+
+        warp-cli generate-completions fish | source
       '';
 
       shellAliases = {

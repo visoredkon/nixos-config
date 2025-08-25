@@ -13,6 +13,7 @@
     ./system/graphic.nix
     ./system/nix.nix
     ./system/power.nix
+    ./system/zram.nix
 
     ./system/shell.nix
     ./system/users.nix
