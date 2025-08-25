@@ -79,7 +79,7 @@
   },
 
   "custom/nixos": {
-    "format": "\uf313",
+    "format": "\ue843",
     "on-click": "kitty"
   },
   
