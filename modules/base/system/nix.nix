@@ -1,8 +1,15 @@
-{ ... }:
+{ lib, ... }:
 
 {
   nix = {
+    gc = {
+      automatic = true;
+      dates = "weekly";
+      options = "--delete-older-than 1w";
+    };
+
     settings = {
+      auto-optimise-store = true;
       experimental-features = [
         "nix-command"
         "flakes"
@@ -12,8 +19,13 @@
 
   nixpkgs = {
     config = {
-      allowUnfree = true;
+      # allowUnfree = true;
       # allowUnfreePredicate = (_: true);
+      allowUnfreePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "cloudflare-warp"
+        ];
     };
   };
 }

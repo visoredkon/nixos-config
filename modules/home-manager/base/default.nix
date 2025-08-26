@@ -1,4 +1,9 @@
-{ username, stateVersion, ... }:
+{
+  lib,
+  username,
+  stateVersion,
+  ...
+}:
 
 {
   imports = [
@@ -12,8 +17,13 @@
 
   nixpkgs = {
     config = {
-      allowUnfree = true;
-      # allowUnfreePredicate = (_: true);
+      allowUnfreePredicate =
+        pkg:
+        builtins.elem (lib.getName pkg) [
+          "discord"
+          "phpstorm"
+          "spotify"
+        ];
     };
   };
 

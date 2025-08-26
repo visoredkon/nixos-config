@@ -96,7 +96,7 @@
   },
   "custom/expand-icon": {
     "format": "\uf08b",
-    "tooltip": false
+    "tooltip": true
   },
   "tray": {
     "icon-size": 12,

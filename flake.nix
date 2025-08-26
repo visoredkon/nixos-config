@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-stabel.url = "github:NixOS/nixpkgs/nixos-25.05";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
 
     nixos-cli.url = "github:nix-community/nixos-cli";
 
@@ -31,7 +31,7 @@
   outputs =
     inputs@{
       nixpkgs,
-      nixpkgs-stabel,
+      nixpkgs-stable,
       home-manager,
       ...
     }:
@@ -63,7 +63,10 @@
               hostname
               ;
 
-            stable = import nixpkgs-stabel { system = system; };
+            # stable = import nixpkgs-stable {
+            #   system = system;
+            #   config.allowUnfree = true;
+            # };
           };
           modules = [
             ./hosts/${hostname}
@@ -102,7 +105,7 @@
               system
               ;
 
-            stable = nixpkgs-stabel.legacyPackages.${system};
+            stable = nixpkgs-stable.legacyPackages.${system};
             hostName = "${hostname}";
           };
           home-manager.users.${username} =
