@@ -2,21 +2,7 @@
 
 {
   imports = [
-    ./system/boot.nix
-    ./system/firmware.nix
-    ./system/locale.nix
-    ./system/networking.nix
-    ./system/security.nix
-
-    ./system/audio.nix
-    ./system/bluetooth.nix
-    ./system/graphic.nix
-    ./system/nix.nix
-    ./system/power.nix
-    ./system/zram.nix
-
-    ./system/shell.nix
-    ./system/users.nix
+    ./systems
 
     ./packages.nix
     ./programs.nix
