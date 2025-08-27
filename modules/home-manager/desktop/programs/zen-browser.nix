@@ -75,6 +75,7 @@ in
         ];
         mimeType = [
           "text/html"
+          "application/pdf"
           "application/xhtml+xml"
           "application/xml"
         ];
@@ -84,6 +85,7 @@ in
     mimeApps = {
       defaultApplications = {
         "text/html" = "zen-browser.desktop";
+        "application/pdf" = "zen-browser.desktop";
         "application/xhtml+xml" = "zen-browser.desktop";
         "application/xml" = "zen-browser.desktop";
         "x-scheme-handler/http" = "zen-browser.desktop";
