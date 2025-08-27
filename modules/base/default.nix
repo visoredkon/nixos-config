@@ -5,7 +5,7 @@
     ./systems
 
     ./packages.nix
-    ./programs.nix
+    ./programs
 
     ./services
 
