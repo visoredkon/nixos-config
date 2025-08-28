@@ -1,4 +1,4 @@
-{ ... }:
+{ username, ... }:
 
 {
   security = {
@@ -6,20 +6,20 @@
       enable = true;
     };
 
+    sudo = {
+      enable = false;
+      execWheelOnly = true;
+    };
+
     sudo-rs = {
       enable = true;
       execWheelOnly = true;
     };
+  };
 
-    # tpm2 = {
-    # enable = true;
-    # abrmd = {
-    #   enable = true;
-    # };
-    #
-    # pkcs11 = {
-    #   enable = true;
-    # };
-    # };
+  users.users.${username} = {
+    extraGroups = [
+      "wheel"
+    ];
   };
 }
