@@ -88,6 +88,9 @@
       starship = {
         enable = false;
       };
+      vscode = {
+        enable = false;
+      };
       waybar = {
         enable = false;
       };
