@@ -1,4 +1,9 @@
-{ lib, ... }:
+{
+  lib,
+  pkgs,
+  username,
+  ...
+}:
 
 {
   networking = {
@@ -11,6 +16,10 @@
 
     networkmanager = {
       enable = true;
+
+      plugins = with pkgs; [
+        networkmanager-l2tp
+      ];
     };
 
     firewall = {
@@ -24,6 +33,12 @@
       "1.0.0.2"
       "1.1.1.1"
       "1.0.0.1"
+    ];
+  };
+
+  users.users.${username} = {
+    extraGroups = [
+      "networkmanager"
     ];
   };
 }

@@ -5,9 +5,7 @@
     isNormalUser = true;
     description = "Pahril";
     extraGroups = [
-      "networkmanager"
       "wheel"
-      "seat"
     ];
   };
 }

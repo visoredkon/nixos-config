@@ -1,7 +1,0 @@
-{ ... }:
-
-{
-  programs.seahorse = {
-    enable = true;
-  };
-}

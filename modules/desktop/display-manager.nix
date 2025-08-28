@@ -18,4 +18,10 @@
       };
     };
   };
+
+  users.users.${username} = {
+    extraGroups = [
+      "seat"
+    ];
+  };
 }
