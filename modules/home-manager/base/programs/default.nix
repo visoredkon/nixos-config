@@ -8,6 +8,7 @@
     ./lazygit.nix
     ./neovim.nix
     ./nix-index.nix
+    ./password-store.nix
     ./pay-respects.nix
     ./shell.nix
     ./ssh.nix

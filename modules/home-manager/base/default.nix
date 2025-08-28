@@ -21,8 +21,10 @@
         pkg:
         builtins.elem (lib.getName pkg) [
           "discord"
+          "obsidian"
           "phpstorm"
           "spotify"
+          "vscode"
         ];
     };
   };

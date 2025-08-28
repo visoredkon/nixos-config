@@ -4,6 +4,7 @@
   username,
   ...
 }:
+
 {
   imports = [ inputs.nixos-cli.nixosModules.nixos-cli ];
 
