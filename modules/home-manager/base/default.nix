@@ -1,5 +1,4 @@
 {
-  lib,
   username,
   stateVersion,
   ...
@@ -14,20 +13,6 @@
 
     ./themes/catppuccin.nix
   ];
-
-  nixpkgs = {
-    config = {
-      allowUnfreePredicate =
-        pkg:
-        builtins.elem (lib.getName pkg) [
-          "discord"
-          "obsidian"
-          "phpstorm"
-          "spotify"
-          "vscode"
-        ];
-    };
-  };
 
   home = {
     inherit username stateVersion;

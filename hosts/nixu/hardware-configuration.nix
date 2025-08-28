@@ -27,7 +27,15 @@
 
     kernelModules = [ "kvm-intel" ];
 
-    extraModulePackages = [ ];
+    loader = {
+      efi.canTouchEfiVariables = true;
+
+      systemd-boot = {
+        enable = true;
+
+        configurationLimit = 10;
+      };
+    };
   };
 
   fileSystems."/" = {
@@ -45,8 +53,6 @@
   };
 
   swapDevices = [ { device = "/dev/disk/by-uuid/d7a612cd-887c-4e5f-88a0-7f71503509fb"; } ];
-
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

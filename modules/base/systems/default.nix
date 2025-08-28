@@ -1,7 +1,7 @@
 { ... }:
 {
   imports = [
-    ./boot.nix
+    ./kernel.nix
     ./firmware.nix
     ./locale.nix
     ./networking.nix

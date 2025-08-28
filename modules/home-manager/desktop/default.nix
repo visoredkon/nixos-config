@@ -11,7 +11,6 @@
 
     ./hypr
 
-    # ./themes/theming.nix
     ./themes/stylix.nix
     ./themes/catppuccin.nix
   ];

@@ -3,9 +3,11 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.05";
 
-    nixos-cli.url = "github:nix-community/nixos-cli";
+    nixos-cli = {
+      url = "github:nix-community/nixos-cli";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -31,18 +33,43 @@
   outputs =
     inputs@{
       nixpkgs,
-      nixpkgs-stable,
       home-manager,
       ...
     }:
     let
+      lib = nixpkgs.lib;
+
       arch = "x86_64-linux";
-      stateVersion = nixpkgs.lib.versions.majorMinor nixpkgs.lib.version;
+      stateVersion = lib.versions.majorMinor lib.version;
 
       username = "pahril";
       hostname = {
         guiHost = "nixu";
         cli = "rune";
+      };
+
+      mkPkgs = {
+        "nixos" = {
+          nixpkgs = {
+            hostPlatform = arch;
+            config.allowUnfreePredicate =
+              pkg:
+              builtins.elem (lib.getName pkg) [
+                "cloudflare-warp"
+              ];
+          };
+        };
+        "home-manager" = {
+          nixpkgs.config.allowUnfreePredicate =
+            pkg:
+            builtins.elem (lib.getName pkg) [
+              "discord"
+              "obsidian"
+              "phpstorm"
+              "spotify"
+              "vscode"
+            ];
+        };
       };
 
       mkSystem =
@@ -51,7 +78,7 @@
           system ? arch,
           extraModules ? [ ],
         }:
-        nixpkgs.lib.nixosSystem {
+        lib.nixosSystem {
           inherit system;
 
           specialArgs = {
@@ -59,42 +86,22 @@
               inputs
               stateVersion
               username
-              system
               hostname
               ;
-
-            # stable = import nixpkgs-stable {
-            #   system = system;
-            #   config.allowUnfree = true;
-            # };
           };
           modules = [
-            ./hosts/${hostname}
+            mkPkgs."nixos"
 
-            (
-              { ... }:
-              {
-                nixpkgs.overlays = [
-                  (self: super: {
-                    ripgrep = super.ripgrep.override {
-                      withPcre2 = true;
-                    };
-                  })
-                ];
-              }
-            )
+            ./hosts/${hostname}
           ]
           ++ extraModules;
         };
 
       mkHome =
         {
-          hostname,
-          system ? arch,
           path,
         }:
         {
-          # home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = {
@@ -102,16 +109,16 @@
               inputs
               stateVersion
               username
-              system
               ;
-
-            stable = nixpkgs-stable.legacyPackages.${system};
-            hostName = "${hostname}";
           };
           home-manager.users.${username} =
             { ... }:
             {
-              imports = [ path ];
+              imports = [
+                mkPkgs."home-manager"
+
+                path
+              ];
             };
         };
     in
@@ -122,7 +129,6 @@
           extraModules = [
             home-manager.nixosModules.home-manager
             (mkHome {
-              hostname = "${hostname.guiHost}";
               path = ./modules/home-manager/desktop;
             })
           ];
@@ -133,7 +139,6 @@
           extraModules = [
             home-manager.nixosModules.home-manager
             (mkHome {
-              hostname = "${hostname.cli}";
               path = ./modules/home-manager/base;
             })
           ];
