@@ -14,5 +14,7 @@
     wget
     xz
     zip
+
+    ookla-speedtest
   ];
 }

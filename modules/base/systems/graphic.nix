@@ -23,6 +23,7 @@
     };
 
     systemPackages = with pkgs; [
+      mesa-demos
       libva-utils
       vulkan-tools
     ];
