@@ -38,6 +38,8 @@
         config-test = "nixup test";
 
         mkdir = "mkdir -p";
+
+        speedtest = "speedtest --progress=yes";
       };
 
       plugins = [
