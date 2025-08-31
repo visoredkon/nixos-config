@@ -15,7 +15,7 @@
     xz
     zip
 
-    devenv
+    # devenv
     ookla-speedtest
   ];
 }
