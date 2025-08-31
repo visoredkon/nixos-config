@@ -41,6 +41,10 @@ in
             "gtk"
           ];
           "org.freedesktop.impl.portal.FileChooser" = "kde";
+          # except for the secret portal, which is handled by gnome-keyring
+          "org.freedesktop.impl.portal.Secret" = [
+            "gnome-keyring"
+          ];
         };
       };
       xdgOpenUsePortal = true;

@@ -17,6 +17,22 @@
     };
   };
 
+  programs = {
+    gnupg = {
+      agent = {
+        enable = true;
+      };
+    };
+
+    seahorse.enable = true;
+  };
+
+  services = {
+    gnome.gnome-keyring = {
+      enable = true;
+    };
+  };
+
   users.users.${username} = {
     extraGroups = [
       "wheel"
