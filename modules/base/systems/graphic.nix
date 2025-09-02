@@ -11,20 +11,24 @@
       enable = true;
 
       extraPackages = with pkgs; [
-        vpl-gpu-rt
+        libvdpau-va-gl
         intel-media-driver
+        vpl-gpu-rt
       ];
     };
   };
 
   environment = {
     sessionVariables = {
+      ANV_DEBUG = "video-decode,video-encode";
       LIBVA_DRIVER_NAME = "iHD";
+      VDPAU_DRIVER = "va_gl";
     };
 
     systemPackages = with pkgs; [
       mesa-demos
       libva-utils
+      vdpauinfo
       vulkan-tools
     ];
   };

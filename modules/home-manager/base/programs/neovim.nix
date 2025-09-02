@@ -13,6 +13,7 @@
       go
 
       # LSP
+      intelephense
       lua-language-server
       nixd
       hyprls

@@ -20,6 +20,9 @@
     mako = {
       enable = true;
     };
+    obs = {
+      enable = true;
+    };
     rofi = {
       enable = true;
     };

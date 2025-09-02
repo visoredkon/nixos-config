@@ -25,8 +25,6 @@
       kernelModules = [ ];
     };
 
-    kernelModules = [ "kvm-intel" ];
-
     loader = {
       efi.canTouchEfiVariables = true;
 

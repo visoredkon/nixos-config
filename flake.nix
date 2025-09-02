@@ -64,6 +64,7 @@
             pkg:
             builtins.elem (lib.getName pkg) [
               "discord"
+              "intelephense"
               "obsidian"
               "ookla-speedtest"
               "phpstorm"

@@ -6,6 +6,12 @@
       enable = true;
     };
 
+    pam = {
+      services = {
+        sddm.enableGnomeKeyring = true;
+      };
+    };
+
     sudo = {
       enable = false;
       execWheelOnly = true;
