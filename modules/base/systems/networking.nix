@@ -36,6 +36,10 @@
     ];
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/375352
+  # debug command: `journalctl -fu NetworkManager -fu nm-l2tp-service`
+  environment.etc."strongswan.conf".text = "";
+
   users.users.${username} = {
     extraGroups = [
       "networkmanager"
