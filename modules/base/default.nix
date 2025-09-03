@@ -11,6 +11,8 @@
 
     ./fonts.nix
 
+    ./devops
+
     ./themes/catppuccin.nix
   ];
 

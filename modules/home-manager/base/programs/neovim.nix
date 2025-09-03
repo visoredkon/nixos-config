@@ -13,6 +13,7 @@
       go
 
       # LSP
+      gopls
       intelephense
       lua-language-server
       nixd
@@ -22,6 +23,7 @@
       nixpkgs-lint
 
       # Formatter
+      gofumpt
       stylua
       shfmt
       nixfmt-rfc-style
