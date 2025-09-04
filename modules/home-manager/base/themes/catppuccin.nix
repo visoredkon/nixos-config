@@ -27,9 +27,6 @@
     lazygit = {
       enable = true;
     };
-    starship = {
-      enable = true;
-    };
     waybar = {
       enable = false;
     };
