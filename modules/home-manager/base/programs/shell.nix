@@ -81,6 +81,9 @@
   };
 
   home = {
+    file.".config/starship.toml" = {
+      source = ../../dotconfig/starship.toml;
+    };
     file.".config/fastfetch" = {
       source = ../../dotconfig/fastfetch;
       recursive = true;

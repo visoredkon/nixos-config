@@ -34,7 +34,7 @@
     },
     {
       "type": "os",
-      "key": "  \uf313 OS      ",
+      "key": "  \ue843 OS      ",
       "format": "{2}",
       "keyColor": "green"
     },
