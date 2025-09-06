@@ -1,5 +1,18 @@
 { pkgs, ... }:
+let
+  phpstorm-base = pkgs.jetbrains.phpstorm.override {
+    jdk = pkgs.jetbrains.jdk;
+  };
+  phpstorm-wrapped = pkgs.buildFHSEnv {
+    name = "phpstorm";
+    targetPkgs = pkgs: [
+      phpstorm-base
 
+      pkgs.nodejs_latest
+    ];
+    runScript = "phpstorm";
+  };
+in
 {
   home = {
     packages =
@@ -8,9 +21,8 @@
           discord
         ];
 
-        devs = with pkgs; [
-          jetbrains.jdk
-          jetbrains.phpstorm
+        devs = [
+          phpstorm-wrapped
         ];
 
         entertainments = with pkgs; [
