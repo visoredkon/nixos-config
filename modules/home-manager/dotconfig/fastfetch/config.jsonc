@@ -1,5 +1,8 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "general": {
+    "detectVersion": false
+  },
   "logo": {
     "source": "~/.home-manager/images/fastfetch/chara3_full1.png",
     "height": 11,
