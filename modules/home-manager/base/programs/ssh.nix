@@ -5,9 +5,21 @@
     enable = true;
 
     enableDefaultConfig = false;
-    hashKnownHosts = true;
 
     matchBlocks = {
+      "*" = {
+        addKeysToAgent = "no";
+        compression = false;
+        controlMaster = "no";
+        controlPath = "~/.ssh/master-%r@%n:%p";
+        controlPersist = "no";
+        forwardAgent = false;
+        hashKnownHosts = true;
+        serverAliveCountMax = 3;
+        serverAliveInterval = 0;
+        userKnownHostsFile = "~/.ssh/known_hosts";
+      };
+
       "github.com" = {
         user = "git";
         hostname = "github.com";
