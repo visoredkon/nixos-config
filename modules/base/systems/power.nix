@@ -5,7 +5,7 @@
     enable = true;
 
     powertop = {
-      enable = false;
+      enable = true;
     };
   };
 
