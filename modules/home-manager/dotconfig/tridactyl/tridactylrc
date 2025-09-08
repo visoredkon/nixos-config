@@ -3,6 +3,7 @@ unbind d
 set smoothscroll true
 
 blacklistadd docs.google.com
-blacklistadd meet.google.com
 blacklistadd excalidraw.com
+blacklistadd meet.google.com
+blacklistadd www.planttext.com
 blacklistadd web.whatsapp.com
