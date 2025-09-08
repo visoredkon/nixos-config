@@ -8,6 +8,7 @@
     fzf
     ripgrep
     tldr
+    sshfs
 
     usbutils
     unzip

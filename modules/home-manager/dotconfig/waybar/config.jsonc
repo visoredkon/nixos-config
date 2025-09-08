@@ -1,11 +1,9 @@
 {
   "reload_style_on_change": true,
   
-  "height": 30,
   "layer": "top",
   "mode": "dock",
   "position": "top",
-  "spacing": 0,
 
   "modules-left": [
     "custom/nixos",
@@ -99,8 +97,7 @@
     "tooltip": true
   },
   "tray": {
-    "icon-size": 12,
-    "spacing": 12
+    "icon-size": 14
   },
   
   "hyprland/workspaces": {
@@ -123,8 +120,7 @@
   },
   
   "privacy": {
-    "icon-size": 12,
-    "icon-spacing": 12,
+    "icon-size": 14,
     "ignore": [
       {
         "name": "obs",
@@ -135,17 +131,14 @@
     "modules": [
       {
         "tooltip": true,
-        "tooltip-icon-size": 12,
         "type": "screenshare"
       },
       {
         "tooltip": true,
-        "tooltip-icon-size": 12,
         "type": "audio-out"
       },
       {
         "tooltip": true,
-        "tooltip-icon-size": 12,
         "type": "audio-in"
       }
     ],
@@ -167,8 +160,7 @@
     "format": "{volume}% \uf130",
     "format-muted": "\uf131",
     "node-type": "Audio/Source",
-    "on-click": "pwvucontrol",
-    "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
+    "on-click": "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle",
     "reverse-scrolling": true,
     "tooltip-format": "{node_name} // {source_desc}"
   }
