@@ -14,8 +14,10 @@
       listener = [
         {
           timeout = 150; # 2.5min
-          on-timeout = "brightnessctl -s set 0";
-          on-resume = "brightnessctl -r";
+          on-timeout = "${../../dotconfig/hypr/hyprland/scripts/blackout.sh}";
+          on-resume = "${../../dotconfig/hypr/hyprland/scripts/blackout.sh}";
+          # on-timeout = "brightnessctl -s set 0";
+          # on-resume = "brightnessctl -r";
         }
         {
           timeout = 300;
