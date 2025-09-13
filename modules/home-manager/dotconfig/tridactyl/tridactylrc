@@ -5,5 +5,7 @@ set smoothscroll true
 blacklistadd docs.google.com
 blacklistadd excalidraw.com
 blacklistadd meet.google.com
+blacklistadd monkeytype.com
+blacklistadd www.canva.com
 blacklistadd www.planttext.com
 blacklistadd web.whatsapp.com

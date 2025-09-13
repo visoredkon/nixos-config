@@ -1,16 +1,34 @@
 { pkgs, ... }:
 let
-  phpstorm-base = pkgs.jetbrains.phpstorm.override {
-    jdk = pkgs.jetbrains.jdk;
-  };
   phpstorm-wrapped = pkgs.buildFHSEnv {
     name = "phpstorm";
-    targetPkgs = pkgs: [
-      phpstorm-base
 
-      pkgs.nodejs_latest
-    ];
+    targetPkgs =
+      pkgs: with pkgs; [
+        (jetbrains.phpstorm.override {
+          jdk = pkgs.jetbrains.jdk;
+        })
+
+        nodejs_latest
+      ];
+
     runScript = "phpstorm";
+  };
+  vscode-wrapped = pkgs.buildFHSEnv {
+    name = "code";
+
+    targetPkgs =
+      pkgs: with pkgs; [
+        (vscode.override {
+          commandLineArgs = [
+            "--password-store=gnome-libsecret"
+          ];
+        })
+
+        nodejs_latest
+      ];
+
+    runScript = "code";
   };
 in
 {
@@ -23,6 +41,7 @@ in
 
         devs = [
           phpstorm-wrapped
+          vscode-wrapped
         ];
 
         entertainments = with pkgs; [
