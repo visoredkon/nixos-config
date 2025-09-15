@@ -64,6 +64,7 @@ in
       # Use Wayland if available; if not, try X11 and then any other GDK backend.
       # (https://wiki.hypr.land/Configuring/Environment-variables/)
       GDK_BACKEND = "wayland,*";
+      GTK_CSD = "0";
       QT_QPA_PLATFORM = "wayland";
       # (https://doc.qt.io/qt-5/highdpi.html) enables automatic scaling, based on the monitor’s pixel density
       QT_AUTO_SCREEN_SCALE_FACTOR = "1";

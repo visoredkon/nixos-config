@@ -4,6 +4,8 @@ return {
     opts = {
       ---@type lspconfig.options
       servers = {
+        dartls = {},
+
         gopls = {
           settings = {
             gopls = {
@@ -114,8 +116,7 @@ return {
       },
 
       inlay_hints = {
-        enabled = true,
-        exclude = { "vue" },
+        enabled = false,
       },
 
       codelens = {
