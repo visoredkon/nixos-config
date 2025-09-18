@@ -11,6 +11,7 @@
       cargo
       clang
       go
+      websocat
 
       # LSP
       gopls
@@ -21,11 +22,13 @@
 
       # Linter
       nixpkgs-lint
+      tinymist
 
       # Formatter
       gofumpt
       stylua
       shfmt
+      typstyle
       nixfmt-rfc-style
     ];
   };

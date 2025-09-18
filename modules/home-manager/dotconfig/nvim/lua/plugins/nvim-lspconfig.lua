@@ -2,7 +2,6 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
-      ---@type lspconfig.options
       servers = {
         dartls = {},
 
@@ -93,6 +92,17 @@ return {
         },
 
         hyprls = {},
+
+        tinymist = {
+          settings = {
+            formatterMode = "typstyle",
+            exportPdf = "onType",
+            semanticTokens = "enable",
+            lint = {
+              enabled = true,
+            },
+          },
+        },
       },
 
       ---@type vim.diagnostic.Opts
