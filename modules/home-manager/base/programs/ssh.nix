@@ -21,7 +21,6 @@
       };
 
       "github.com" = {
-        user = "git";
         hostname = "github.com";
         identityFile = "${config.home.homeDirectory}/.ssh/github";
       };

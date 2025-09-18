@@ -11,7 +11,15 @@
       cargo
       clang
       go
+      lua5_1
+      luarocks-nix
+      nodejs
+      temurin-bin-21
       websocat
+
+      graphviz
+      imagemagick
+      tree-sitter
 
       # LSP
       gopls
