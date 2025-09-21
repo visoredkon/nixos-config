@@ -9,6 +9,10 @@
         "ctrl+shift+t" = "new_tab_with_cwd";
       };
 
+      settings = {
+        allow_remote_control = "yes";
+      };
+
       # settings = {
       #   tab_bar_edge = "bottom";
       #   tab_bar_style = "powerline";
