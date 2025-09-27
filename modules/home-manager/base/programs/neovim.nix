@@ -15,11 +15,11 @@
       luarocks-nix
       nodejs
       temurin-bin-21
-      websocat
 
       graphviz
       imagemagick
       tree-sitter
+      websocat
 
       # LSP
       gopls

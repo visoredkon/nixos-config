@@ -10,6 +10,7 @@
     tldr
     sshfs
 
+    lsof
     usbutils
     unzip
     wget
