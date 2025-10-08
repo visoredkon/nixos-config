@@ -5,6 +5,8 @@ return {
       servers = {
         dartls = {},
 
+        docker_language_server = {},
+
         gopls = {
           settings = {
             gopls = {
@@ -47,6 +49,19 @@ return {
 
         intelephense = {},
 
+        jsonls = {
+          settings = {
+            json = {
+              format = {
+                enable = true,
+              },
+              schemaStore = {
+                enable = true,
+              },
+            },
+          },
+        },
+
         lua_ls = {
           settings = {
             Lua = {
@@ -86,6 +101,9 @@ return {
                 nixos = {
                   expr = '(builtins.getFlake "/home/pahril/.config/nixos-config").nixosConfigurations."nixu".config',
                 },
+                flake_parts = {
+                  expr = 'let flake = builtins.getFlake ("/tmp/NixOS_Home-Manager"); in flake.debug.options // flake.currentSystem.options',
+                },
               },
             },
           },
@@ -100,6 +118,24 @@ return {
             semanticTokens = "enable",
             lint = {
               enabled = true,
+            },
+          },
+        },
+
+        yamlls = {
+          settings = {
+            yaml = {
+              format = {
+                enable = true,
+                singleQuote = false,
+              },
+              schemaStore = {
+                enable = true,
+                url = "https://www.schemastore.org/api/json/catalog.json",
+              },
+              validate = true,
+              completion = true,
+              hover = true,
             },
           },
         },

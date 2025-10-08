@@ -6,6 +6,10 @@
 
     enableDefaultConfig = false;
 
+    includes = [
+      "config.d/*"
+    ];
+
     matchBlocks = {
       "*" = {
         addKeysToAgent = "no";
@@ -23,12 +27,6 @@
       "github.com" = {
         hostname = "github.com";
         identityFile = "${config.home.homeDirectory}/.ssh/github";
-      };
-
-      "larva" = {
-        user = "larva";
-        hostname = "203.145.34.245";
-        port = 22;
       };
     };
   };

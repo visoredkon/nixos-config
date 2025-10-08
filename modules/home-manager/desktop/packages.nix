@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-main, ... }:
 let
   phpstorm-wrapped = pkgs.buildFHSEnv {
     name = "phpstorm";
@@ -6,7 +6,7 @@ let
     targetPkgs =
       pkgs: with pkgs; [
         (jetbrains.phpstorm.override {
-          jdk = pkgs.jetbrains.jdk;
+          jdk = jetbrains.jdk;
         })
 
         nodejs_latest
@@ -17,16 +17,15 @@ let
   vscode-wrapped = pkgs.buildFHSEnv {
     name = "code";
 
-    targetPkgs =
-      pkgs: with pkgs; [
-        (vscode.override {
-          commandLineArgs = [
-            "--password-store=gnome-libsecret"
-          ];
-        })
+    targetPkgs = pkgs: [
+      (pkgs-main.vscode.override {
+        commandLineArgs = [
+          "--password-store=gnome-libsecret"
+        ];
+      })
 
-        nodejs_latest
-      ];
+      pkgs.nodejs_latest
+    ];
 
     runScript = "code";
   };
@@ -70,8 +69,6 @@ in
 
           libsForQt5.qt5.qtwayland
           kdePackages.qtwayland
-
-          kdePackages.xwaylandvideobridge
         ];
 
         nonPkgs = [ ];

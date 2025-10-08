@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, pkgs-main, ... }:
 
 {
   boot = {
@@ -11,7 +11,7 @@
       enable = true;
 
       extraPackages = with pkgs; [
-        libvdpau-va-gl
+        pkgs-main.libvdpau-va-gl
         intel-media-driver
         vpl-gpu-rt
       ];

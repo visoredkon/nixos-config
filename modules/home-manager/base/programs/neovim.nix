@@ -18,19 +18,23 @@
 
       graphviz
       imagemagick
+      tinymist
       tree-sitter
       websocat
 
       # LSP
+      docker-language-server
       gopls
       intelephense
       lua-language-server
       nixd
       hyprls
+      vscode-json-languageserver
+      yaml-language-server
 
       # Linter
+      hadolint
       nixpkgs-lint
-      tinymist
 
       # Formatter
       gofumpt

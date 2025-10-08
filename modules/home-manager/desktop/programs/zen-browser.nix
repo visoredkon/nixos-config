@@ -41,7 +41,7 @@ in
 
         userChrome = retrieveZenCatppuccin {
           file = "userChrome.css";
-          sha256 = "sha256:03qd2bp4vjmg983n57bf2p36azbighcx67pwjhxap5q8rg23bac6";
+          sha256 = "sha256:1nz7305bys8h8hycmwgifzc2lwvydzri3zqg9dxadd9jsm4800bn";
         };
         userContent = retrieveZenCatppuccin {
           file = "userContent.css";

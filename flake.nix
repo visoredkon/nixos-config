@@ -3,6 +3,8 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
+    # nixpkgs-stable.url = "nixpkgs/nixos-25.05";
+    nixpkgs-main.url = "nixpkgs/master";
 
     nixos-cli = {
       url = "github:nix-community/nixos-cli";
@@ -33,6 +35,7 @@
   outputs =
     inputs@{
       nixpkgs,
+      nixpkgs-main,
       home-manager,
       ...
     }:
@@ -69,9 +72,17 @@
               "ookla-speedtest"
               "phpstorm"
               "spotify"
-              "vscode"
             ];
         };
+      };
+
+      pkgs-main = import nixpkgs-main {
+        system = arch;
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (lib.getName pkg) [
+            "vscode"
+          ];
       };
 
       mkSystem =
@@ -86,6 +97,7 @@
           specialArgs = {
             inherit
               inputs
+              pkgs-main
               stateVersion
               username
               hostname
@@ -109,6 +121,7 @@
           home-manager.extraSpecialArgs = {
             inherit
               inputs
+              pkgs-main
               stateVersion
               username
               ;
