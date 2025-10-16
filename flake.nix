@@ -3,8 +3,12 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    # nixpkgs-stable.url = "nixpkgs/nixos-25.05";
-    nixpkgs-main.url = "nixpkgs/master";
+    nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
+
+    chaotic = {
+      url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     nixos-cli = {
       url = "github:nix-community/nixos-cli";
@@ -27,7 +31,7 @@
     };
 
     zen-browser = {
-      url = "github:0xc000022070/zen-browser-flake";
+      url = "github:0xc000022070/zen-browser-flake/beta";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -35,7 +39,7 @@
   outputs =
     inputs@{
       nixpkgs,
-      nixpkgs-main,
+      nixpkgs-unstable,
       home-manager,
       ...
     }:
@@ -49,6 +53,15 @@
       hostname = {
         guiHost = "nixu";
         cli = "rune";
+      };
+
+      pkgs-unstable = import nixpkgs-unstable {
+        system = arch;
+        config.allowUnfreePredicate =
+          pkg:
+          builtins.elem (lib.getName pkg) [
+            "vscode"
+          ];
       };
 
       mkPkgs = {
@@ -76,15 +89,6 @@
         };
       };
 
-      pkgs-main = import nixpkgs-main {
-        system = arch;
-        config.allowUnfreePredicate =
-          pkg:
-          builtins.elem (lib.getName pkg) [
-            "vscode"
-          ];
-      };
-
       mkSystem =
         {
           hostname,
@@ -97,7 +101,7 @@
           specialArgs = {
             inherit
               inputs
-              pkgs-main
+              pkgs-unstable
               stateVersion
               username
               hostname
@@ -121,7 +125,7 @@
           home-manager.extraSpecialArgs = {
             inherit
               inputs
-              pkgs-main
+              pkgs-unstable
               stateVersion
               username
               ;

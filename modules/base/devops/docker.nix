@@ -1,4 +1,4 @@
-{ ... }:
+{ pkgs, ... }:
 
 {
   virtualisation.docker = {
@@ -10,4 +10,8 @@
       setSocketVariable = true;
     };
   };
+
+  environment.systemPackages = with pkgs; [
+    docker-credential-helpers
+  ];
 }

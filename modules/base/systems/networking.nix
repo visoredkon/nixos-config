@@ -4,7 +4,14 @@
   username,
   ...
 }:
-
+let
+  dnsServers = [
+    "1.1.1.2"
+    "1.0.0.2"
+    "1.1.1.1#one.one.one.one"
+    "1.0.0.1#one.one.one.one"
+  ];
+in
 {
   networking = {
     # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -20,6 +27,14 @@
       plugins = with pkgs; [
         networkmanager-l2tp
       ];
+
+      dns = "systemd-resolved";
+      # ethernet = {
+      #   macAddress = "stable";
+      # };
+      wifi = {
+        macAddress = "random";
+      };
     };
 
     firewall = {
@@ -28,12 +43,16 @@
       allowedTCPPorts = [ ];
     };
 
-    nameservers = [
-      "1.1.1.2"
-      "1.0.0.2"
-      "1.1.1.1"
-      "1.0.0.1"
-    ];
+    nameservers = dnsServers;
+  };
+
+  services.resolved = {
+    enable = true;
+
+    dnssec = "true";
+    domains = [ "~." ];
+    fallbackDns = dnsServers;
+    dnsovertls = "true";
   };
 
   # https://github.com/NixOS/nixpkgs/issues/375352

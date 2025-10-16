@@ -17,7 +17,6 @@ let
         url = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/Mocha/Green/${file}";
       }
     );
-
 in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];

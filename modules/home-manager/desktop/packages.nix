@@ -1,4 +1,4 @@
-{ pkgs, pkgs-main, ... }:
+{ pkgs, pkgs-unstable, ... }:
 let
   phpstorm-wrapped = pkgs.buildFHSEnv {
     name = "phpstorm";
@@ -18,7 +18,7 @@ let
     name = "code";
 
     targetPkgs = pkgs: [
-      (pkgs-main.vscode.override {
+      (pkgs-unstable.vscode.override {
         commandLineArgs = [
           "--password-store=gnome-libsecret"
         ];
@@ -52,6 +52,7 @@ in
         ];
 
         gui-utils = with pkgs; [
+          libnotify
           pwvucontrol
         ];
 
