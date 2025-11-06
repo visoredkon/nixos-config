@@ -3,6 +3,10 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
+        basedpyright = {
+          disableOrganizeImports = true,
+        },
+
         dartls = {},
 
         docker_language_server = {},
@@ -46,6 +50,8 @@ return {
             },
           },
         },
+
+        hyprls = {},
 
         intelephense = {},
 
@@ -109,7 +115,13 @@ return {
           },
         },
 
-        hyprls = {},
+        python = {
+          analysis = {
+            ignore = { "*" },
+          },
+        },
+
+        ruff = {},
 
         tinymist = {
           settings = {
@@ -141,6 +153,19 @@ return {
         },
       },
 
+      codelens = {
+        enabled = true,
+      },
+
+      capabilities = {
+        workspace = {
+          fileOperations = {
+            didRename = true,
+            willRename = true,
+          },
+        },
+      },
+
       ---@type vim.diagnostic.Opts
       diagnostics = {
         underline = true,
@@ -163,19 +188,6 @@ return {
 
       inlay_hints = {
         enabled = false,
-      },
-
-      codelens = {
-        enabled = false,
-      },
-
-      capabilities = {
-        workspace = {
-          fileOperations = {
-            didRename = true,
-            willRename = true,
-          },
-        },
       },
     },
   },

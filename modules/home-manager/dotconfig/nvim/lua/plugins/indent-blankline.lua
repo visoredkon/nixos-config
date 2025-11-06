@@ -37,8 +37,8 @@ return {
         highlight = indent_highlight_names,
       },
       scope = {
-        show_start = false,
-        show_end = false,
+        show_start = true,
+        show_end = true,
       },
       exclude = {
         filetypes = {

@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   virtualisation.docker = {
@@ -12,6 +15,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    docker-credential-helpers
+    docker-buildx
+    # docker-credential-helpers
   ];
 }

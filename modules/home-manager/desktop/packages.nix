@@ -38,7 +38,9 @@ in
           discord
         ];
 
-        devs = [
+        devs = with pkgs; [
+          postman
+
           phpstorm-wrapped
           vscode-wrapped
         ];

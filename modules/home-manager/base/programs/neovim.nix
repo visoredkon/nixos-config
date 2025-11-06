@@ -22,18 +22,20 @@
       websocat
 
       # LSP
-      docker-language-server
+      # docker-language-server
       gopls
       intelephense
       lua-language-server
       nixd
       hyprls
+      basedpyright
       vscode-json-languageserver
       yaml-language-server
 
       # Linter
       hadolint
       nixpkgs-lint
+      ruff
 
       # Formatter
       gofumpt

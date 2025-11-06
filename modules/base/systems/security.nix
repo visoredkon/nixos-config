@@ -8,7 +8,10 @@
 
     pam = {
       services = {
-        sddm.enableGnomeKeyring = true;
+        sddm = {
+          enable = true;
+          enableGnomeKeyring = true;
+        };
       };
     };
 

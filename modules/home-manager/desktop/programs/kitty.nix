@@ -11,6 +11,8 @@
 
       settings = {
         allow_remote_control = "yes";
+
+        cursor_trail = "1";
       };
 
       # settings = {

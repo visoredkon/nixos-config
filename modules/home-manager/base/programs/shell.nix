@@ -20,9 +20,6 @@
       '';
 
       shellAliases = {
-        n = "n";
-        "n." = "n .";
-
         ze = "zellij";
       };
       shellAbbrs = {
@@ -37,7 +34,12 @@
         config-boot = "nixup boot";
         config-test = "nixup test";
 
+        # Neovim
+        n = "nvim";
+        "n." = "nvim .";
+
         mkdir = "mkdir -p";
+        ssh = "kitten ssh";
 
         speedtest = "speedtest --progress=yes";
       };

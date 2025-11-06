@@ -4,10 +4,7 @@
   programs.git = {
     enable = true;
 
-    userName = "Pahril";
-    userEmail = "88573655+visoredkon@users.noreply.github.com";
-
-    extraConfig = {
+    settings = {
       commit = {
         gpgsign = true;
       };
@@ -29,6 +26,9 @@
       };
 
       user = {
+        name = "Pahril";
+        email = "88573655+visoredkon@users.noreply.github.com";
+
         signingKey = "${config.home.homeDirectory}/.ssh/github";
       };
     };

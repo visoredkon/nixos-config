@@ -28,7 +28,9 @@ in
         networkmanager-l2tp
       ];
 
-      dns = "systemd-resolved";
+      # Ada masalah pake "systemd-resolved"
+      # WARP jadi sering error dan `bun install` di Docker jadi suka bermasalah
+      # dns = "systemd-resolved";
       # ethernet = {
       #   macAddress = "stable";
       # };
@@ -39,6 +41,7 @@ in
 
     firewall = {
       enable = true;
+
       allowedUDPPorts = [ ];
       allowedTCPPorts = [ ];
     };
@@ -46,14 +49,14 @@ in
     nameservers = dnsServers;
   };
 
-  services.resolved = {
-    enable = true;
-
-    dnssec = "true";
-    domains = [ "~." ];
-    fallbackDns = dnsServers;
-    dnsovertls = "true";
-  };
+  # services.resolved = {
+  #   enable = true;
+  #
+  #   dnssec = "true";
+  #   domains = [ "~." ];
+  #   fallbackDns = dnsServers;
+  #   dnsovertls = "true";
+  # };
 
   # https://github.com/NixOS/nixpkgs/issues/375352
   # debug command: `journalctl -fu NetworkManager -fu nm-l2tp-service`

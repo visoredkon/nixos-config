@@ -84,6 +84,7 @@
               "obsidian"
               "ookla-speedtest"
               "phpstorm"
+              "postman"
               "spotify"
             ];
         };
@@ -101,7 +102,6 @@
           specialArgs = {
             inherit
               inputs
-              pkgs-unstable
               stateVersion
               username
               hostname
