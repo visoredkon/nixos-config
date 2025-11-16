@@ -3,6 +3,7 @@
 {
   imports = [
     ./packages.nix
+    ./programs
 
     ./services.nix
 

@@ -6,7 +6,6 @@
     ./direnv.nix
     ./eza.nix
     ./git.nix
-    ./lazydocker.nix
     ./lazygit.nix
     ./neovim.nix
     ./nix-index.nix

@@ -22,13 +22,15 @@
       websocat
 
       # LSP
-      # docker-language-server
+      basedpyright
+      docker-language-server
       gopls
+      hyprls
       intelephense
       lua-language-server
       nixd
-      hyprls
-      basedpyright
+      # typescript-go
+      typescript-language-server
       vscode-json-languageserver
       yaml-language-server
 
@@ -48,6 +50,9 @@
 
   home = {
     file.".config/nvim" = {
+      enable = true;
+
+      force = true;
       source = ../../dotconfig/nvim;
       recursive = true;
     };

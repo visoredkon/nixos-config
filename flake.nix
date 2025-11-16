@@ -76,17 +76,19 @@
           };
         };
         "home-manager" = {
-          nixpkgs.config.allowUnfreePredicate =
-            pkg:
-            builtins.elem (lib.getName pkg) [
-              "discord"
-              "intelephense"
-              "obsidian"
-              "ookla-speedtest"
-              "phpstorm"
-              "postman"
-              "spotify"
-            ];
+          nixpkgs = {
+            config.allowUnfreePredicate =
+              pkg:
+              builtins.elem (lib.getName pkg) [
+                "discord"
+                "intelephense"
+                "obsidian"
+                "ookla-speedtest"
+                "phpstorm"
+                "postman"
+                "spotify"
+              ];
+          };
         };
       };
 
@@ -121,7 +123,7 @@
         }:
         {
           home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "backup";
+          home-manager.backupFileExtension = "home-manager.backup";
           home-manager.extraSpecialArgs = {
             inherit
               inputs
@@ -134,7 +136,7 @@
             { ... }:
             {
               imports = [
-                mkPkgs."home-manager"
+                mkPkgs.home-manager
 
                 path
               ];

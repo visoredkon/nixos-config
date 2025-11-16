@@ -7,6 +7,8 @@ return {
           disableOrganizeImports = true,
         },
 
+        biome = {},
+
         dartls = {},
 
         docker_language_server = {},
@@ -133,6 +135,9 @@ return {
             },
           },
         },
+
+        -- tsgo = {},
+        ts_ls = {},
 
         yamlls = {
           settings = {

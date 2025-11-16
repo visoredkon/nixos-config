@@ -8,8 +8,8 @@ let
   dnsServers = [
     "1.1.1.2"
     "1.0.0.2"
-    "1.1.1.1#one.one.one.one"
-    "1.0.0.1#one.one.one.one"
+    # "1.1.1.1#one.one.one.one"
+    # "1.0.0.1#one.one.one.one"
   ];
 in
 {

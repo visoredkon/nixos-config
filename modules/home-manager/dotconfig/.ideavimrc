@@ -13,7 +13,7 @@ set notimeout
 set timeoutlen=5000
 
 set NERDTree
-set relativenumber
+" set relativenumber
 set tabstop=4
 set shiftwidth=4
 set expandtab
@@ -39,7 +39,7 @@ nnoremap <leader>nd :NERDTreeDelFile<CR>
 nnoremap <leader>nr :NERDTreeRenameFile<CR>
 
 nnoremap <space><space> :action SearchEverywhere<CR>
-map s <Action>(flash.search)
+map f <Action>(flash.search)
 nnoremap d "_d
 vnoremap d "_d
 
@@ -47,13 +47,20 @@ nnoremap gd :action GotoDeclaration<CR>
 nnoremap gi :action GotoImplementation<CR>
 nnoremap gt :action GotoTypeDeclaration<CR>
 nnoremap gr :action FindUsages<CR>
-nnoremap cie :action RenameElement<CR>
+nnoremap <leader>cr :action RenameElement<CR>
 nnoremap <leader>ca :action ShowIntentionActions<CR>
 vnoremap <leader>ca :action ShowIntentionActions<CR>
 vnoremap <leader>cs :action SurroundWith<CR>
 nnoremap <leader>cp :action ParameterInfo<CR>
 nnoremap <leader>cl :action com.laravel_idea.plugin.GenerateHelperCodeAction<CR>
 vnoremap <leader>cd :action DiscordBeam.Share<CR>
+
+nnoremap <leader>ga :action aiplugin.custom.transform<CR>
+vnoremap <leader>ga :action aiplugin.custom.transform<CR>
+nnoremap <leader>gs :action com.google.tools.intellij.aiplugin.generation.GenerateManualInlineCompletionAction<CR>
+vnoremap <leader>gs :action com.google.tools.intellij.aiplugin.generation.GenerateManualInlineCompletionAction<CR>
+nnoremap <leader>gc :action ActivateStudioBotToolWindow<CR>
+vnoremap <leader>gc :action ActivateStudioBotToolWindow<CR>
 
 nnoremap <Down> :action EditorDownWithSelection<CR>
 xnoremap <Down> :action EditorDownWithSelection<CR>
