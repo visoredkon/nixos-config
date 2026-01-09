@@ -3,7 +3,10 @@ unbind d
 set smoothscroll true
 
 blacklistadd docs.google.com
+blacklistadd discord.com
 blacklistadd excalidraw.com
+blacklistadd gemini.google.com
+blacklistadd github.dev
 blacklistadd meet.google.com
 blacklistadd monkeytype.com
 blacklistadd www.canva.com

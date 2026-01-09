@@ -1,87 +1,126 @@
-{ pkgs, pkgs-unstable, ... }:
+{
+  pkgs,
+  pkgs-unstable,
+  lib,
+  ...
+}:
+
 let
-  phpstorm-wrapped = pkgs.buildFHSEnv {
-    name = "phpstorm";
+  mkFhsApp =
+    {
+      name,
+      pkg,
+      extraPkgs ? [ ],
+      runScript ? name,
+    }:
+    pkgs.buildFHSEnv {
+      inherit name runScript;
+      targetPkgs = pkgs: [ pkg ] ++ (if builtins.isList extraPkgs then extraPkgs else extraPkgs pkgs);
+    };
 
-    targetPkgs =
+  mkWrappedApp =
+    {
+      name,
+      pkg,
+      extraPkgs ? [ ],
+    }:
+    with pkgs;
+    symlinkJoin {
+      inherit name;
+      paths = [ pkg ];
+      buildInputs = [ makeBinaryWrapper ];
+      postBuild = ''
+        for bin in $out/bin/*; do
+          wrapProgram $bin \
+            --prefix PATH : ${
+              lib.makeBinPath (if builtins.isList extraPkgs then extraPkgs else extraPkgs pkgs)
+            }
+        done
+      '';
+    };
+
+  antigravity-wrapped = mkFhsApp {
+    name = "antigravity";
+    pkg = (
+      pkgs-unstable.antigravity.override {
+        commandLineArgs = [ "--password-store=gnome-libsecret" ];
+      }
+    );
+    extraPkgs =
       pkgs: with pkgs; [
-        (jetbrains.phpstorm.override {
-          jdk = jetbrains.jdk;
-        })
-
+        google-chrome
         nodejs_latest
+        uv
       ];
-
-    runScript = "phpstorm";
   };
-  vscode-wrapped = pkgs.buildFHSEnv {
+
+  phpstorm-wrapped = mkWrappedApp {
+    name = "phpstorm";
+    pkg = (
+      pkgs-unstable.jetbrains.phpstorm.override {
+        jdk = pkgs-unstable.jetbrains.jdk;
+      }
+    );
+    extraPkgs = with pkgs; [
+      nodejs_latest
+    ];
+  };
+
+  vscode-wrapped = mkWrappedApp {
     name = "code";
+    pkg = (
+      pkgs-unstable.vscode.override {
+        commandLineArgs = [ "--password-store=gnome-libsecret" ];
+      }
+    );
+    extraPkgs = with pkgs; [
+      nodejs_latest
+    ];
+  };
 
-    targetPkgs = pkgs: [
-      (pkgs-unstable.vscode.override {
-        commandLineArgs = [
-          "--password-store=gnome-libsecret"
-        ];
-      })
-
-      pkgs.nodejs_latest
+  pkgGroups = {
+    communications = with pkgs; [
+      discord
     ];
 
-    runScript = "code";
+    devs = with pkgs; [
+      postman
+
+      antigravity-wrapped
+      phpstorm-wrapped
+      vscode-wrapped
+    ];
+
+    entertainments = with pkgs; [
+      spotify
+    ];
+
+    gui-utils = with pkgs; [
+      libnotify
+      pwvucontrol
+    ];
+
+    cli-utils = with pkgs; [
+      brightnessctl
+      wl-clipboard
+      grim
+      jq
+      slurp
+      swappy
+      libinput
+      libinput-gestures
+      libsForQt5.qt5.qtwayland
+      kdePackages.qtwayland
+    ];
   };
 in
 {
   home = {
-    packages =
-      let
-        communications = with pkgs; [
-          discord
-        ];
-
-        devs = with pkgs; [
-          postman
-
-          phpstorm-wrapped
-          vscode-wrapped
-        ];
-
-        entertainments = with pkgs; [
-          spotify
-        ];
-
-        office = with pkgs; [
-          obsidian
-        ];
-
-        gui-utils = with pkgs; [
-          libnotify
-          pwvucontrol
-        ];
-
-        cli-utils = with pkgs; [
-          brightnessctl
-          wl-clipboard
-
-          grim
-          jq
-          slurp
-          swappy
-
-          libinput
-          libinput-gestures
-
-          libsForQt5.qt5.qtwayland
-          kdePackages.qtwayland
-        ];
-
-        nonPkgs = [ ];
-      in
-      communications ++ devs ++ entertainments ++ office ++ gui-utils ++ cli-utils ++ nonPkgs;
+    packages = lib.flatten (lib.attrValues pkgGroups);
 
     file = {
-      ".ideavimrc" = {
-        source = ../dotconfig/.ideavimrc;
-      };
+      ".ideavimrc".source = ../dotconfig/.ideavimrc;
+
       ".config/swappy" = {
         source = ../dotconfig/swappy;
         recursive = true;

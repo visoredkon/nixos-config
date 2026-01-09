@@ -1,10 +1,8 @@
 {
   "reload_style_on_change": true,
-  
   "layer": "top",
   "mode": "dock",
   "position": "top",
-
   "modules-left": [
     "custom/nixos",
     "clock",
@@ -21,8 +19,6 @@
     "bluetooth",
     "battery"
   ],
-
-
   "battery": {
     "format": "{capacity}% {icon}",
     "format-charging": "{capacity}% {icon}",
@@ -30,10 +26,23 @@
     "format-full": "\udb80\udc85",
     "format-icons": {
       "charging": [
-        "\udb82\udc9c", "\udb80\udc85", "\udb80\udc87", "\udb80\udc88", "\udb82\udc9d", "\udb80\udc89", "\udb82\udc9e", "\udb80\udc8a", "\udb80\udc8b", "\udb80\udc85"
+        "\udb82\udc9c",
+        "\udb80\udc85",
+        "\udb80\udc87",
+        "\udb80\udc88",
+        "\udb82\udc9d",
+        "\udb80\udc89",
+        "\udb82\udc9e",
+        "\udb80\udc8a",
+        "\udb80\udc8b",
+        "\udb80\udc85"
       ],
       "default": [
-        "\uf244", "\uf243", "\uf242", "\uf241", "\uf240"
+        "\uf244",
+        "\uf243",
+        "\uf242",
+        "\uf241",
+        "\uf240"
       ]
     },
     "format-plugged": "{capacity}% \udb81\udea5",
@@ -45,7 +54,6 @@
     "tooltip-format-charging": "{power:>1.0f}W↑ {capacity}%",
     "tooltip-format-discharging": "{power:>1.0f}W↓ {capacity}% ({time})"
   },
-  
   "bluetooth": {
     "format": "\udb80\udcaf",
     "format-alt": "{device_battery_percentage} \udb80\udcaf",
@@ -53,7 +61,6 @@
     "format-disabled": "\udb80\udcb2",
     "tooltip-format": "Devices connected: {num_connections}"
   },
-  
   "clock": {
     "actions": {
       "on-click-right": "mode",
@@ -75,12 +82,10 @@
     "rotate": 0,
     "tooltip-format": "<span>{calendar}</span>"
   },
-
   "custom/nixos": {
     "format": "\ue843",
     "on-click": "kitty"
   },
-  
   "group/tray-expander": {
     "drawer": {
       "children-class": "tray-group-item",
@@ -99,18 +104,22 @@
   "tray": {
     "icon-size": 14
   },
-  
   "hyprland/workspaces": {
     "on-click": "activate",
     "persistent-workspaces": {}
   },
-  
   "network": {
     "format": "{icon}",
     "format-alt": "{bandwidthTotalBytes} {icon}",
     "format-disconnected": "\udb82\udd2d",
     "format-ethernet": "\udb80\ude01",
-    "format-icons": ["\udb82\udd2f", "\udb82\udd1f", "\udb82\udd22", "\udb82\udd25", "\udb82\udd28"],
+    "format-icons": [
+      "\udb82\udd2f",
+      "\udb82\udd1f",
+      "\udb82\udd22",
+      "\udb82\udd25",
+      "\udb82\udd28"
+    ],
     "format-wifi": "{icon}",
     "interval": 3,
     "nospacing": 1,
@@ -118,7 +127,6 @@
     "tooltip-format-ethernet": "⇣{bandwidthDownBytes}  ⇡{bandwidthUpBytes}",
     "tooltip-format-wifi": "{essid} ({frequency}GHz)\n⇡{bandwidthUpBytes} ⇣{bandwidthDownBytes}\n{ipaddr}"
   },
-  
   "privacy": {
     "icon-size": 14,
     "ignore": [
@@ -144,10 +152,13 @@
     ],
     "transition-duration": 250
   },
-  
   "wireplumber": {
     "format": "{volume}% {icon}",
-    "format-icons": ["\uf026", "\uf027", "\uf028"],
+    "format-icons": [
+      "\uf026",
+      "\uf027",
+      "\uf028"
+    ],
     "format-muted": "\ueee8",
     "node-type": "Audio/Sink",
     "on-click": "pwvucontrol",
@@ -155,7 +166,6 @@
     "reverse-scrolling": true,
     "tooltip-format": "{node_name} // {source_desc}"
   },
-  
   "wireplumber#source": {
     "format": "{volume}% \uf130",
     "format-muted": "\uf131",

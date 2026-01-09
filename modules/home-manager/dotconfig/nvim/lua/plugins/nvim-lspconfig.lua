@@ -3,6 +3,17 @@ return {
     "neovim/nvim-lspconfig",
     opts = {
       servers = {
+        ["*"] = {
+          capabilities = {
+            workspace = {
+              fileOperations = {
+                didRename = true,
+                willRename = true,
+              },
+            },
+          },
+        },
+
         basedpyright = {
           disableOrganizeImports = true,
         },
@@ -160,15 +171,6 @@ return {
 
       codelens = {
         enabled = true,
-      },
-
-      capabilities = {
-        workspace = {
-          fileOperations = {
-            didRename = true,
-            willRename = true,
-          },
-        },
       },
 
       ---@type vim.diagnostic.Opts

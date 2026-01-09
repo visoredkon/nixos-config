@@ -44,7 +44,7 @@
       stylua
       shfmt
       typstyle
-      nixfmt-rfc-style
+      nixfmt
     ];
   };
 

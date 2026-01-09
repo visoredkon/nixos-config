@@ -14,7 +14,8 @@
     ./nix.nix
     ./power.nix
     ./shell.nix
+    ./tmp.nix
     ./virtualization.nix
-    # ./zram.nix
+    ./zram.nix
   ];
 }

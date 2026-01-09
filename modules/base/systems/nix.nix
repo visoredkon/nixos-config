@@ -15,10 +15,12 @@
 
     settings = {
       auto-optimise-store = true;
+      cores = 0;
       experimental-features = [
         "nix-command"
         "flakes"
       ];
+      max-jobs = "auto";
       trusted-users = [
         "@wheel"
       ];

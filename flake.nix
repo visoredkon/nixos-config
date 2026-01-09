@@ -5,11 +5,6 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
 
-    chaotic = {
-      url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     nixos-cli = {
       url = "github:nix-community/nixos-cli";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -60,6 +55,8 @@
         config.allowUnfreePredicate =
           pkg:
           builtins.elem (lib.getName pkg) [
+            "antigravity"
+            "phpstorm"
             "vscode"
           ];
       };
@@ -81,10 +78,10 @@
               pkg:
               builtins.elem (lib.getName pkg) [
                 "discord"
+                "google-chrome"
                 "intelephense"
                 "obsidian"
                 "ookla-speedtest"
-                "phpstorm"
                 "postman"
                 "spotify"
               ];
@@ -104,6 +101,7 @@
           specialArgs = {
             inherit
               inputs
+              pkgs-unstable
               stateVersion
               username
               hostname
@@ -119,7 +117,7 @@
 
       mkHome =
         {
-          path,
+          homePath,
         }:
         {
           home-manager.useUserPackages = true;
@@ -138,7 +136,7 @@
               imports = [
                 mkPkgs.home-manager
 
-                path
+                homePath
               ];
             };
         };
@@ -150,7 +148,7 @@
           extraModules = [
             home-manager.nixosModules.home-manager
             (mkHome {
-              path = ./modules/home-manager/desktop;
+              homePath = ./modules/home-manager/desktop;
             })
           ];
         };
@@ -160,7 +158,7 @@
           extraModules = [
             home-manager.nixosModules.home-manager
             (mkHome {
-              path = ./modules/home-manager/base;
+              homePath = ./modules/home-manager/base;
             })
           ];
         };

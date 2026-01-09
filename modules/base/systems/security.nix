@@ -16,11 +16,6 @@
     };
 
     sudo = {
-      enable = false;
-      execWheelOnly = true;
-    };
-
-    sudo-rs = {
       enable = true;
       execWheelOnly = true;
     };

@@ -8,6 +8,8 @@ let
   dnsServers = [
     "1.1.1.2"
     "1.0.0.2"
+    "2606:4700:4700::1112"
+    "2606:4700:4700::1002"
     # "1.1.1.1#one.one.one.one"
     # "1.0.0.1#one.one.one.one"
   ];
@@ -31,11 +33,30 @@ in
       # Ada masalah pake "systemd-resolved"
       # WARP jadi sering error dan `bun install` di Docker jadi suka bermasalah
       # dns = "systemd-resolved";
+      dns = "dnsmasq";
       # ethernet = {
       #   macAddress = "stable";
       # };
       wifi = {
+        backend = "iwd";
         macAddress = "random";
+        powersave = false;
+      };
+
+      settings = {
+        logging = {
+          level = "WARN";
+          audit = "false";
+        };
+
+        device = {
+          "wifi.scan-rand-mac-address" = "yes";
+        };
+
+        connection = {
+          "ipv6.ip6-privacy" = 2;
+          "wifi.powersave" = 2;
+        };
       };
     };
 
@@ -47,6 +68,20 @@ in
     };
 
     nameservers = dnsServers;
+
+    wireless.iwd = {
+      enable = true;
+      settings = {
+        General = {
+          EnableNetworkConfiguration = true;
+          AddressRandomization = "network";
+          AddressRandomizationRange = "full";
+        };
+        Network = {
+          EnableIPv6 = true;
+        };
+      };
+    };
   };
 
   # services.resolved = {

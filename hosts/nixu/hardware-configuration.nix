@@ -22,7 +22,9 @@
         "sd_mod"
         "sdhci_pci"
       ];
-      kernelModules = [ ];
+      kernelModules = [
+        "i915"
+      ];
     };
 
     loader = {
