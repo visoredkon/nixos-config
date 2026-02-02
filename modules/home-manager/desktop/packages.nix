@@ -87,7 +87,7 @@ let
       postman
 
       antigravity-wrapped
-      phpstorm-wrapped
+      # phpstorm-wrapped
       vscode-wrapped
     ];
 
@@ -95,9 +95,12 @@ let
       spotify
     ];
 
-    gui-utils = with pkgs; [
-      libnotify
-      pwvucontrol
+    games = with pkgs; [
+      hytale-launcher
+    ];
+
+    office = with pkgs; [
+      zotero
     ];
 
     cli-utils = with pkgs; [
@@ -111,6 +114,11 @@ let
       libinput-gestures
       libsForQt5.qt5.qtwayland
       kdePackages.qtwayland
+    ];
+
+    gui-utils = with pkgs; [
+      libnotify
+      pwvucontrol
     ];
   };
 in

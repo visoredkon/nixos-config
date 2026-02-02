@@ -45,6 +45,7 @@
         ];
         test = [
           "apply"
+          "--local-root"
           "--no-boot"
           "--yes"
         ];

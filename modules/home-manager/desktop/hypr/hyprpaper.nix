@@ -7,16 +7,10 @@ in
     enable = true;
 
     settings = {
-      ipc = true;
-      splash = true;
-
-      preload = [
-        wallpaper
-      ];
-
-      wallpaper = [
-        ", ${wallpaper}"
-      ];
+      wallpaper = {
+        monitor = "";
+        path = wallpaper;
+      };
     };
   };
 }

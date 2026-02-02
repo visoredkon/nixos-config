@@ -1,0 +1,11 @@
+{
+  pkgs-unstable,
+  ...
+}:
+
+{
+  services.flatpak = {
+    enable = true;
+    package = pkgs-unstable.flatpak;
+  };
+}

@@ -1,9 +1,3 @@
 { ... }:
 
-{
-  services = {
-    blueman = {
-      enable = true;
-    };
-  };
-}
+{ }

@@ -17,10 +17,18 @@
     powerOnBoot = false;
     settings = {
       General = {
-        ControllerMode = "dual";
+        Enable = "Source,Sink,Media,Socket";
         Experimental = true; # Show battery charge of Bluetooth devices (https://nixos.wiki/wiki/Bluetooth)
+        ControllerMode = "dual";
         FastConnectable = true;
       };
     };
   };
+
+  services = {
+    blueman = {
+      enable = true;
+    };
+  };
+
 }

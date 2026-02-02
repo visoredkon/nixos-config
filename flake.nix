@@ -25,6 +25,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    hytale-launcher = {
+      url = "github:visoredkon/hytale-launcher-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     zen-browser = {
       url = "github:0xc000022070/zen-browser-flake/beta";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -79,12 +84,15 @@
               builtins.elem (lib.getName pkg) [
                 "discord"
                 "google-chrome"
+                "hytale-launcher"
                 "intelephense"
                 "obsidian"
                 "ookla-speedtest"
                 "postman"
                 "spotify"
               ];
+
+            overlays = [ inputs.hytale-launcher.overlays.default ];
           };
         };
       };

@@ -15,11 +15,13 @@
       nodejs
       temurin-bin-21
 
-      graphviz
+      # graphviz
       imagemagick
       tinymist
       tree-sitter
       websocat
+
+      mermaid-cli
 
       # LSP
       basedpyright

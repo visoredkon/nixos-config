@@ -2,6 +2,8 @@ unbind d
 
 set smoothscroll true
 
+blacklistadd app.eraser.io
+blacklistadd console.idcloudhost.com
 blacklistadd docs.google.com
 blacklistadd discord.com
 blacklistadd excalidraw.com
@@ -12,6 +14,8 @@ blacklistadd monkeytype.com
 blacklistadd www.canva.com
 blacklistadd www.figma.com
 blacklistadd www.mermaidchart.com
+blacklistadd www.mermaidflow.app
 blacklistadd www.notion.so
 blacklistadd www.planttext.com
 blacklistadd web.whatsapp.com
+
