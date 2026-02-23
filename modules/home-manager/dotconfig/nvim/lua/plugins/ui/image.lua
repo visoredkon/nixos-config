@@ -1,5 +1,7 @@
 return {
   "3rd/image.nvim",
+  lazy = true,
+  ft = { "markdown", "vimwiki", "norg", "typst" },
   opts = {
     backend = "kitty",
     processor = "magick_cli",
@@ -31,7 +33,7 @@ return {
     max_width = nil,
     max_height = nil,
     max_width_window_percentage = nil,
-    max_height_window_percentage = 50,
+    max_height_window_percentage = 2,
     scale_factor = 1.0,
     window_overlap_clear_enabled = false,
     window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "snacks_notif", "scrollview", "scrollview_sign" },

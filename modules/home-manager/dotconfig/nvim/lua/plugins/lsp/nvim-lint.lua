@@ -6,7 +6,9 @@ return {
     linters_by_ft = {
       dockerfile = { "hadolint" },
       fish = { "fish" },
-      -- nix = { "nixpkgs-lint" },
+      nix = { "deadnix" },
+      python = { "ruff" },
+      terraform = { "tflint" },
     },
   },
 }

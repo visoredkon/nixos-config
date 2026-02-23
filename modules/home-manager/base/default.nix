@@ -12,6 +12,8 @@
     ./services
 
     ./themes/catppuccin.nix
+
+    ./sops.nix
   ];
 
   home = {

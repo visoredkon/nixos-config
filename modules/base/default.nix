@@ -1,4 +1,7 @@
-{ stateVersion, ... }:
+{
+  stateVersion,
+  ...
+}:
 
 {
   imports = [
@@ -11,9 +14,9 @@
 
     ./fonts.nix
 
-    ./devops
-
     ./themes/catppuccin.nix
+
+    ./sops.nix
   ];
 
   system.stateVersion = stateVersion;

@@ -2,6 +2,14 @@ return {
   {
     "neovim/nvim-lspconfig",
     opts = {
+      tinymist_subscribeDevEvent = function(callback)
+        if type(callback) ~= "function" then
+          error("callback must be a function")
+        end
+        vim.g.tinymist_subscribers = vim.g.tinymist_subscribers or {}
+        table.insert(vim.g.tinymist_subscribers, callback)
+      end,
+
       servers = {
         ["*"] = {
           capabilities = {
@@ -136,6 +144,8 @@ return {
 
         ruff = {},
 
+        terraformls = {},
+
         tinymist = {
           settings = {
             formatterMode = "typstyle",
@@ -144,6 +154,20 @@ return {
             lint = {
               enabled = true,
             },
+          },
+          handlers = {
+            ["tinymist/devEvent"] = function(_, result, ctx)
+              vim.g.tinymist_subscribers = vim.g.tinymist_subscribers or {}
+              for i = #vim.g.tinymist_subscribers, 1, -1 do
+                local callback = vim.g.tinymist_subscribers[i]
+                if callback(result) then
+                  table.remove(vim.g.tinymist_subscribers, i)
+                end
+              end
+            end,
+          },
+          init_options = {
+            hasWidgets = true,
           },
         },
 

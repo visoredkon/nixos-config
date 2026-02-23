@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   fonts = {
@@ -20,6 +23,8 @@
     };
 
     packages = with pkgs; [
+      stix-two
+
       font-awesome
 
       noto-fonts

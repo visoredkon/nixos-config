@@ -3,9 +3,11 @@ unbind d
 set smoothscroll true
 
 blacklistadd app.eraser.io
+blacklistadd chatgpt.com
 blacklistadd console.idcloudhost.com
 blacklistadd docs.google.com
 blacklistadd discord.com
+blacklistadd ieeexplore.ieee.org
 blacklistadd excalidraw.com
 blacklistadd gemini.google.com
 blacklistadd github.dev

@@ -114,6 +114,10 @@ return {
           -- },
         },
       },
+      picker = { enabled = true },
+      git = { enabled = true },
+      image = { enabled = true },
+      statuscolumn = { enabled = true },
     },
   },
 }

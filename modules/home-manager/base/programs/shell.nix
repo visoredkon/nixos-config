@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  config,
+  pkgs,
+  ...
+}:
 
 {
   programs = {
@@ -20,6 +24,7 @@
       '';
 
       shellAliases = {
+        proxmox-qemu = "${config.home.homeDirectory}/Data/Codes/lab/thesis/virtualization/proxmox-qemu.sh";
         ze = "zellij";
       };
       shellAbbrs = {

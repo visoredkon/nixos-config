@@ -23,27 +23,7 @@ vim.keymap.set("v", "d", '"_d', {
   silent = true,
 })
 
-vim.keymap.set("i", "<C-k>", "<Up>", {
-  noremap = true,
-  silent = true,
-})
-
-vim.keymap.set("i", "<C-l>", "<Right>", {
-  noremap = true,
-  silent = true,
-})
-
-vim.keymap.set("i", "<C-j>", "<Down>", {
-  noremap = true,
-  silent = true,
-})
-
-vim.keymap.set("i", "<C-h>", "<Left>", {
-  noremap = true,
-  silent = true,
-})
-
-vim.keymap.set("n", "<C-S-p>", function()
+vim.keymap.set("n", "<leader>pp", function()
   local input_opts = {
     prompt = "Save image as (path/filename): ",
     default = vim.fn.expand("%:p:h") .. "/",

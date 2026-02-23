@@ -1,6 +1,7 @@
 return {
   "chomosuke/typst-preview.nvim",
-  lazy = false,
+  lazy = true,
+  ft = "typst",
   version = "1.*",
   opts = {
     -- Setting this true will enable logging debug information to

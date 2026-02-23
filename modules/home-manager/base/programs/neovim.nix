@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   programs.neovim = {
@@ -7,23 +10,27 @@
     defaultEditor = true;
 
     extraPackages = with pkgs; [
+      # Build Tools / Compilers
       cargo
       clang
       go
+
+      # Runtime / Interpreters
       lua5_1
       luarocks-nix
       nodejs
       temurin-bin-21
 
-      # graphviz
+      # Image / Graphics
+      ghostscript
       imagemagick
-      tinymist
-      tree-sitter
-      websocat
 
+      # Document / Typesetting
       mermaid-cli
+      tectonic
+      typstyle
 
-      # LSP
+      # LSP Servers
       basedpyright
       docker-language-server
       gopls
@@ -31,22 +38,28 @@
       intelephense
       lua-language-server
       nixd
-      # typescript-go
       typescript-language-server
       vscode-json-languageserver
       yaml-language-server
 
-      # Linter
+      # Linters
+      deadnix
       hadolint
-      nixpkgs-lint
       ruff
+      tflint
 
-      # Formatter
+      # Formatters
       gofumpt
-      stylua
-      shfmt
-      typstyle
       nixfmt
+      shfmt
+      stylua
+
+      # Others
+      sqlite
+      tinymist
+      tree-sitter
+      trash-cli
+      websocat
     ];
   };
 

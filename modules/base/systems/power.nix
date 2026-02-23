@@ -12,8 +12,8 @@
 
   services = {
     logind.settings.Login = {
-      HandleLidSwitch = "poweroff";
-      HandleLidSwitchDocked = "poweroff";
+      HandleLidSwitch = "systemctl suspend";
+      HandleLidSwitchDocked = "systemctl suspend";
     };
 
     tlp = {

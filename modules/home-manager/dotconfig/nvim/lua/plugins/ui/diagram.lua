@@ -1,10 +1,12 @@
 return {
   "3rd/diagram.nvim",
-  dependencies = {
-    {
-      "3rd/image.nvim",
-    }, -- you'd probably want to configure image.nvim manually instead of doing this
-  },
+  lazy = true,
+  ft = { "markdown", "neorg" },
+  -- dependencies = {
+  --   {
+  --     "3rd/image.nvim",
+  --   }, -- you'd probably want to configure image.nvim manually instead of doing this
+  -- },
   config = function()
     require("diagram").setup({
       integrations = {

@@ -6,7 +6,8 @@
 
 {
   boot = {
-    kernelPackages = pkgs.linuxPackages_latest;
+    kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
+    # kernelPackages = pkgs.linuxPackages_latest;
 
     kernel = {
       sysctl = {
@@ -51,7 +52,7 @@
         "vm.dirty_background_ratio" = 5;
         "vm.dirty_ratio" = 10;
         "vm.page-cluster" = 0;
-        "vm.swappiness" = 100;
+        "vm.swappiness" = 5;
         "vm.vfs_cache_pressure" = 50;
         "vm.watermark_boost_factor" = 0;
         "vm.watermark_scale_factor" = 125;
@@ -62,6 +63,7 @@
       "tcp_bbr"
     ];
     kernelParams = [
+      "preempt=full"
       "usbcore.autosuspend=-1"
     ];
   };

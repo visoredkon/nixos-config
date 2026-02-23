@@ -1,33 +1,19 @@
 function nixup
-    if status is-interactive
-        set -l color_header (set_color yellow)
-        set -l color_success (set_color green)
-        set -l color_error (set_color red)
-        set -l color_info (set_color blue)
-        set -l color_cmd (set_color cyan)
-        set -l color_normal (set_color normal)
-    else
-        set -l color_header ""
-        set -l color_success ""
-        set -l color_error ""
-        set -l color_info ""
-        set -l color_cmd ""
-        set -l color_normal ""
-    end
-
     set -l config_dir ~/.config/nixos-config
     if set -q nixup_config_dir_override; and test -n "$nixup_config_dir_override"
         set config_dir $nixup_config_dir_override
     end
+    set -l secrets_dir "$config_dir/secrets"
+
+    function _print_help_entry
+        printf "  "
+        set_color cyan
+        printf "%-18s" $argv[1]
+        set_color normal
+        printf " %s\n" $argv[2]
+    end
 
     function _nixup_help
-        function _print_help_entry
-            printf "  "
-            set_color cyan
-            printf "%-18s" $argv[1]
-            set_color normal
-            printf " %s\n" $argv[2]
-        end
         echo "Usage: nixup [command] [--commit | \"message\"]"
         echo
         echo "Manages NixOS configuration with Git integration."
@@ -48,42 +34,131 @@ function nixup
 
     function _nixup_ensure_git_repo
         set -l target_dir $argv[1]
-        set -l original_dir (pwd)
-        cd "$target_dir"
-        if test $status -ne 0
-            echo (set_color red)"Fatal: Could not cd to '$target_dir'."(set_color normal)
-            cd "$original_dir"
-            return 1
-        end
 
-        if not git rev-parse --is-inside-work-tree >/dev/null 2>&1
+        if not git -C "$target_dir" rev-parse --is-inside-work-tree >/dev/null 2>&1
             echo (set_color yellow)"Git repository not found. Initializing a new one..."(set_color normal)
-            git init; and git add .; and git commit -m "I use NixOS btw"
+            git -C "$target_dir" init \
+                and git -C "$target_dir" add . \
+                and git -C "$target_dir" commit -m "I use NixOS btw"
             if test $status -ne 0
                 echo (set_color red)"Failed to initialize Git repository."(set_color normal)
-                cd "$original_dir"
                 return 1
             end
             echo (set_color green)"Git repository initialized successfully."(set_color normal)
         end
-        cd "$original_dir"
+
+        git -C "$target_dir" submodule update --init >/dev/null 2>&1
+    end
+
+    function _nixup_fmt
+        set -l cfg_dir $argv[1]
+
+        echo ""
+        echo (set_color yellow)"Formatting files with nix fmt..."(set_color normal)
+        nix fmt -- -C "$cfg_dir"
+        if test $status -ne 0
+            echo (set_color red)"Formatting failed. Aborting."(set_color normal)
+            return 1
+        end
+    end
+
+    function _nixup_prepare
+        set -l cfg_dir $argv[1]
+        set -l sec_dir $argv[2]
+
+        _nixup_ensure_git_repo "$cfg_dir"
+        if test $status -ne 0
+            return 1
+        end
+
+        _nixup_fmt "$cfg_dir"
+        if test $status -ne 0
+            return 1
+        end
+
+        echo ""
+        echo (set_color yellow)"Staging all changes..."(set_color normal)
+        _nixup_stage_all "$cfg_dir" "$sec_dir"
+        if test $status -ne 0
+            return 1
+        end
+    end
+
+    function _nixup_stage_all
+        set -l cfg_dir $argv[1]
+        set -l sec_dir $argv[2]
+
+        if test -d "$sec_dir"
+            git -C "$sec_dir" add .
+            if test $status -ne 0
+                echo (set_color red)"Failed to stage secrets submodule."(set_color normal)
+                return 1
+            end
+        end
+
+        git -C "$cfg_dir" add .
+        if test $status -ne 0
+            echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
+            return 1
+        end
+        return 0
+    end
+
+    function _nixup_check_secrets_encrypted
+        set -l sec_dir $argv[1]
+
+        if not test -d "$sec_dir"
+            return 0
+        end
+
+        set -l unencrypted
+        for f in (fd -e yaml --exclude .sops.yaml . "$sec_dir")
+            if not grep -q 'ENC\[AES256_GCM' "$f"
+                set -a unencrypted $f
+            end
+        end
+
+        if test (count $unencrypted) -gt 0
+            echo (set_color red)"Aborted: the following secrets files are not SOPS-encrypted:"(set_color normal)
+            for f in $unencrypted
+                echo "  "(set_color yellow)"$f"(set_color normal)
+            end
+            echo "Encrypt with: "(set_color cyan)"sops -e -i <file>"(set_color normal)
+            return 1
+        end
         return 0
     end
 
     function _nixup_git_sync
         set -l commit_message $argv[1]
-        set -l target_dir $argv[2]
-        set -l original_dir (pwd)
-        cd "$target_dir"
+        set -l cfg_dir $argv[2]
+        set -l sec_dir $argv[3]
+
+        _nixup_check_secrets_encrypted "$sec_dir"
         if test $status -ne 0
-            echo (set_color red)"Fatal: Could not cd to '$target_dir'."(set_color normal)
-            cd "$original_dir"
             return 1
         end
 
-        if git diff --quiet --cached
+        if not string match -rq '^(chore|feat)\([^)]+\): ' $commit_message
+            set commit_message "feat(nixos): $commit_message"
+        end
+        set -l secrets_body (string replace -r '^(chore|feat)\([^)]+\): ' '' $commit_message)
+        set -l secrets_hash ""
+
+        if test -d "$sec_dir"; and not git -C "$sec_dir" diff --quiet --cached
+            echo ""
+            echo (set_color yellow)"Committing secrets submodule..."(set_color normal)
+            git -C "$sec_dir" commit -m "feat(secrets): $secrets_body"
+            if test $status -ne 0
+                echo (set_color red)"Failed to commit secrets submodule."(set_color normal)
+                return 1
+            end
+            set secrets_hash (git -C "$sec_dir" rev-parse --short HEAD)
+            git -C "$cfg_dir" add "$sec_dir"
+        end
+
+        if git -C "$cfg_dir" diff --quiet --cached
             echo "No staged changes to commit."
-            cd "$original_dir"
             return 0
         end
 
@@ -91,17 +166,24 @@ function nixup
         echo (set_color yellow)"Committing and pushing changes..."(set_color normal)
         echo "  Commit message: '"(set_color blue)"$commit_message"(set_color normal)"'"
 
-        git commit -m "$commit_message"; and echo ""; and git push
-        set -l git_status $status
-
-        if test $git_status -ne 0
-            echo (set_color red)"Git operation failed. Aborting."(set_color normal)
+        if test -n "$secrets_hash"
+            git -C "$cfg_dir" commit -m "$commit_message" -m "secrets: $secrets_hash"
         else
-            echo (set_color green)"Git operations successful!"(set_color normal)
+            git -C "$cfg_dir" commit -m "$commit_message"
+        end
+        if test $status -ne 0
+            echo (set_color red)"Git operation failed. Aborting."(set_color normal)
+            return 1
         end
 
-        cd "$original_dir"
-        return $git_status
+        echo ""
+        git -C "$cfg_dir" push
+        if test $status -ne 0
+            echo (set_color red)"Push failed. Aborting."(set_color normal)
+            return 1
+        end
+
+        echo (set_color green)"Git operations successful!"(set_color normal)
     end
 
     if not test -d "$config_dir"
@@ -148,16 +230,8 @@ function nixup
             sudo nix-collect-garbage -d
             return $status
         case sync
-            _nixup_ensure_git_repo "$config_dir"
+            _nixup_prepare "$config_dir" "$secrets_dir"
             if test $status -ne 0
-                return 1
-            end
-
-            echo ""
-            echo (set_color yellow)"Staging all changes..."(set_color normal)
-            fish -c "cd '$config_dir'; and git add ."
-            if test $status -ne 0
-                echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
                 return 1
             end
 
@@ -166,22 +240,14 @@ function nixup
                 set commit_message $argv[2]
             else
                 set -l now (date --iso-8601=seconds)
-                set commit_message "chore(nixos): manual sync @ $now"
+                set commit_message "feat(nixos): manual sync @ $now"
             end
 
-            _nixup_git_sync "$commit_message" "$config_dir"
+            _nixup_git_sync "$commit_message" "$config_dir" "$secrets_dir"
             return $status
         case apply boot test update
-            _nixup_ensure_git_repo "$config_dir"
+            _nixup_prepare "$config_dir" "$secrets_dir"
             if test $status -ne 0
-                return 1
-            end
-
-            echo ""
-            echo (set_color yellow)"Staging all changes..."(set_color normal)
-            fish -c "cd '$config_dir'; and git add ."
-            if test $status -ne 0
-                echo (set_color red)"Failed to stage changes with 'git add'."(set_color normal)
                 return 1
             end
 
@@ -193,54 +259,47 @@ function nixup
                     echo (set_color red)"Flake update failed. Aborting."(set_color normal)
                     return 1
                 end
-                fish -c "cd '$config_dir'; and git add flake.lock"
+                git -C "$config_dir" add flake.lock
             end
 
-            if fish -c "cd '$config_dir'; and git diff --quiet --cached"
+            if git -C "$config_dir" diff --quiet --cached
                 echo "No changes staged. Nothing to build or commit."
                 return 0
             end
 
-            set -l build_msg
-            set -l build_command_exec
+            echo ""
             switch $command
                 case apply
-                    set build_msg "Applying new configuration (switch)..."
-                    set build_command_exec "nixos apply"
+                    echo (set_color yellow)"Applying new configuration (switch)..."(set_color normal)
+                    nixos apply
                 case boot
-                    set build_msg "Building new boot generation..."
-                    set build_command_exec "nixos boot"
+                    echo (set_color yellow)"Building new boot generation..."(set_color normal)
+                    nixos boot
                 case test
-                    set build_msg "Building and testing current (staged) configuration..."
-                    set build_command_exec "nixos test"
+                    echo (set_color yellow)"Building and testing current (staged) configuration..."(set_color normal)
+                    nixos test
                 case update
-                    set build_msg "Building new boot generation with all packages upgraded..."
-                    set build_command_exec "sudo nixos-rebuild boot --flake '$config_dir' --upgrade-all"
+                    echo (set_color yellow)"Building new boot generation with all packages upgraded..."(set_color normal)
+                    sudo nixos-rebuild boot --flake "$config_dir" --upgrade-all
             end
-
-            echo ""
-            echo (set_color yellow)$build_msg(set_color normal)
-            eval $build_command_exec
             set -l build_status $status
 
-            if test $build_status -eq 0
-                if $should_commit
-                    echo ""
-                    echo (set_color green)"Build successful."(set_color normal)
-                    set -l now (date --iso-8601=seconds)
-                    set -l commit_message "feat(nixos): configuration update @ $now"
-                    if test $command = update
-                        set commit_message "feat(nixos): update flake inputs and apply changes @ $now"
-                    end
-                    _nixup_git_sync "$commit_message" "$config_dir"
-                    return $status
-                else
-                    return 0
-                end
-            else
+            if test $build_status -ne 0
                 echo ""
                 echo (set_color red)"Build failed. Changes are staged but not committed."(set_color normal)
                 return $build_status
+            end
+
+            if $should_commit
+                echo ""
+                echo (set_color green)"Build successful."(set_color normal)
+                set -l now (date --iso-8601=seconds)
+                set -l commit_message "feat(nixos): configuration update @ $now"
+                if test $command = update
+                    set commit_message "feat(nixos): update flake inputs and apply changes @ $now"
+                end
+                _nixup_git_sync "$commit_message" "$config_dir" "$secrets_dir"
+                return $status
             end
         case '*'
             if string match -q -- "--*" $command
@@ -253,10 +312,4 @@ function nixup
             return 1
     end
 
-    if test $command = sync; or begin
-            contains $command apply boot test update; and $should_commit
-        end
-        echo ""
-        echo (set_color green)"Done."(set_color normal)
-    end
 end

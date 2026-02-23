@@ -1,4 +1,7 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  ...
+}:
 
 {
   home.packages = with pkgs; [
@@ -12,6 +15,7 @@
     sshfs
     xh
 
+    gdu
     lsof
     usbutils
     unzip

@@ -9,7 +9,7 @@
   imports = [ inputs.nixos-cli.nixosModules.nixos-cli ];
 
   environment.systemPackages = with pkgs; [
-    nvd
+    # nvd
     nix-output-monitor
   ];
 
@@ -17,7 +17,11 @@
     enable = true;
     config = {
       config_location = "/home/${username}/.config/nixos-config";
-      use_nvd = true;
+      use_nvd = false;
+
+      option = {
+        prettify = true;
+      };
 
       aliases = {
         boot = [

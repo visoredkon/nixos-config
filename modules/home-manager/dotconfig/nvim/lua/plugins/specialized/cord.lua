@@ -1,8 +1,10 @@
 return {
   "vyfor/cord.nvim",
+  lazy = true,
+  event = "VeryLazy",
   build = ":Cord update",
   opts = {
-    enable = true,
+    enabled = true,
 
     editor = {
       -- client = "",

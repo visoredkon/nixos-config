@@ -1,4 +1,8 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  ...
+}:
 
 {
   imports = [ inputs.stylix.homeModules.stylix ];
@@ -48,7 +52,7 @@
 
     targets = {
       zen-browser = {
-        enable = false;
+        enable = true;
 
         profileNames = [ "default" ];
       };
