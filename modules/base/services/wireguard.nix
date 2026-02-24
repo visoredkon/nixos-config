@@ -1,11 +1,16 @@
 {
   config,
   hostname,
+  pkgs,
   secretsPath,
   ...
 }:
 
 {
+  environment.systemPackages = with pkgs; [
+    wireguard-tools
+  ];
+
   sops.secrets."wg0-private-key" = {
     sopsFile = "${secretsPath}/${hostname}/wireguard/wg0.yaml";
     key = "private_key";
@@ -33,7 +38,7 @@
         {
           publicKey = "wYurqHbnOxGO0UkwhSV1GtsK+75POFv1zdX2lGbH/z4=";
           allowedIPs = [ "0.0.0.0/0" ];
-          endpoint = "210.79.191.148:53119";
+          endpoint = "27.112.78.81:53119";
           persistentKeepalive = 25;
         }
       ];

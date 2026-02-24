@@ -7,6 +7,24 @@
   projectRootFile = "flake.nix";
 
   programs = {
+    dprint = {
+      enable = true;
+      includes = [
+        "**/*.json"
+        "**/*.jsonc"
+        "**/*.md"
+      ];
+      settings = {
+        lineWidth = 120;
+        plugins = pkgs.dprint-plugins.getPluginList (
+          p: with p; [
+            dprint-plugin-json
+            dprint-plugin-markdown
+          ]
+        );
+      };
+    };
+
     nixfmt.enable = true;
 
     shfmt = {
@@ -14,7 +32,16 @@
       indent_size = 2;
     };
 
-    stylua.enable = true;
+    stylua = {
+      enable = true;
+      settings = {
+        column_width = 120;
+        indent_type = "Spaces";
+        indent_width = 2;
+      };
+    };
+
+    taplo.enable = true;
 
     yamlfmt = {
       enable = true;
@@ -32,9 +59,9 @@
       "**/*.jpg"
       "**/*.png"
       "**/*.pub"
+      "flake.lock"
       "secrets/nixu/**"
       "secrets/rune/**"
-      "flake.lock"
     ];
 
     formatter.fish_indent = {

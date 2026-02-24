@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
+    nixpkgs-unstable.url = "nixpkgs/master";
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 

@@ -37,20 +37,11 @@ let
     };
 in
 {
-  home.file = {
-    ".ssh/github.pub" = mkPubKeyLink "${sshPubKeys}/github.pub";
-  }
-  // lib.mapAttrs' (
+  home.file = lib.mapAttrs' (
     name: _: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeys}/vps/${name}.pub")
   ) (lib.genAttrs [ "aura" "genesis" "siti" ] lib.id);
 
   sops.secrets = {
-    "ssh/github" = mkSshKey {
-      sopsFile = "${sshSecrets}/github.yaml";
-      key = "private_key";
-      path = "${sshDir}/github";
-    };
-
     "ssh/config.d/secret_hosts" = mkSshKey {
       sopsFile = "${sshSecrets}/config.d/secret_hosts.yaml";
       key = "secret_host";
@@ -82,10 +73,6 @@ in
         userKnownHostsFile = "~/.ssh/known_hosts";
       };
 
-      "github.com" = {
-        hostname = "github.com";
-        identityFile = config.sops.secrets."ssh/github".path;
-      };
     };
   };
 }

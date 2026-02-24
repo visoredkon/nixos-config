@@ -55,7 +55,7 @@ function nixup
 
         echo ""
         echo (set_color yellow)"Formatting files with nix fmt..."(set_color normal)
-        nix fmt -- -C "$cfg_dir"
+        fish -c "cd '$cfg_dir'; and nix fmt"
         if test $status -ne 0
             echo (set_color red)"Formatting failed. Aborting."(set_color normal)
             return 1
@@ -151,6 +151,11 @@ function nixup
             git -C "$sec_dir" commit -m "feat(secrets): $secrets_body"
             if test $status -ne 0
                 echo (set_color red)"Failed to commit secrets submodule."(set_color normal)
+                return 1
+            end
+            git -C "$sec_dir" push
+            if test $status -ne 0
+                echo (set_color red)"Failed to push secrets submodule."(set_color normal)
                 return 1
             end
             set secrets_hash (git -C "$sec_dir" rev-parse --short HEAD)
@@ -271,13 +276,13 @@ function nixup
             switch $command
                 case apply
                     echo (set_color yellow)"Applying new configuration (switch)..."(set_color normal)
-                    nixos apply
+                    fish -c "cd '$config_dir'; and nixos apply"
                 case boot
                     echo (set_color yellow)"Building new boot generation..."(set_color normal)
-                    nixos boot
+                    fish -c "cd '$config_dir'; and nixos boot"
                 case test
                     echo (set_color yellow)"Building and testing current (staged) configuration..."(set_color normal)
-                    nixos test
+                    fish -c "cd '$config_dir'; and nixos test"
                 case update
                     echo (set_color yellow)"Building new boot generation with all packages upgraded..."(set_color normal)
                     sudo nixos-rebuild boot --flake "$config_dir" --upgrade-all
