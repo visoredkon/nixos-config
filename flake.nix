@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "nixpkgs/nixos-unstable";
-    nixpkgs-unstable.url = "nixpkgs/master";
+    nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
@@ -66,11 +66,7 @@
     }:
     let
       lib = nixpkgs.lib;
-
       arch = "x86_64-linux";
-
-      pkgs = nixpkgs.legacyPackages.${arch};
-      treefmtEval = treefmt-nix.lib.evalModule pkgs ./treefmt.nix;
       stateVersion = lib.versions.majorMinor lib.version;
 
       username = "pahril";
@@ -83,27 +79,29 @@
         system = arch;
         config.allowUnfreePredicate =
           pkg:
-          builtins.elem (lib.getName pkg) [
-            "antigravity"
-            "vscode"
-          ];
+          {
+            "antigravity" = true;
+            "vscode" = true;
+          } ? ${lib.getName pkg};
+      };
+
+      pkgs = import nixpkgs {
+        system = arch;
+        config.allowUnfreePredicate =
+          pkg:
+          {
+            "cloudflare-warp" = true;
+            "terraform" = true;
+          } ? ${lib.getName pkg};
+        overlays = [
+          inputs.nix-cachyos-kernel.overlays.pinned
+          inputs.hytale-launcher.overlays.default
+        ];
       };
 
       mkPkgs = {
         "nixos" = {
-          nixpkgs = {
-            hostPlatform = arch;
-            config.allowUnfreePredicate =
-              pkg:
-              builtins.elem (lib.getName pkg) [
-                "cloudflare-warp"
-                "terraform"
-              ];
-
-            overlays = [
-              inputs.nix-cachyos-kernel.overlays.pinned
-            ];
-          };
+          nixpkgs.pkgs = pkgs;
 
           nix.settings = {
             extra-substituters = [
@@ -114,21 +112,21 @@
             ];
           };
         };
+
         "home-manager" = {
           nixpkgs = {
             config.allowUnfreePredicate =
               pkg:
-              builtins.elem (lib.getName pkg) [
-                "discord"
-                "google-chrome"
-                "hytale-launcher"
-                "intelephense"
-                "obsidian"
-                "ookla-speedtest"
-                "postman"
-                "spotify"
-              ];
-
+              {
+                "discord" = true;
+                "google-chrome" = true;
+                "hytale-launcher" = true;
+                "intelephense" = true;
+                "obsidian" = true;
+                "ookla-speedtest" = true;
+                "postman" = true;
+                "spotify" = true;
+              } ? ${lib.getName pkg};
             overlays = [
               inputs.hytale-launcher.overlays.default
             ];
@@ -183,7 +181,7 @@
             { ... }:
             {
               imports = [
-                mkPkgs.home-manager
+                mkPkgs."home-manager"
 
                 homePath
               ];
@@ -191,7 +189,8 @@
         };
     in
     {
-      formatter.${arch} = treefmtEval.config.build.wrapper;
+      formatter.${arch} =
+        (treefmt-nix.lib.evalModule nixpkgs.legacyPackages.${arch} ./treefmt.nix).config.build.wrapper;
 
       nixosConfigurations = {
         "${hostname.guiHost}" = mkSystem {

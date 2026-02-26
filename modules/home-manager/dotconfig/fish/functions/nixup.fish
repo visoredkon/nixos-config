@@ -23,6 +23,7 @@ function nixup
         _print_help_entry "boot [--commit]" "Stage & build boot. With --commit, commits on success."
         _print_help_entry "test [--commit]" "Stage & test. With --commit, commits on success."
         _print_help_entry "update [--commit]" "Update flakes & build. With --commit, commits on success."
+        _print_help_entry secrets "Commit & push secrets, update flake input, and rebuild."
         _print_help_entry "sync [message]" "Stage, commit with an optional message, and push."
         _print_help_entry log "Show git log of the NixOS configuration"
         _print_help_entry gc "Run garbage collection for user and system"
@@ -250,6 +251,58 @@ function nixup
 
             _nixup_git_sync "$commit_message" "$config_dir" "$secrets_dir"
             return $status
+        case secrets
+            _nixup_check_secrets_encrypted "$secrets_dir"
+            if test $status -ne 0
+                return 1
+            end
+
+            if not test -d "$secrets_dir"
+                echo (set_color red)"Secrets directory not found."(set_color normal)
+                return 1
+            end
+
+            echo (set_color yellow)"Staging secrets..."(set_color normal)
+            git -C "$secrets_dir" add .
+            if git -C "$secrets_dir" diff --quiet --cached
+                echo "No secrets changes to commit."
+                return 0
+            end
+
+            echo (set_color yellow)"Committing secrets submodule..."(set_color normal)
+            set -l now (date --iso-8601=seconds)
+            git -C "$secrets_dir" commit -m "feat(secrets): update @ $now"
+            if test $status -ne 0
+                echo (set_color red)"Failed to commit secrets."(set_color normal)
+                return 1
+            end
+
+            echo (set_color yellow)"Pushing secrets submodule..."(set_color normal)
+            git -C "$secrets_dir" push
+            if test $status -ne 0
+                echo (set_color red)"Failed to push secrets."(set_color normal)
+                return 1
+            end
+
+            echo ""
+            echo (set_color yellow)"Updating secrets flake input..."(set_color normal)
+            fish -c "cd '$config_dir'; and nix flake update secrets"
+            if test $status -ne 0
+                echo (set_color red)"Flake update failed."(set_color normal)
+                return 1
+            end
+
+            git -C "$config_dir" add flake.lock
+
+            echo ""
+            echo (set_color yellow)"Applying new configuration..."(set_color normal)
+            fish -c "cd '$config_dir'; and nixos apply"
+            if test $status -ne 0
+                echo (set_color red)"Build failed."(set_color normal)
+                return $status
+            end
+
+            echo (set_color green)"Secrets updated and applied successfully!"(set_color normal)
         case apply boot test update
             _nixup_prepare "$config_dir" "$secrets_dir"
             if test $status -ne 0

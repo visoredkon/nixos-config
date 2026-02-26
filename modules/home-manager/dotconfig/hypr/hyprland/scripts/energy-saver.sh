@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
+set -eu
 
-HYPRENERYSAVERMODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')
-if [ "$HYPRENERYSAVERMODE" = 1 ]; then
+HYPR_ENERGY_SAVER_MODE=$(hyprctl getoption animations:enabled | awk 'NR==1{print $2}')
+if [ "$HYPR_ENERGY_SAVER_MODE" = 1 ]; then
   hyprctl --batch "\
         keyword animations:enabled 0;\
         keyword decoration:shadow:enabled 0;\
@@ -12,14 +13,8 @@ if [ "$HYPRENERYSAVERMODE" = 1 ]; then
         keyword decoration:rounding 0;\
         keyword misc:vfr 1;"
   notify-send "Energy Save: On"
-
   exit
 fi
 
 hyprctl reload
 notify-send "Energy Save: Off"
-
-# hyprctl --batch "\
-#       reload;\
-#       notify 5 5000 rgb(243,139,168) \"Energy Save: Off\";"
-# exit

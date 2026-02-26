@@ -38,13 +38,13 @@ in
     "ssh/github/authentication" = mkSshKey {
       sopsFile = "${sshSecrets}/github.yaml";
       key = "authentication";
-      path = "${sshDir}/github-authentication";
+      path = "${sshDir}/github/authentication";
     };
 
     "ssh/github/signing" = mkSshKey {
       sopsFile = "${sshSecrets}/github.yaml";
       key = "signing";
-      path = "${sshDir}/github-signing";
+      path = "${sshDir}/github/signing";
     };
   };
 

@@ -13,9 +13,12 @@ let
       extraPkgs ? [ ],
       runScript ? name,
     }:
+    let
+      resolvedPkgs = if builtins.isList extraPkgs then extraPkgs else extraPkgs pkgs;
+    in
     pkgs.buildFHSEnv {
       inherit name runScript;
-      targetPkgs = pkgs: [ pkg ] ++ (if builtins.isList extraPkgs then extraPkgs else extraPkgs pkgs);
+      targetPkgs = pkgs: [ pkg ] ++ resolvedPkgs;
     };
 
   mkWrappedApp =
@@ -24,6 +27,9 @@ let
       pkg,
       extraPkgs ? [ ],
     }:
+    let
+      resolvedPkgs = if builtins.isList extraPkgs then extraPkgs else extraPkgs pkgs;
+    in
     with pkgs;
     symlinkJoin {
       inherit name;
@@ -32,9 +38,7 @@ let
       postBuild = ''
         for bin in $out/bin/*; do
           wrapProgram $bin \
-            --prefix PATH : ${
-              lib.makeBinPath (if builtins.isList extraPkgs then extraPkgs else extraPkgs pkgs)
-            }
+            --prefix PATH : ${lib.makeBinPath resolvedPkgs}
         done
       '';
     };
@@ -46,12 +50,11 @@ let
         commandLineArgs = [ "--password-store=gnome-libsecret" ];
       }
     );
-    extraPkgs =
-      pkgs: with pkgs; [
-        google-chrome
-        nodejs_latest
-        uv
-      ];
+    extraPkgs = with pkgs; [
+      google-chrome
+      nodejs_latest
+      uv
+    ];
   };
 
   # phpstorm-wrapped = mkWrappedApp {
@@ -125,7 +128,7 @@ let
 in
 {
   home = {
-    packages = lib.flatten (lib.attrValues pkgGroups);
+    packages = lib.concatLists (lib.attrValues pkgGroups);
 
     file = {
       ".ideavimrc".source = ../dotconfig/.ideavimrc;

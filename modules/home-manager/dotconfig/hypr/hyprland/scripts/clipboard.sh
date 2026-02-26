@@ -1,8 +1,9 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+set -u
 
-if [ "$IS_ROFI_MODI" = "true" ]; then
+if [ "${IS_ROFI_MODI:-}" = "true" ]; then
   ACTION="$1"
-  SELECTION="$2"
+  SELECTION="${2:-}"
 
   if [ -n "$SELECTION" ]; then
     case "$ACTION" in
@@ -23,7 +24,7 @@ if [ "$IS_ROFI_MODI" = "true" ]; then
   read -r -d '' prog <<EOF
 /^[0-9]+\s<meta http-equiv=/ { next }
 match(\$0, /^([0-9]+)\s(\[\[\s)?binary.*(jpg|jpeg|png|bmp)/, grp) {
-    system("echo " grp[1] "\\\\\t | cliphist decode >$tmp_dir/"grp[1]"."grp[3])
+    system("echo " grp[1] "\\\\\\t | cliphist decode >$tmp_dir/"grp[1]"."grp[3])
     print \$0"\0icon\x1f$tmp_dir/"grp[1]"."grp[3]
     next
 }

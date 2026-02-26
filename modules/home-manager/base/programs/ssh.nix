@@ -5,74 +5,77 @@
   secretsPath,
   ...
 }:
-
 let
-  sshDir = "${config.home.homeDirectory}/.ssh";
   sshSecrets = "${secretsPath}/${hostname}/ssh";
   sshPubKeys = "${sshSecrets}/public-keys";
+  sopsHostsFile = "${sshSecrets}/hosts.yaml";
+
+  hostNames = [
+    "aura"
+    "genesis"
+    "siti"
+  ];
 
   mkPubKeyLink = src: {
     source = src;
     executable = false;
   };
 
-  mkSshKey =
-    {
-      sopsFile,
-      key,
-      path ? null,
-    }:
-    {
-      inherit key sopsFile;
-      mode = "0600";
-    }
-    // lib.optionalAttrs (path != null) { inherit path; };
-
-  mkVpsKey =
+  mkHostSecrets =
     name:
-    mkSshKey {
-      sopsFile = "${sshSecrets}/vps.yaml";
-      key = name;
-      path = "${sshDir}/vps/${name}";
-    };
+    map
+      (
+        field:
+        lib.nameValuePair "ssh/hosts/${name}/${field}" {
+          sopsFile = sopsHostsFile;
+          key = "${name}/${field}";
+          mode = if field == "private_key" then "0600" else "0400";
+        }
+      )
+      [
+        "user"
+        "hostname"
+        "port"
+        "private_key"
+      ];
+
+  secretPlaceholder = name: field: config.sops.placeholder."ssh/hosts/${name}/${field}";
+
+  mkHostConfig = name: ''
+    Host ${name}
+      HostName ${secretPlaceholder name "hostname"}
+      User ${secretPlaceholder name "user"}
+      Port ${secretPlaceholder name "port"}
+      IdentityFile ${config.sops.secrets."ssh/hosts/${name}/private_key".path}
+  '';
 in
 {
-  home.file = lib.mapAttrs' (
-    name: _: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeys}/vps/${name}.pub")
-  ) (lib.genAttrs [ "aura" "genesis" "siti" ] lib.id);
-
-  sops.secrets = {
-    "ssh/config.d/secret_hosts" = mkSshKey {
-      sopsFile = "${sshSecrets}/config.d/secret_hosts.yaml";
-      key = "secret_host";
-      path = "${sshDir}/config.d/secret_hosts";
-    };
-  }
-  // lib.mapAttrs' (name: value: lib.nameValuePair "ssh/vps/${name}" value) (
-    lib.genAttrs [ "aura" "genesis" "siti" ] mkVpsKey
+  home.file = lib.listToAttrs (
+    map (
+      name: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeys}/vps/${name}.pub")
+    ) hostNames
   );
+
+  sops.secrets = lib.listToAttrs (lib.concatMap mkHostSecrets hostNames);
+
+  sops.templates."ssh-hosts".content = lib.concatMapStringsSep "\n" mkHostConfig hostNames;
 
   programs.ssh = {
     enable = true;
-
     enableDefaultConfig = false;
+    includes = [ config.sops.templates."ssh-hosts".path ];
 
-    includes = [ "config.d/*" ];
-
-    matchBlocks = {
-      "*" = {
-        addKeysToAgent = "no";
-        compression = false;
-        controlMaster = "no";
-        controlPath = "~/.ssh/master-%r@%n:%p";
-        controlPersist = "no";
-        forwardAgent = false;
-        hashKnownHosts = true;
-        serverAliveCountMax = 3;
-        serverAliveInterval = 0;
-        userKnownHostsFile = "~/.ssh/known_hosts";
-      };
-
+    matchBlocks."*" = {
+      addKeysToAgent = "no";
+      compression = false;
+      controlMaster = "no";
+      controlPath = "~/.ssh/master-%r@%n:%p";
+      controlPersist = "no";
+      forwardAgent = false;
+      hashKnownHosts = true;
+      serverAliveCountMax = 3;
+      serverAliveInterval = 0;
+      userKnownHostsFile = "~/.ssh/known_hosts";
     };
   };
 }

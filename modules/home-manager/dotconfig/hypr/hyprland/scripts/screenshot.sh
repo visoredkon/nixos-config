@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -eu
 
 OUTPUT_DIR="$HOME/Pictures/Screenshots"
 SILENT_DIR="$OUTPUT_DIR/.Silent"
@@ -6,44 +7,44 @@ SILENT_DIR="$OUTPUT_DIR/.Silent"
 mkdir -p "$OUTPUT_DIR"
 mkdir -p "$SILENT_DIR"
 
-FILENAME="$OUTPUT_DIR/$(date +'%Y-%m-%d_%H-%M-%S').png"
-SILENT_FILENAME="$SILENT_DIR/$(date +'%Y-%m-%d_%H-%M-%S').png"
+TIMESTAMP=$(date +'%Y-%m-%d_%H-%M-%S')
+SILENT_FILENAME="$SILENT_DIR/$TIMESTAMP.png"
+FOCUSED_MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
 
-TMP_FILE=$(mktemp --suffix=.png)
+case "${1:-}" in
+silent)
+  grim -o "$FOCUSED_MONITOR" - | tee "$SILENT_FILENAME" >/dev/null
+  exit 0
+  ;;
+all)
+  TMP_FILE=$(mktemp --suffix=.png)
+  grim -o "$FOCUSED_MONITOR" "$TMP_FILE"
+  ;;
+rect)
+  GEOMETRY=$(slurp) || exit 1
+  TMP_FILE=$(mktemp --suffix=.png)
+  grim -g "$GEOMETRY" "$TMP_FILE"
+  ;;
+window)
+  GEOMETRY=$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
+  [ -z "$GEOMETRY" ] && exit 1
+  TMP_FILE=$(mktemp --suffix=.png)
+  grim -g "$GEOMETRY" "$TMP_FILE"
+  ;;
+*)
+  exit 1
+  ;;
+esac
 
 cleanup() {
   rm -f "$TMP_FILE"
 }
 trap cleanup EXIT
 
-case "$1" in
-all)
-  FOCUSED_MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
-  grim -o "$FOCUSED_MONITOR" "$TMP_FILE"
-  ;;
-silent)
-  FOCUSED_MONITOR=$(hyprctl monitors -j | jq -r '.[] | select(.focused == true) | .name')
-  grim -o "$FOCUSED_MONITOR" - | tee "$SILENT_FILENAME" >/dev/null
-  ;;
-rect)
-  GEOMETRY=$(slurp)
-  [ -z "$GEOMETRY" ] && exit 1
-  grim -g "$GEOMETRY" "$TMP_FILE"
-  ;;
-window)
-  GEOMETRY=$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
-  [ -z "$GEOMETRY" ] && exit 1
-  grim -g "$GEOMETRY" "$TMP_FILE"
-  ;;
-esac
-
-if [ "$1" != "silent" ]; then
-  if [ -f "$TMP_FILE" ]; then
-    wl-copy <"$TMP_FILE"
-    swappy -f "$TMP_FILE"
-
-    notify-send "Screenshot Taken" "Saved to clipboard." -i "$TMP_FILE"
-  else
-    notify-send "Screenshot Failed" "Could not capture the image."
-  fi
+if [ -f "$TMP_FILE" ]; then
+  wl-copy <"$TMP_FILE"
+  swappy -f "$TMP_FILE"
+  notify-send "Screenshot Taken" "Saved to clipboard and opened in editor." -i "$TMP_FILE"
+else
+  notify-send "Screenshot Failed" "Could not capture the image."
 fi

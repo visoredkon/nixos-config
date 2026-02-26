@@ -13,9 +13,9 @@
     nix-output-monitor
   ];
 
-  services.nixos-cli = {
+  programs.nixos-cli = {
     enable = true;
-    config = {
+    settings = {
       config_location = "/home/${username}/.config/nixos-config";
       use_nvd = false;
 

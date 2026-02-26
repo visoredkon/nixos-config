@@ -1,7 +1,10 @@
 #!/usr/bin/env sh
+set -eu
 
-ARGS="$@"
+PIDS=$(ps aux | grep -F "$*" | grep -v grep | grep -v toggle.sh | awk '{print $2}')
 
-if ! (ps aux | rg "$ARGS" | rg -v rg | rg -v "hypr/hyprland" | awk '{print $2}' | xargs kill); then
-  $ARGS
+if [ -n "$PIDS" ]; then
+  echo "$PIDS" | xargs kill 2>/dev/null || true
+else
+  exec "$@"
 fi
