@@ -57,14 +57,15 @@ let
     ];
   };
 
-  # phpstorm-wrapped = mkWrappedApp {
-  #   name = "phpstorm";
+  # idea-wrapped = mkWrappedApp {
+  #   name = "idea";
   #   pkg = (
-  #     pkgs-unstable.jetbrains.phpstorm.override {
+  #     pkgs-unstable.jetbrains.idea.override {
   #       jdk = pkgs-unstable.jetbrains.jdk;
   #     }
   #   );
   #   extraPkgs = with pkgs; [
+  #     javaPackages.compiler.temurin-bin.jdk-25
   #     nodejs_latest
   #   ];
   # };
@@ -78,6 +79,7 @@ let
     );
     extraPkgs = with pkgs; [
       dotnetCorePackages.sdk_10_0-bin
+      gradle
       javaPackages.compiler.temurin-bin.jdk-25
       nodejs_latest
     ];
@@ -92,6 +94,7 @@ let
       postman
 
       antigravity-wrapped
+      # idea-wrapped
       vscode-wrapped
     ];
 

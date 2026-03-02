@@ -3,9 +3,9 @@
 {
   imports = [
     ./cloudflare-warp.nix
-    # ./flatpak.nix
+    ./flatpak.nix
     ./irqbalance.nix
     ./openssh.nix
-    # ./wireguard.nix
+    ./wireguard.nix
   ];
 }

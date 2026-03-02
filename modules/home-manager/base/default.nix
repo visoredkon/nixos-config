@@ -6,6 +6,8 @@
 
 {
   imports = [
+    ../libs/ssh.nix
+
     ./packages.nix
     ./programs
 

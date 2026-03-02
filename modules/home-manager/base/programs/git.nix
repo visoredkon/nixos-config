@@ -1,50 +1,28 @@
 {
   config,
-  hostname,
-  lib,
-  secretsPath,
+  sshLib,
   ...
 }:
-
 let
-  sshDir = "${config.home.homeDirectory}/.ssh";
-  sshSecrets = "${secretsPath}/${hostname}/ssh";
-  sshPubKeys = "${sshSecrets}/public-keys";
-
-  mkPubKeyLink = src: {
-    source = src;
-    executable = false;
-  };
-
-  mkSshKey =
-    {
-      sopsFile,
-      key,
-      path ? null,
-    }:
-    {
-      inherit key sopsFile;
-      mode = "0600";
-    }
-    // lib.optionalAttrs (path != null) { inherit path; };
+  inherit (sshLib) sshSecretsPath sshPubKeysPath mkPubKeyLink;
 in
 {
   home.file = {
-    ".ssh/github/authentication.pub" = mkPubKeyLink "${sshPubKeys}/github/authentication.pub";
-    ".ssh/github/signing.pub" = mkPubKeyLink "${sshPubKeys}/github/signing.pub";
+    ".ssh/github/authentication.pub" = mkPubKeyLink "${sshPubKeysPath}/github/authentication.pub";
+    ".ssh/github/signing.pub" = mkPubKeyLink "${sshPubKeysPath}/github/signing.pub";
   };
 
   sops.secrets = {
-    "ssh/github/authentication" = mkSshKey {
-      sopsFile = "${sshSecrets}/github.yaml";
+    "ssh/github/authentication" = {
+      sopsFile = "${sshSecretsPath}/github.yaml";
       key = "authentication";
-      path = "${sshDir}/github/authentication";
+      mode = "0600";
     };
 
-    "ssh/github/signing" = mkSshKey {
-      sopsFile = "${sshSecrets}/github.yaml";
+    "ssh/github/signing" = {
+      sopsFile = "${sshSecretsPath}/github.yaml";
       key = "signing";
-      path = "${sshDir}/github/signing";
+      mode = "0600";
     };
   };
 

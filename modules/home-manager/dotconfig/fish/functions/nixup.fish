@@ -23,7 +23,7 @@ function nixup
         _print_help_entry "boot [--commit]" "Stage & build boot. With --commit, commits on success."
         _print_help_entry "test [--commit]" "Stage & test. With --commit, commits on success."
         _print_help_entry "update [--commit]" "Update flakes & build. With --commit, commits on success."
-        _print_help_entry secrets "Commit & push secrets, update flake input, and rebuild."
+        _print_help_entry secrets "Commit & push secrets, update flake input, and test."
         _print_help_entry "sync [message]" "Stage, commit with an optional message, and push."
         _print_help_entry log "Show git log of the NixOS configuration"
         _print_help_entry gc "Run garbage collection for user and system"
@@ -160,7 +160,15 @@ function nixup
                 return 1
             end
             set secrets_hash (git -C "$sec_dir" rev-parse --short HEAD)
-            git -C "$cfg_dir" add "$sec_dir"
+
+            echo (set_color yellow)"Updating secrets flake input..."(set_color normal)
+            fish -c "cd '$cfg_dir'; and nix flake update secrets"
+            if test $status -ne 0
+                echo (set_color red)"Flake update failed."(set_color normal)
+                return 1
+            end
+
+            git -C "$cfg_dir" add "$sec_dir" flake.lock
         end
 
         if git -C "$cfg_dir" diff --quiet --cached
@@ -292,17 +300,17 @@ function nixup
                 return 1
             end
 
-            git -C "$config_dir" add flake.lock
+            git -C "$config_dir" add "$secrets_dir" flake.lock
 
             echo ""
-            echo (set_color yellow)"Applying new configuration..."(set_color normal)
-            fish -c "cd '$config_dir'; and nixos apply"
+            echo (set_color yellow)"Testing new configuration..."(set_color normal)
+            fish -c "cd '$config_dir'; and nixos test"
             if test $status -ne 0
                 echo (set_color red)"Build failed."(set_color normal)
                 return $status
             end
 
-            echo (set_color green)"Secrets updated and applied successfully!"(set_color normal)
+            echo (set_color green)"Secrets updated and tested successfully!"(set_color normal)
         case apply boot test update
             _nixup_prepare "$config_dir" "$secrets_dir"
             if test $status -ne 0

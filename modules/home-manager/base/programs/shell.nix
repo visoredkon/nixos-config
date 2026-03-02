@@ -44,7 +44,6 @@
         "n." = "nvim .";
 
         mkdir = "mkdir -p";
-        ssh = "kitten ssh";
 
         speedtest = "speedtest --progress=yes";
       };

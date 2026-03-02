@@ -1,25 +1,19 @@
 {
   config,
-  hostname,
   lib,
-  secretsPath,
+  sshLib,
   ...
 }:
 let
-  sshSecrets = "${secretsPath}/${hostname}/ssh";
-  sshPubKeys = "${sshSecrets}/public-keys";
-  sopsHostsFile = "${sshSecrets}/hosts.yaml";
+  inherit (sshLib) sshSecretsPath sshPubKeysPath mkPubKeyLink;
+
+  sopsHostsFile = "${sshSecretsPath}/hosts.yaml";
 
   hostNames = [
     "aura"
     "genesis"
     "siti"
   ];
-
-  mkPubKeyLink = src: {
-    source = src;
-    executable = false;
-  };
 
   mkHostSecrets =
     name:
@@ -52,7 +46,7 @@ in
 {
   home.file = lib.listToAttrs (
     map (
-      name: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeys}/vps/${name}.pub")
+      name: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeysPath}/vps/${name}.pub")
     ) hostNames
   );
 
