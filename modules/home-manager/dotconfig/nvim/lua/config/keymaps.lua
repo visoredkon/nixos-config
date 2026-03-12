@@ -1,6 +1,3 @@
--- Keymaps are automatically loaded on the VeryLazy event
--- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
--- Add any additional keymaps here
 vim.keymap.set("n", "gpd", "<cmd>lua require('goto-preview').goto_preview_definition()<CR>", { noremap = true })
 vim.keymap.set("n", "gpt", "<cmd>lua require('goto-preview').goto_preview_type_definition()<CR>", { noremap = true })
 vim.keymap.set("n", "gpi", "<cmd>lua require('goto-preview').goto_preview_implementation()<CR>", { noremap = true })
@@ -53,3 +50,29 @@ end, {
   noremap = true,
   desc = "Paste clipboard to a prompted file path",
 })
+
+local function export_keymaps()
+  local modes = { "n", "v", "i" }
+  local lines = {}
+
+  for _, mode in ipairs(modes) do
+    table.insert(lines, "MODE: " .. mode:upper())
+    local maps = vim.api.nvim_get_keymap(mode)
+    for _, map in ipairs(maps) do
+      if map.desc or map.lhs:find("<Leader>") then
+        local lhs = map.lhs:gsub(" ", "<Space>")
+        local desc = map.desc or "No Description"
+        table.insert(lines, string.format("[%s] %-15s | %s", mode:upper(), lhs, desc))
+      end
+    end
+    table.insert(lines, "")
+  end
+
+  vim.api.nvim_command("enew")
+  vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
+  vim.bo.buftype = "nofile"
+  vim.bo.bufhidden = "hide"
+  vim.bo.swapfile = false
+end
+
+vim.api.nvim_create_user_command("ExportKeymaps", export_keymaps, {})

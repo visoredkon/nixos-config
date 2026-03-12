@@ -20,19 +20,22 @@
     };
 
     systemPackages = with pkgs; [
-      dnsmasq
       qemu_kvm
-
-      terraform
     ];
   };
 
-  networking = lib.mkIf (builtins.pathExists "/sys/class/net/enp0s20f0u4u4c2") {
-    bridges.br0.interfaces = [
-      "enp0s20f0u4u4c2"
-    ];
+  networking.networkmanager.ensureProfiles.profiles = {
+    br0 = {
+      connection = {
+        id = "br0";
+        type = "bridge";
+        interface-name = "br0";
+        autoconnect = false;
+      };
 
-    interfaces.br0.useDHCP = true;
+      ipv4.method = "auto";
+      ipv6.method = "auto";
+    };
   };
 
   security.wrappers.qemu-bridge-helper = lib.mkIf (!config.virtualisation.libvirtd.enable) {

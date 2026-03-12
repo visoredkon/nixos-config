@@ -6,7 +6,6 @@
 }:
 let
   zenPackage = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.beta;
-  zenDesktopFile = zenPackage.meta.desktopFileName;
 
   # retrieveZenCatppuccin =
   #   {
@@ -26,7 +25,7 @@ in
 
   programs.zen-browser = {
     enable = true;
-    suppressXdgMigrationWarning = true;
+    setAsDefaultBrowser = true;
 
     nativeMessagingHosts = with pkgs; [
       tridactyl-native
@@ -157,38 +156,5 @@ in
         ];
       };
     };
-
-    mimeApps =
-      let
-        associations = builtins.listToAttrs (
-          map
-            (name: {
-              inherit name;
-              value = zenDesktopFile;
-            })
-            [
-              "text/html"
-              "text/plain"
-              "application/json"
-              "application/pdf"
-              "application/xml"
-              "application/xhtml+xml"
-              "application/x-extension-htm"
-              "application/x-extension-html"
-              "application/x-extension-xht"
-              "application/x-extension-xhtml"
-              "application/x-extension-shtml"
-              "x-scheme-handler/http"
-              "x-scheme-handler/https"
-              "x-scheme-handler/about"
-              "x-scheme-handler/chrome"
-              "x-scheme-handler/unknown"
-            ]
-        );
-      in
-      {
-        associations.added = associations;
-        defaultApplications = associations;
-      };
   };
 }

@@ -1,6 +1,7 @@
 return {
   "lukas-reineke/indent-blankline.nvim",
   event = "LazyFile",
+  main = "ibl",
   opts = function()
     local highlight_groups_config = {
       { name = "IblIndentColor1", color = "#EED49F" },
@@ -11,24 +12,29 @@ return {
       { name = "IblIndentColor6", color = "#ED8796" },
     }
 
-    for _, group in ipairs(highlight_groups_config) do
-      vim.api.nvim_set_hl(0, group.name, { fg = group.color })
-    end
+    local hooks = require("ibl.hooks")
+    hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+      for _, group in ipairs(highlight_groups_config) do
+        vim.api.nvim_set_hl(0, group.name, { fg = group.color })
+      end
+    end)
 
     local indent_highlight_names = {}
     for _, group in ipairs(highlight_groups_config) do
       table.insert(indent_highlight_names, group.name)
     end
 
-    Snacks.toggle({
-      name = "Indention Guides",
-      get = function()
-        return require("ibl.config").get_config(0).enabled
-      end,
-      set = function(state)
-        require("ibl").setup_buffer(0, { enabled = state })
-      end,
-    }):map("<leader>ug")
+    if _G.Snacks then
+      Snacks.toggle({
+        name = "Indention Guides",
+        get = function()
+          return require("ibl.config").get_config(0).enabled
+        end,
+        set = function(state)
+          require("ibl").setup_buffer(0, { enabled = state })
+        end,
+      }):map("<leader>ug")
+    end
 
     return {
       indent = {
@@ -60,5 +66,4 @@ return {
       },
     }
   end,
-  main = "ibl",
 }

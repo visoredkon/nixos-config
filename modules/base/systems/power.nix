@@ -1,15 +1,6 @@
 { ... }:
 
 {
-  powerManagement = {
-    enable = false;
-
-    cpuFreqGovernor = "ondemand";
-    powertop = {
-      enable = false;
-    };
-  };
-
   services = {
     logind.settings.Login = {
       HandleLidSwitch = "systemctl suspend";

@@ -34,6 +34,10 @@ in
   programs.git = {
     enable = true;
 
+    lfs = {
+      enable = true;
+    };
+
     settings = {
       commit = {
         gpgsign = true;

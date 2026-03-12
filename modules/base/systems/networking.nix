@@ -6,10 +6,10 @@
 }:
 let
   dnsServers = [
-    "1.1.1.2"
-    "1.0.0.2"
-    "2606:4700:4700::1112"
-    "2606:4700:4700::1002"
+    "1.1.1.1"
+    "1.0.0.1"
+    "2606:4700:4700::1111"
+    "2606:4700:4700::1001"
     # "1.1.1.1#one.one.one.one"
     # "1.0.0.1#one.one.one.one"
   ];
@@ -32,14 +32,10 @@ in
 
       # Ada masalah pake "systemd-resolved"
       # WARP jadi sering error dan `bun install` di Docker jadi suka bermasalah
-      # dns = "systemd-resolved";
       dns = "dnsmasq";
-      # ethernet = {
-      #   macAddress = "stable";
-      # };
+
       wifi = {
         backend = "iwd";
-        macAddress = "random";
         powersave = false;
       };
 
@@ -47,10 +43,6 @@ in
         logging = {
           level = "WARN";
           audit = "false";
-        };
-
-        device = {
-          "wifi.scan-rand-mac-address" = "yes";
         };
 
         connection = {
@@ -65,7 +57,6 @@ in
     };
     firewall = {
       enable = true;
-
       allowedUDPPorts = [ ];
       allowedTCPPorts = [ ];
     };
@@ -76,7 +67,6 @@ in
       enable = true;
       settings = {
         General = {
-          EnableNetworkConfiguration = true;
           AddressRandomization = "network";
           AddressRandomizationRange = "full";
         };
@@ -87,15 +77,6 @@ in
     };
   };
 
-  # services.resolved = {
-  #   enable = true;
-  #
-  #   dnssec = "true";
-  #   domains = [ "~." ];
-  #   fallbackDns = dnsServers;
-  #   dnsovertls = "true";
-  # };
-
   # https://github.com/NixOS/nixpkgs/issues/375352
   # debug command: `journalctl -fu NetworkManager -fu nm-l2tp-service`
   environment.etc."strongswan.conf".text = "";
@@ -103,6 +84,12 @@ in
   users.users.${username} = {
     extraGroups = [
       "networkmanager"
+    ];
+    packages = with pkgs; [
+      dnsmasq
+      iw
+      linux-wifi-hotspot
+      haveged
     ];
   };
 }

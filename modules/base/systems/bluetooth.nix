@@ -2,13 +2,9 @@
 
 {
   boot.extraModprobeConfig = ''
-    # Enable software crypto (helps BT coexistence sometimes)
     options iwlwifi swcrypto=1
-
-    # Disable power saving on Wi-Fi module to reduce radio state changes that might disrupt BT
     options iwlwifi power_save=0
-
-    # Set power scheme for performance (iwlmvm)
+    options iwlwifi uapsd_disable=1
     options iwlmvm power_scheme=1
   '';
 

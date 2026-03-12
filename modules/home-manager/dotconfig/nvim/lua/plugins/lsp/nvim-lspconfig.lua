@@ -1,6 +1,19 @@
 return {
   {
     "neovim/nvim-lspconfig",
+    dependencies = {
+      {
+        "folke/lazydev.nvim",
+        opts = {
+          library = {
+            "LazyVim",
+            "snacks",
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          },
+          integrations = { lspconfig = true },
+        },
+      },
+    },
     opts = {
       tinymist_subscribeDevEvent = function(callback)
         if type(callback) ~= "function" then
@@ -75,6 +88,8 @@ return {
         hyprls = {},
 
         intelephense = {},
+
+        jdtls = {},
 
         jsonls = {
           settings = {

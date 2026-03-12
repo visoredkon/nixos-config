@@ -18,7 +18,7 @@ let
     in
     pkgs.buildFHSEnv {
       inherit name runScript;
-      targetPkgs = pkgs: [ pkg ] ++ resolvedPkgs;
+      targetPkgs = _pkgs: [ pkg ] ++ resolvedPkgs;
     };
 
   mkWrappedApp =

@@ -36,6 +36,7 @@
       gopls
       hyprls
       intelephense
+      jdt-language-server
       lua-language-server
       nixd
       typescript-language-server
