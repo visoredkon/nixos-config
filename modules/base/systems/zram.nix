@@ -6,9 +6,7 @@
     settings = {
       zram0 = {
         compression-algorithm = "zstd";
-
-        zram-size = "ram * 1.5";
-
+        zram-size = "ram / 2";
         priority = 100;
       };
     };

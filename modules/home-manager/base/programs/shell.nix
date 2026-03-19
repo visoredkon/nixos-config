@@ -24,6 +24,7 @@
       '';
 
       shellAliases = {
+        cfw = "${../../dotconfig/scripts/cloudflare-warp.sh}";
         proxmox-qemu = "${config.home.homeDirectory}/Data/Codes/lab/thesis/virtualization/proxmox-qemu.sh";
         ze = "zellij";
       };

@@ -1,7 +1,29 @@
-{ ... }:
+{
+  config,
+  hostname,
+  secretsPath,
+  ...
+}:
 
 {
+  sops = {
+    secrets."github-token" = {
+      sopsFile = "${secretsPath}/${hostname}/github-token.yaml";
+      key = "github_token";
+    };
+
+    templates."nix-access-token.conf" = {
+      content = ''
+        access-tokens = github.com=${config.sops.placeholder."github-token"}
+      '';
+    };
+  };
+
   nix = {
+    extraOptions = ''
+      !include /run/secrets/rendered/nix-access-tokens.conf
+    '';
+
     gc = {
       automatic = true;
       dates = "weekly";

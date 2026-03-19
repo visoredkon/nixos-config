@@ -12,6 +12,7 @@
     ./bluetooth.nix
     ./graphic.nix
     ./nix.nix
+    ./ntp.nix
     ./power.nix
     ./shell.nix
     ./tmp.nix

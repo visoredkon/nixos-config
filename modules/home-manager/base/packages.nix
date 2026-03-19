@@ -5,26 +5,29 @@
 
 {
   home.packages = with pkgs; [
-    ffmpeg
-
-    aria2
-    fd
-    fzf
-    ripgrep
-    tldr
-    sshfs
-    xh
+    p7zip
+    unzip
+    xz
+    zip
 
     gdu
     lsof
     usbutils
-    unzip
+
+    aria2
+    ookla-speedtest
+    sshfs
     wget
-    xz
-    zip
+    xh
+
+    ffmpeg
 
     devenv
 
-    ookla-speedtest
+    fd
+    fzf
+    jq
+    ripgrep
+    tldr
   ];
 }

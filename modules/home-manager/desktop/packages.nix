@@ -103,6 +103,7 @@ let
     ];
 
     games = with pkgs; [
+      blockbench
       hytale-launcher
     ];
 
@@ -114,7 +115,6 @@ let
       brightnessctl
       wl-clipboard
       grim
-      jq
       slurp
       swappy
       libinput
