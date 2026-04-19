@@ -9,7 +9,6 @@
 
     firmware = with pkgs; [
       linux-firmware
-      sof-firmware
     ];
   };
 }

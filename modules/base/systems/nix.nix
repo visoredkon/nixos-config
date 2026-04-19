@@ -21,7 +21,7 @@
 
   nix = {
     extraOptions = ''
-      !include /run/secrets/rendered/nix-access-tokens.conf
+      !include ${config.sops.templates."nix-access-token.conf".path}
     '';
 
     gc = {

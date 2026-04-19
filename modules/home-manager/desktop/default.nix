@@ -7,7 +7,7 @@
     ./packages.nix
     ./programs
 
-    ./services.nix
+    ./services
 
     ./hypr
 

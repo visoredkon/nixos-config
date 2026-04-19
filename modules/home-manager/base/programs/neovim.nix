@@ -39,6 +39,7 @@
       jdt-language-server
       lua-language-server
       nixd
+      pyright
       typescript-language-server
       vscode-json-languageserver
       yaml-language-server

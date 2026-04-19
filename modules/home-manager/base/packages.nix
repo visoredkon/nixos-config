@@ -23,6 +23,7 @@
     ffmpeg
 
     devenv
+    forge
 
     fd
     fzf

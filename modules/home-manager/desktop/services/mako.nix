@@ -13,7 +13,7 @@
   home = {
     file = {
       ".config/mako" = {
-        source = ../dotconfig/mako;
+        source = ../../dotconfig/mako;
         recursive = true;
       };
     };

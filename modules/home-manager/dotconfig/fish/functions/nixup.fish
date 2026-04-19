@@ -377,5 +377,4 @@ function nixup
             _nixup_help
             return 1
     end
-
 end

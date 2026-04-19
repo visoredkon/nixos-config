@@ -35,9 +35,7 @@ return {
           },
         },
 
-        basedpyright = {
-          disableOrganizeImports = true,
-        },
+        -- basedpyright = {},
 
         biome = {},
 
@@ -95,13 +93,17 @@ return {
           settings = {
             json = {
               format = {
-                enable = true,
+                enable = false,
               },
               schemaStore = {
                 enable = true,
               },
             },
           },
+          on_attach = function(client)
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.documentRangeFormattingProvider = false
+          end,
         },
 
         lua_ls = {
@@ -150,6 +152,8 @@ return {
             },
           },
         },
+
+        pyright = {},
 
         python = {
           analysis = {

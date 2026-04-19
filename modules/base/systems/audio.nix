@@ -1,40 +1,38 @@
 {
   username,
+  pkgs,
   ...
 }:
 
 {
+  environment.systemPackages = with pkgs; [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    gst_all_1.gst-vaapi
+  ];
+
+  hardware = {
+    firmware = with pkgs; [
+      sof-firmware
+    ];
+  };
+
   services = {
     pipewire = {
       enable = true;
-
       alsa = {
         enable = true;
+        support32Bit = true;
       };
-      # jack = {
-      #   enable = true;
-      # };
       pulse = {
         enable = true;
       };
       wireplumber = {
         enable = true;
-
-        extraConfig = {
-          # bluetoothEnhancements = {
-          #   "monitor.bluez.properties" = {
-          #   };
-          # };
-
-          pipewire."92-low-latency" = {
-            "context.properties" = {
-              "default.clock.rate" = 48000;
-              "default.clock.quantum" = 32;
-              "default.clock.min-quantum" = 32;
-              "default.clock.max-quantum" = 1024;
-            };
-          };
-        };
       };
     };
   };

@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   username,
@@ -137,6 +138,7 @@
 
       settings = {
         Resolve = {
+          DNS = config.networking.nameservers;
           FallbackDNS = [
             "1.1.1.1#one.one.one.one"
             "1.0.0.1#one.one.one.one"

@@ -5,8 +5,10 @@
 -- Prepend mise shims to PATH
 vim.env.PATH = vim.env.HOME .. "/.local/share/mise/shims:" .. vim.env.PATH
 
-vim.g.lazyvim_picker = "telescope"
+vim.opt.relativenumber = false
+vim.opt.number = true
 
+vim.g.lazyvim_picker = "telescope"
 vim.g.lazyvim_python_ruff = "ruff"
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),

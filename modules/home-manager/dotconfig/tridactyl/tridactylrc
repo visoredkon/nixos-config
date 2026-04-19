@@ -12,6 +12,7 @@ blacklistadd excalidraw.com
 blacklistadd gemini.google.com
 blacklistadd github.dev
 blacklistadd meet.google.com
+blacklistadd miro.com
 blacklistadd monkeytype.com
 blacklistadd www.canva.com
 blacklistadd www.figma.com
@@ -19,5 +20,6 @@ blacklistadd www.mermaidchart.com
 blacklistadd www.mermaidflow.app
 blacklistadd www.notion.so
 blacklistadd www.planttext.com
+blacklistadd www.tldraw.com
 blacklistadd web.whatsapp.com
 

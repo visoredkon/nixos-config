@@ -94,6 +94,7 @@ let
       postman
 
       antigravity-wrapped
+      lmstudio
       # idea-wrapped
       vscode-wrapped
     ];
@@ -125,6 +126,7 @@ let
 
     gui-utils = with pkgs; [
       libnotify
+      persepolis
       pwvucontrol
     ];
   };

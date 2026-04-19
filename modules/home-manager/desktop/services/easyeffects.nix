@@ -1,7 +1,7 @@
 { ... }:
 
 {
-  services.flatpak = {
+  services.easyeffects = {
     enable = true;
   };
 }

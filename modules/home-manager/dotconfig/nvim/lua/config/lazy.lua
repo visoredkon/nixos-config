@@ -50,7 +50,7 @@ require("lazy").setup({
     { "LazyVim/LazyVim", import = "lazyvim.plugins" },
 
     { import = "plugins.core" },
-    { import = "plugins.lsp" },
+    { import = "plugins.lsp-formatter" },
     { import = "plugins.treesitter" },
     { import = "plugins.git" },
     { import = "plugins.editing" },
