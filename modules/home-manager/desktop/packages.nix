@@ -70,6 +70,15 @@ let
   #   ];
   # };
 
+  lmstudio-wrapped = mkFhsApp {
+    name = "lm-studio";
+    pkg = pkgs-unstable.lmstudio;
+    extraPkgs = with pkgs; [
+      nodejs_latest
+      uv
+    ];
+  };
+
   vscode-wrapped = mkWrappedApp {
     name = "code";
     pkg = (
@@ -94,7 +103,7 @@ let
       postman
 
       antigravity-wrapped
-      lmstudio
+      lmstudio-wrapped
       # idea-wrapped
       vscode-wrapped
     ];

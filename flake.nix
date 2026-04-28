@@ -38,7 +38,7 @@
     };
 
     forgecode = {
-      url = "github:tailcallhq/forgecode/v2.11.1";
+      url = "github:visoredkon/forgecode-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -86,6 +86,7 @@
           pkg:
           {
             "antigravity" = true;
+            "lmstudio" = true;
             "vscode" = true;
           } ? ${lib.getName pkg};
       };
@@ -128,40 +129,13 @@
                 "google-chrome" = true;
                 "hytale-launcher" = true;
                 "intelephense" = true;
-                "lmstudio" = true;
                 "obsidian" = true;
                 "ookla-speedtest" = true;
                 "postman" = true;
                 "spotify" = true;
               } ? ${lib.getName pkg};
             overlays = [
-              (_: _: {
-                forge = pkgs.stdenv.mkDerivation rec {
-                  pname = "forge";
-                  version = "2.11.1";
-
-                  src = pkgs.fetchurl {
-                    url = "https://github.com/tailcallhq/forgecode/releases/download/v${version}/forge-x86_64-unknown-linux-gnu";
-                    hash = "sha256-v5H0/wdnFlSiXFTWF5oJU2cQTa1D3jdy+XPCeXmziA8=";
-                  };
-
-                  dontUnpack = true;
-                  dontBuild = true;
-
-                  nativeBuildInputs = [ pkgs.autoPatchelfHook ];
-
-                  buildInputs = with pkgs; [
-                    gcc.cc.lib
-                    glibc
-                  ];
-
-                  installPhase = ''
-                    mkdir -p $out/bin
-                    cp $src $out/bin/forge
-                    chmod +x $out/bin/forge
-                  '';
-                };
-              })
+              inputs.forgecode.overlays.default
               inputs.hytale-launcher.overlays.default
             ];
           };

@@ -23,7 +23,10 @@
     ffmpeg
 
     devenv
-    forge
+    forgecode
+    gemini-cli-bin
+    mise
+    opencode
 
     fd
     fzf

@@ -20,6 +20,8 @@
 
         batman --export-env | source
 
+        mise activate fish | source
+
         warp-cli generate-completions fish | source
       '';
 

@@ -7,7 +7,6 @@
     ./eza.nix
     ./git.nix
     ./lazygit.nix
-    ./mise.nix
     ./neovim.nix
     ./nix-index.nix
     ./pay-respects.nix

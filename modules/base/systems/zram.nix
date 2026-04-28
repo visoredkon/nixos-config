@@ -5,9 +5,9 @@
     enable = true;
     settings = {
       zram0 = {
-        compression-algorithm = "zstd";
         zram-size = "ram / 2";
-        priority = 100;
+        compression-algorithm = "zstd";
+        swap-priority = 100;
       };
     };
   };
