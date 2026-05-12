@@ -33,16 +33,6 @@ let
     ${nft} insert rule inet nixos-fw input jump hytale-server comment "wg-jump-$IFACE"
     ${nft} add rule inet nixos-fw hytale-server iifname "$IFACE" accept
     ${nft} add rule inet nixos-fw hytale-server ip6 nexthdr udp udp dport 5520 accept
-
-    handle=$(${nft} -a list chain inet nixos-fw input 2>/dev/null | ${grep} "wg-jump-hotspot" | ${awk} '{print $NF}')
-    if [ -n "$handle" ]; then
-      ${nft} delete rule inet nixos-fw input handle "$handle" 2>/dev/null || true
-    fi
-    ${nft} delete chain inet nixos-fw hotspot-fw 2>/dev/null || true
-    ${nft} add chain inet nixos-fw hotspot-fw
-    ${nft} insert rule inet nixos-fw input jump hotspot-fw comment "wg-jump-hotspot"
-    ${nft} add rule inet nixos-fw hotspot-fw iifname "ap0" tcp dport '{ 53, 5353 }' accept
-    ${nft} add rule inet nixos-fw hotspot-fw iifname "ap0" udp dport '{ 53, 5353, 67, 5520 }' accept
   '';
 
   hytalePreDown = pkgs.writeShellScript "hytale-predown" ''
@@ -54,13 +44,6 @@ let
     fi
     ${nft} flush chain inet nixos-fw hytale-server || true
     ${nft} delete chain inet nixos-fw hytale-server || true
-
-    handle=$(${nft} -a list chain inet nixos-fw input | ${grep} "wg-jump-hotspot" | ${awk} '{print $NF}')
-    if [ -n "$handle" ]; then
-      ${nft} delete rule inet nixos-fw input handle "$handle"
-    fi
-    ${nft} flush chain inet nixos-fw hotspot-fw || true
-    ${nft} delete chain inet nixos-fw hotspot-fw || true
   '';
 
   hytaleUpdateDns = pkgs.writeShellScript "hytale-dns-update" ''

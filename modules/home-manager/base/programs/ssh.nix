@@ -60,11 +60,11 @@ in
     includes = [ config.sops.templates."ssh-hosts".path ];
 
     matchBlocks."*" = {
-      addKeysToAgent = "no";
+      addKeysToAgent = "yes";
       compression = false;
-      controlMaster = "no";
+      controlMaster = "auto";
       controlPath = "~/.ssh/master-%r@%n:%p";
-      controlPersist = "no";
+      controlPersist = "10m";
       forwardAgent = false;
       hashKnownHosts = true;
       serverAliveCountMax = 3;

@@ -14,7 +14,7 @@
     displayManager = {
       sddm = {
         enable = true;
-        package = pkgs.kdePackages.sddm;
+        package = pkgs.qt6Packages.sddm;
 
         wayland = {
           enable = true;

@@ -1,5 +1,6 @@
 {
   pkgs,
+  pkgs-unstable,
   ...
 }:
 
@@ -15,23 +16,34 @@
     usbutils
 
     aria2
+    cloudflared
     ookla-speedtest
     sshfs
+    wayvnc
     wget
     xh
 
     ffmpeg
 
-    devenv
+    claude-code
+    codebase-memory-mcp
+    copilot-cli
     forgecode
-    gemini-cli-bin
-    mise
+    pkgs-unstable.gemini-cli
+    kiro-cli
     opencode
+
+    devenv
+    mise
+    # pvetui
+    terraform
 
     fd
     fzf
     jq
     ripgrep
     tldr
+
+    go
   ];
 }

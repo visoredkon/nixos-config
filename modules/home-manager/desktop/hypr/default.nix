@@ -1,4 +1,9 @@
-{ ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -13,17 +18,29 @@
 
   home = {
     file = {
-      ".config/hypr" = {
-        source = ../../dotconfig/hypr;
-        recursive = true;
+      ".config/nixos-config/modules/home-manager/dotconfig/hypr/.luarc.json" = {
+        text = builtins.toJSON {
+          diagnostics = {
+            globals = [
+              "hl"
+            ];
+          };
+          workspace = {
+            library = [
+              "${inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland}/share/hypr/stubs"
+            ];
+          };
+        };
       };
-      ".config/hypr/mocha.conf" = {
-        text = builtins.readFile (
-          builtins.fetchurl {
-            url = "https://raw.githubusercontent.com/catppuccin/hyprland/refs/heads/main/themes/mocha.conf";
-            sha256 = "sha256:0513j8wbh50jah2r0h48sw9jfw8w0h6w8z90vg0f6zk3jsyls5ab";
-          }
-        );
+
+      ".config/hypr/.luarc.json" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/.luarc.json";
+      };
+      ".config/hypr/hyprland.conf" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/hyprland.conf";
+      };
+      ".config/hypr/hyprland" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/hyprland";
       };
     };
   };

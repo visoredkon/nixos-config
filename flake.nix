@@ -7,13 +7,13 @@
 
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
-    nixos-cli = {
-      url = "github:nix-community/nixos-cli";
+    home-manager = {
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -22,10 +22,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     secrets = {
-      url = "git+file:///home/pahril/.config/nixos-config/secrets";
+      url = "git+ssh://git@github.com/visoredkon/nixos-secrets.git";
       flake = false;
     };
+
+    # secrets = {
+    #   url = "git+file:///home/pahril/.config/nixos-config/secrets";
+    #   flake = false;
+    # };
 
     catppuccin = {
       url = "github:catppuccin/nix";
@@ -37,13 +47,18 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    forgecode = {
-      url = "github:visoredkon/forgecode-flake";
+    hytale-launcher = {
+      url = "github:visoredkon/hytale-launcher-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hytale-launcher = {
-      url = "github:visoredkon/hytale-launcher-flake";
+    my-flakes = {
+      url = "github:visoredkon/my-flakes";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    pvetui = {
+      url = "github:devnullvoid/pvetui";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -53,11 +68,6 @@
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
       };
-    };
-
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -80,6 +90,26 @@
         cli = "rune";
       };
 
+      nixSettings = {
+        nix.settings = {
+          extra-substituters = [
+            "https://hyprland.cachix.org"
+            "https://nix-community.cachix.org"
+            "https://attic.xuyh0120.win/lantian"
+          ];
+          extra-trusted-substituters = [
+            "https://hyprland.cachix.org"
+            "https://nix-community.cachix.org"
+            "https://attic.xuyh0120.win/lantian"
+          ];
+          extra-trusted-public-keys = [
+            "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+            "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+            "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+          ];
+        };
+      };
+
       pkgs-unstable = import nixpkgs-unstable {
         system = arch;
         config.allowUnfreePredicate =
@@ -91,31 +121,17 @@
           } ? ${lib.getName pkg};
       };
 
-      pkgs = import nixpkgs {
-        system = arch;
-        config.allowUnfreePredicate =
-          pkg:
-          {
-            "cloudflare-warp" = true;
-            "terraform" = true;
-          } ? ${lib.getName pkg};
-        overlays = [
-          inputs.nix-cachyos-kernel.overlays.pinned
-        ];
-      };
-
       mkPkgs = {
         "nixos" = {
-          nixpkgs.pkgs = pkgs;
-
-          nix.settings = {
-            extra-substituters = [
-              "https://nix-community.cachix.org"
-              "https://attic.xuyh0120.win/lantian"
-            ];
-            extra-trusted-public-keys = [
-              "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-              "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+          nixpkgs = {
+            system = arch;
+            config.allowUnfreePredicate =
+              pkg:
+              {
+                "cloudflare-warp" = true;
+              } ? ${lib.getName pkg};
+            overlays = [
+              inputs.nix-cachyos-kernel.overlays.pinned
             ];
           };
         };
@@ -132,11 +148,16 @@
                 "obsidian" = true;
                 "ookla-speedtest" = true;
                 "postman" = true;
+                "terraform" = true;
                 "spotify" = true;
               } ? ${lib.getName pkg};
             overlays = [
-              inputs.forgecode.overlays.default
               inputs.hytale-launcher.overlays.default
+              inputs.my-flakes.overlays.default
+
+              (_final: prev: {
+                pvetui = inputs.pvetui.packages.${prev.stdenv.hostPlatform.system}.default;
+              })
             ];
           };
         };
@@ -162,7 +183,7 @@
           };
           modules = [
             mkPkgs."nixos"
-
+            nixSettings
             ./hosts/${hostname}
           ]
           ++ extraModules;

@@ -106,6 +106,7 @@ let
       lmstudio-wrapped
       # idea-wrapped
       vscode-wrapped
+      zed-editor
     ];
 
     entertainments = with pkgs; [

@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   username,
   ...
@@ -11,6 +12,6 @@
 
   sops = {
     defaultSopsFormat = "yaml";
-    age.keyFile = "/home/${username}/.config/sops/age/keys.txt";
+    age.keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
   };
 }

@@ -1,17 +1,24 @@
 {
+  inputs,
   pkgs,
   ...
 }:
 
 {
+  imports = [ inputs.hyprland.nixosModules.default ];
+
   environment.systemPackages = with pkgs; [
     hyprshutdown
   ];
 
-  programs.hyprland = {
-    enable = true;
+  programs = {
+    uwsm.enable = true;
 
-    withUWSM = true;
-    xwayland.enable = true;
+    hyprland = {
+      enable = true;
+
+      withUWSM = true;
+      xwayland.enable = true;
+    };
   };
 }

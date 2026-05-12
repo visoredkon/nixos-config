@@ -3,8 +3,8 @@
 {
   imports = [
     ./dconf.nix
+    ./nh.nix
     ./nix-ld.nix
-    ./nixos-cli.nix
 
     ./virtualization
   ];

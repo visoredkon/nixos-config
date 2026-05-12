@@ -1,4 +1,5 @@
 {
+  config,
   username,
   stateVersion,
   ...
@@ -23,7 +24,7 @@
     homeDirectory = "/home/${username}";
 
     sessionVariables = {
-      NIXOS_CONFIG = "/home/${username}/.config/nixos-config";
+      NIXOS_CONFIG = "${config.home.homeDirectory}/.config/nixos-config";
     };
 
     shell.enableFishIntegration = true;

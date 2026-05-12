@@ -1,4 +1,5 @@
 {
+  config,
   inputs,
   lib,
   pkgs,
@@ -127,9 +128,8 @@ in
   };
 
   home.file = {
-    ".config/tridactyl" = {
-      source = ../../dotconfig/tridactyl;
-      recursive = true;
+    ".config/tridactyl/tridactylrc" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/tridactyl/tridactylrc";
     };
   };
 

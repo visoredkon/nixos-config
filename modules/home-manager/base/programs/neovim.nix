@@ -1,5 +1,7 @@
 {
+  config,
   pkgs,
+  lib,
   ...
 }:
 
@@ -40,6 +42,7 @@
       lua-language-server
       nixd
       pyright
+      terraform-ls
       typescript-language-server
       vscode-json-languageserver
       yaml-language-server
@@ -65,13 +68,18 @@
     ];
   };
 
-  home = {
-    file.".config/nvim" = {
-      enable = true;
-
-      force = true;
-      source = ../../dotconfig/nvim;
-      recursive = true;
+  xdg.configFile = {
+    "nvim/init.lua" = lib.mkForce {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/nvim/init.lua";
+    };
+    "nvim/lazyvim.json" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/nvim/lazyvim.json";
+    };
+    "nvim/stylua.toml" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/nvim/stylua.toml";
+    };
+    "nvim/lua" = {
+      source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/nvim/lua";
     };
   };
 }
