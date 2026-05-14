@@ -3,7 +3,7 @@
 {
   catppuccin = {
     hyprland = {
-      enable = true;
+      enable = false;
     };
 
     hyprlock = {

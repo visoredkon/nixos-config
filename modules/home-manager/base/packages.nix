@@ -35,7 +35,7 @@
 
     devenv
     mise
-    # pvetui
+    pvetui
     terraform
 
     fd

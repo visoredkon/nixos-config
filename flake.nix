@@ -5,7 +5,10 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "nixpkgs/nixpkgs-unstable";
 
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    nix-cachyos-kernel = {
+      url = "github:xddxdd/nix-cachyos-kernel/release";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -93,20 +96,21 @@
       nixSettings = {
         nix.settings = {
           extra-substituters = [
+            "https://attic.xuyh0120.win/lantian"
             "https://hyprland.cachix.org"
             "https://nix-community.cachix.org"
-            "https://attic.xuyh0120.win/lantian"
           ];
           extra-trusted-substituters = [
+            "https://attic.xuyh0120.win/lantian"
             "https://hyprland.cachix.org"
             "https://nix-community.cachix.org"
-            "https://attic.xuyh0120.win/lantian"
           ];
           extra-trusted-public-keys = [
+            "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
             "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
             "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
-            "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
           ];
+          fallback = true;
         };
       };
 
@@ -156,7 +160,9 @@
               inputs.my-flakes.overlays.default
 
               (_final: prev: {
-                pvetui = inputs.pvetui.packages.${prev.stdenv.hostPlatform.system}.default;
+                pvetui = inputs.pvetui.packages.${prev.stdenv.hostPlatform.system}.default.overrideAttrs (_: {
+                  vendorHash = "sha256-S6QjNRuZgB+iGbGmKUGGjQHaHdNjVCdpeNhtMoUEkSA=";
+                });
               })
             ];
           };

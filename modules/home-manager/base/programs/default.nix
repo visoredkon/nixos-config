@@ -2,11 +2,12 @@
 
 {
   imports = [
+    ./vcs
+
     ./btop.nix
     ./direnv.nix
     ./eza.nix
     ./gh.nix
-    ./git.nix
     ./lazygit.nix
     ./neovim.nix
     ./nix-index.nix

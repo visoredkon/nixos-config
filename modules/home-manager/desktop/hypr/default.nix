@@ -36,8 +36,8 @@
       ".config/hypr/.luarc.json" = {
         source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/.luarc.json";
       };
-      ".config/hypr/hyprland.conf" = {
-        source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/hyprland.conf";
+      ".config/hypr/hyprland.lua" = {
+        source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/hyprland.lua";
       };
       ".config/hypr/hyprland" = {
         source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/hypr/hyprland";

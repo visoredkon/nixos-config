@@ -119,6 +119,7 @@ let
     ];
 
     office = with pkgs; [
+      # obsidian
       zotero
     ];
 

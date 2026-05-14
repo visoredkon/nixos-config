@@ -1,6 +1,13 @@
 #!/usr/bin/env sh
 set -eu
 
+require_cmd() {
+  command -v "$1" >/dev/null 2>&1 || {
+    notify-send "Missing" "$1"
+    exit 1
+  }
+}
+
 OUTPUT_DIR="$HOME/Pictures/Screenshots"
 SILENT_DIR="$OUTPUT_DIR/.Silent"
 
@@ -17,17 +24,23 @@ silent)
   exit 0
   ;;
 all)
+  require_cmd wl-copy
+  require_cmd swappy
   TMP_FILE=$(mktemp --suffix=.png)
   grim -o "$FOCUSED_MONITOR" "$TMP_FILE"
   ;;
 rect)
+  require_cmd wl-copy
+  require_cmd swappy
   GEOMETRY=$(slurp) || exit 1
   TMP_FILE=$(mktemp --suffix=.png)
   grim -g "$GEOMETRY" "$TMP_FILE"
   ;;
 window)
-  GEOMETRY=$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"')
-  [ -z "$GEOMETRY" ] && exit 1
+  require_cmd wl-copy
+  require_cmd swappy
+  GEOMETRY=$(hyprctl -j activewindow | jq -r '"\(.at[0]),\(.at[1]) \(.size[0])x\(.size[1])"') || true
+  [ -z "$GEOMETRY" ] && notify-send "Screenshot" "No active window" && exit 1
   TMP_FILE=$(mktemp --suffix=.png)
   grim -g "$GEOMETRY" "$TMP_FILE"
   ;;
@@ -39,12 +52,9 @@ esac
 cleanup() {
   rm -f "$TMP_FILE"
 }
-trap cleanup EXIT
+trap cleanup EXIT TERM INT
 
-if [ -f "$TMP_FILE" ]; then
-  wl-copy <"$TMP_FILE"
-  swappy -f "$TMP_FILE"
-  notify-send "Screenshot Taken" "Saved to clipboard and opened in editor." -i "$TMP_FILE"
-else
-  notify-send "Screenshot Failed" "Could not capture the image."
-fi
+wl-copy <"$TMP_FILE"
+swappy -f "$TMP_FILE"
+
+notify-send "Screenshot Taken" "Saved to clipboard and opened in editor." -i "$TMP_FILE"
