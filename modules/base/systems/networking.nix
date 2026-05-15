@@ -16,13 +16,8 @@
       ];
 
       connectionConfig = {
-        "ipv4.ignore-auto-dns" = true;
-
-        "ipv6.ignore-auto-dns" = true;
         "ipv6.addr-gen-mode" = "stable-privacy";
         "ipv6.ip6-privacy" = 2;
-
-        "wifi.powersave" = 2;
       };
 
       dns = "systemd-resolved";

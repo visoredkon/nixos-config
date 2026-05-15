@@ -8,10 +8,7 @@ hl.bind(V.mainMod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:s
 hl.bind(V.mainMod .. " + CTRL + S", hl.dsp.window.move({ workspace = "special:special", follow = false }))
 
 hl.bind(V.mainMod .. " + ALT + S", function()
-  hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
-  hl.dispatch(hl.dsp.window.move({ workspace = "+0" }))
-  hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
-  hl.dispatch(hl.dsp.window.move({ workspace = "magic" }))
+  hl.dispatch(hl.dsp.window.move({ workspace = "special:magic", follow = false }))
   hl.dispatch(hl.dsp.workspace.toggle_special("magic"))
 end)
 

@@ -24,17 +24,16 @@ return {
       table.insert(indent_highlight_names, group.name)
     end
 
-    if _G.Snacks then
-      Snacks.toggle({
-        name = "Indention Guides",
-        get = function()
-          return require("ibl.config").get_config(0).enabled
-        end,
-        set = function(state)
-          require("ibl").setup_buffer(0, { enabled = state })
-        end,
-      }):map("<leader>ug")
-    end
+    local Snacks = require("snacks")
+    Snacks.toggle({
+      name = "Indention Guides",
+      get = function()
+        return require("ibl.config").get_config(0).enabled
+      end,
+      set = function(state)
+        require("ibl").setup_buffer(0, { enabled = state })
+      end,
+    }):map("<leader>ug")
 
     return {
       indent = {

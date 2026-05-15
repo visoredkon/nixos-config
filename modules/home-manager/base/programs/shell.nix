@@ -34,24 +34,12 @@
         ze = "zellij";
       };
       shellAbbrs = {
-        # NixUp
         config = "nixup config";
 
-        config-lazygit = "nixup lazygit";
-        config-log = "nixup log";
-        config-sync = "nixup sync";
-
-        config-apply = "nixup apply";
-        config-boot = "nixup boot";
-        config-test = "nixup test";
-
-        # Neovim
         n = "nvim";
         "n." = "nvim .";
 
         mkdir = "mkdir -p";
-
-        speedtest = "speedtest --progress=yes";
       };
 
       plugins = [
@@ -61,12 +49,7 @@
         }
         {
           name = "done";
-          src = pkgs.fetchFromGitHub {
-            owner = "franciscolourenco";
-            repo = "done";
-            rev = "0bfe402753681f705a482694fcaf20c2bfc6deb7";
-            sha256 = "WA6DBrPBuXRIloO05UBunTJ9N01d6tO1K1uqojjO0mo=";
-          };
+          src = pkgs.fishPlugins.done;
         }
         {
           name = "fifc";
@@ -93,15 +76,13 @@
   };
 
   home = {
-    file.".config/starship.toml" = {
-      source = ../../dotconfig/starship.toml;
-    };
-    file.".config/fastfetch" = {
-      source = ../../dotconfig/fastfetch;
-      recursive = true;
-    };
-    file.".config/fish/functions/nixup.fish" = {
-      source = ../../dotconfig/fish/functions/nixup.fish;
+    file = {
+      ".config/starship.toml".source = ../../dotconfig/starship.toml;
+      ".config/fastfetch" = {
+        source = ../../dotconfig/fastfetch;
+        recursive = true;
+      };
+      ".config/fish/functions/nixup.fish".source = ../../dotconfig/fish/functions/nixup.fish;
     };
   };
 }

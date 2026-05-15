@@ -1,7 +1,4 @@
-{
-  # pkgs,
-  ...
-}:
+_:
 
 {
   programs.nix-ld = {

@@ -31,7 +31,7 @@
     };
 
     settings = {
-      auto-optimise-store = true;
+      auto-optimise-store = false;
       cores = 12;
       experimental-features = [
         "nix-command"

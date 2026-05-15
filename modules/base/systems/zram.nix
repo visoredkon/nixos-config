@@ -1,6 +1,8 @@
-{ ... }:
+_:
 
 {
+  boot.zswap.enable = false;
+
   services.zram-generator = {
     enable = true;
     settings = {

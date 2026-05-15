@@ -13,8 +13,9 @@ return {
           if require("conform").get_formatter_info(formatter_name, bufnr).available then
             return { formatter_name }
           end
-          return { "jq" }
+          return { "dprint" }
         end,
+        fish = { "fish_indent" },
         lua = { "stylua" },
         markdown = function(bufnr)
           local fname = vim.api.nvim_buf_get_name(bufnr)
@@ -23,12 +24,14 @@ return {
             return { "prettier" }
           end
 
-          return {}
+          return { "dprint" }
         end,
         nix = { "nixfmt" },
         php = { "pint" },
         python = { "ruff" },
         sh = { "shfmt" },
+        toml = { "taplo" },
+        yaml = { "yamlfmt" },
         zsh = { "shfmt" },
       },
     },

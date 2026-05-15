@@ -7,18 +7,23 @@
   projectRootFile = "flake.nix";
 
   programs = {
-    dprint = {
+    biome = {
       enable = true;
       includes = [
         "**/*.json"
         "**/*.jsonc"
+      ];
+    };
+
+    dprint = {
+      enable = true;
+      includes = [
         "**/*.md"
       ];
       settings = {
         lineWidth = 120;
         plugins = pkgs.dprint-plugins.getPluginList (
           p: with p; [
-            dprint-plugin-json
             dprint-plugin-markdown
           ]
         );

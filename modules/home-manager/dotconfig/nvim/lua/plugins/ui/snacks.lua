@@ -116,7 +116,7 @@ return {
       },
       picker = { enabled = true },
       git = { enabled = true },
-      image = { enabled = true },
+      image = { enabled = false },
       statuscolumn = { enabled = true },
     },
   },

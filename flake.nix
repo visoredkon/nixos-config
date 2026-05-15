@@ -83,7 +83,7 @@
       ...
     }:
     let
-      lib = nixpkgs.lib;
+      inherit (nixpkgs) lib;
       arch = "x86_64-linux";
       stateVersion = lib.versions.majorMinor lib.version;
 
@@ -96,11 +96,6 @@
       nixSettings = {
         nix.settings = {
           extra-substituters = [
-            "https://attic.xuyh0120.win/lantian"
-            "https://hyprland.cachix.org"
-            "https://nix-community.cachix.org"
-          ];
-          extra-trusted-substituters = [
             "https://attic.xuyh0120.win/lantian"
             "https://hyprland.cachix.org"
             "https://nix-community.cachix.org"
@@ -161,7 +156,18 @@
 
               (_final: prev: {
                 pvetui = inputs.pvetui.packages.${prev.stdenv.hostPlatform.system}.default.overrideAttrs (_: {
-                  vendorHash = "sha256-S6QjNRuZgB+iGbGmKUGGjQHaHdNjVCdpeNhtMoUEkSA=";
+                  vendorHash = "sha256-5dcnwOlai2OAC28GgO2IAi1W039+sut+9ThbntNadS0=";
+                });
+              })
+
+              (_final: prev: {
+                waybar = (prev.waybar.override { cavaSupport = false; }).overrideAttrs (_: {
+                  src = prev.fetchFromGitHub {
+                    owner = "Alexays";
+                    repo = "Waybar";
+                    rev = "05945748dccce28bf96d26d8f64a9e69a8dd49ba";
+                    hash = "sha256-51R3mIt8cLNvh/X5qe9vOqeJCj0U9KRyemVE5y+OhiU=";
+                  };
                 });
               })
             ];
@@ -201,16 +207,18 @@
           hostname,
         }:
         {
-          home-manager.useUserPackages = true;
-          home-manager.backupFileExtension = "home-manager.backup";
-          home-manager.extraSpecialArgs = {
-            inherit
-              inputs
-              pkgs-unstable
-              stateVersion
-              username
-              hostname
-              ;
+          home-manager = {
+            useUserPackages = true;
+            backupFileExtension = "home-manager.backup";
+            extraSpecialArgs = {
+              inherit
+                inputs
+                pkgs-unstable
+                stateVersion
+                username
+                hostname
+                ;
+            };
           };
           home-manager.users.${username} =
             { ... }:

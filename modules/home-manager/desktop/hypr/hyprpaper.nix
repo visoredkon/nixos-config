@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   wallpaper = "${../assets/images/wallpapers/madara.jpg}";
 in

@@ -45,11 +45,9 @@ let
 
   antigravity-wrapped = mkFhsApp {
     name = "antigravity";
-    pkg = (
-      pkgs-unstable.antigravity.override {
-        commandLineArgs = [ "--password-store=gnome-libsecret" ];
-      }
-    );
+    pkg = pkgs-unstable.antigravity.override {
+      commandLineArgs = [ "--password-store=gnome-libsecret" ];
+    };
     extraPkgs = with pkgs; [
       google-chrome
       nodejs_latest
@@ -81,11 +79,9 @@ let
 
   vscode-wrapped = mkWrappedApp {
     name = "code";
-    pkg = (
-      pkgs-unstable.vscode.override {
-        commandLineArgs = [ "--password-store=gnome-libsecret" ];
-      }
-    );
+    pkg = pkgs-unstable.vscode.override {
+      commandLineArgs = [ "--password-store=gnome-libsecret" ];
+    };
     extraPkgs = with pkgs; [
       dotnetCorePackages.sdk_10_0-bin
       gradle
@@ -119,7 +115,7 @@ let
     ];
 
     office = with pkgs; [
-      # obsidian
+      obsidian
       zotero
     ];
 

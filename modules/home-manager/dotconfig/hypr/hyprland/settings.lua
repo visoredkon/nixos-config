@@ -7,7 +7,7 @@ hl.config({
     gaps_out = 6,
     col = {
       active_border = c.gradient,
-      inactive_border = c.gradient,
+      inactive_border = c.surface2,
     },
     resize_on_border = false,
     allow_tearing = false,
@@ -20,6 +20,9 @@ hl.config({
       border_locked_active = c.gradient,
       border_locked_inactive = c.gradient,
     },
+  },
+  cursor = {
+    no_hardware_cursors = 1,
   },
   decoration = {
     rounding = 2,

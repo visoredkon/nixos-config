@@ -3,6 +3,7 @@ return {
   event = "LazyFile",
   opts = function()
     local tsc = require("treesitter-context")
+    local Snacks = require("snacks")
     Snacks.toggle({
       name = "Treesitter Context",
       get = tsc.enabled,

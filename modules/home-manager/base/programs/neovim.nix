@@ -18,7 +18,7 @@
       go
 
       # Runtime / Interpreters
-      lua5_1
+      lua
       luarocks-nix
       nodejs
       temurin-bin-21
@@ -33,7 +33,11 @@
       typstyle
 
       # LSP Servers
+      bash-language-server
       basedpyright
+      fish-lsp
+      marksman
+      vscode-langservers-extracted
       docker-language-server
       gopls
       hyprls
@@ -41,19 +45,29 @@
       jdt-language-server
       lua-language-server
       nixd
-      pyright
       terraform-ls
+      typescript-go
       typescript-language-server
       vscode-json-languageserver
       yaml-language-server
 
       # Linters
+      actionlint
       deadnix
+      markdownlint-cli2
+      selene
+      shellcheck
+      statix
+      yamllint
       hadolint
       ruff
       tflint
 
       # Formatters
+      biome
+      dprint
+      taplo
+      yamlfmt
       gofumpt
       nixfmt
       shfmt

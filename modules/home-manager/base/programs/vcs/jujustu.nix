@@ -13,8 +13,7 @@ in
 
       settings = {
         user = {
-          name = gitUser.name;
-          email = gitUser.email;
+          inherit (gitUser) name email;
         };
       };
     };

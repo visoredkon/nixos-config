@@ -38,14 +38,15 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/eda051b9-cda9-46e5-8cf0-a25a0c8fe875";
     fsType = "ext4";
+    options = [ "noatime" ];
   };
 
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/98F4-F7F9";
     fsType = "vfat";
     options = [
-      "fmask=0022"
-      "dmask=0022"
+      "fmask=0077"
+      "dmask=0077"
     ];
   };
 

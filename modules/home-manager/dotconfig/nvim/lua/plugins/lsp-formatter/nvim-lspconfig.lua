@@ -2,6 +2,7 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
+      "saghen/blink.cmp",
       {
         "folke/lazydev.nvim",
         opts = {
@@ -23,7 +24,13 @@ return {
         table.insert(vim.g.tinymist_subscribers, callback)
       end,
 
-      servers = {
+      setup = {
+        ["*"] = function(_, config)
+          config.capabilities = require("blink.cmp").get_lsp_capabilities(config.capabilities)
+        end,
+      },
+
+      servers = vim.tbl_extend("keep", {
         ["*"] = {
           capabilities = {
             workspace = {
@@ -34,189 +41,12 @@ return {
             },
           },
         },
-
-        -- basedpyright = {},
-
-        biome = {},
-
-        dartls = {},
-
-        docker_language_server = {},
-
-        gopls = {
-          settings = {
-            gopls = {
-              ui = {
-                codelenses = {
-                  generate = true,
-                  gc_details = true,
-                  test = true,
-                  tidy = true,
-                  upgrade_dependency = true,
-                  vendor = true,
-                },
-                semanticTokens = true,
-              },
-
-              analyses = {
-                unusedparams = true,
-                shadow = true,
-                nilness = true,
-                unusedwrite = true,
-                useany = true,
-              },
-
-              staticcheck = true,
-
-              gofumpt = true,
-
-              hints = {
-                assignVariableTypes = true,
-                compositeLiteralFields = true,
-                compositeLiteralTypes = true,
-                constantValues = true,
-                functionTypeParameters = true,
-                parameterNames = true,
-                rangeVariableTypes = true,
-              },
-            },
-          },
-        },
-
-        hyprls = {},
-
-        intelephense = {},
-
-        jdtls = {},
-
-        jsonls = {
-          settings = {
-            json = {
-              format = {
-                enable = false,
-              },
-              schemaStore = {
-                enable = true,
-              },
-            },
-          },
-          on_attach = function(client)
-            client.server_capabilities.documentFormattingProvider = false
-            client.server_capabilities.documentRangeFormattingProvider = false
-          end,
-        },
-
-        lua_ls = {
-          settings = {
-            Lua = {
-              workspace = {
-                checkThirdParty = false,
-              },
-              codeLens = {
-                enable = true,
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
-              doc = {
-                privateName = { "^_" },
-              },
-              hint = {
-                enable = true,
-                setType = false,
-                paramType = true,
-                semicolon = "Disable",
-                arrayIndex = "Disable",
-              },
-            },
-          },
-        },
-
-        nixd = {
-          settings = {
-            nixd = {
-              nixpkgs = {
-                expr = "import <nixpkgs> { }",
-              },
-              formatting = {
-                command = { "nixfmt" },
-              },
-              options = {
-                nixos = {
-                  expr = '(builtins.getFlake "/home/pahril/.config/nixos-config").nixosConfigurations."nixu".config',
-                },
-                flake_parts = {
-                  expr = 'let flake = builtins.getFlake ("/tmp/NixOS_Home-Manager"); in flake.debug.options // flake.currentSystem.options',
-                },
-              },
-            },
-          },
-        },
-
-        pyright = {},
-
-        python = {
-          analysis = {
-            ignore = { "*" },
-          },
-        },
-
-        ruff = {},
-
-        terraformls = {},
-
-        tinymist = {
-          settings = {
-            formatterMode = "typstyle",
-            exportPdf = "onType",
-            semanticTokens = "enable",
-            lint = {
-              enabled = true,
-            },
-          },
-          handlers = {
-            ["tinymist/devEvent"] = function(_, result, ctx)
-              vim.g.tinymist_subscribers = vim.g.tinymist_subscribers or {}
-              for i = #vim.g.tinymist_subscribers, 1, -1 do
-                local callback = vim.g.tinymist_subscribers[i]
-                if callback(result) then
-                  table.remove(vim.g.tinymist_subscribers, i)
-                end
-              end
-            end,
-          },
-          init_options = {
-            hasWidgets = true,
-          },
-        },
-
-        -- tsgo = {},
-        ts_ls = {},
-
-        yamlls = {
-          settings = {
-            yaml = {
-              format = {
-                enable = true,
-                singleQuote = false,
-              },
-              schemaStore = {
-                enable = true,
-                url = "https://www.schemastore.org/api/json/catalog.json",
-              },
-              validate = true,
-              completion = true,
-              hover = true,
-            },
-          },
-        },
-      },
+      }, require("config.servers")),
 
       codelens = {
         enabled = true,
       },
 
-      ---@type vim.diagnostic.Opts
       diagnostics = {
         underline = true,
         update_in_insert = false,
@@ -237,7 +67,7 @@ return {
       },
 
       inlay_hints = {
-        enabled = false,
+        enabled = true,
       },
     },
   },
