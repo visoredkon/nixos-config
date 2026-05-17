@@ -1,9 +1,11 @@
+local java_home = os.getenv("JAVA_HOME") or vim.fn.system("readlink -f $(command -v java)"):match("(.+)/bin/java")
+
 return {
   settings = {
     java = {
       configuration = {
         runtimes = {
-          { name = "JavaSE-21", path = "/usr/lib/jvm/java-21-openjdk", default = true },
+          { name = "JavaSE-21", path = java_home, default = true },
         },
       },
       eclipse = {

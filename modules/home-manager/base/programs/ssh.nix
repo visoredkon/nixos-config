@@ -1,19 +1,30 @@
 {
   config,
+  hostname,
   lib,
+  pkgs,
   sshLib,
   ...
 }:
 let
-  inherit (sshLib) sshSecretsPath sshPubKeysPath mkPubKeyLink;
-
-  sopsHostsFile = "${sshSecretsPath}/hosts.yaml";
+  inherit (sshLib) mkPubKeyLink sshPubKeysPath sshSecretsPath;
 
   hostNames = [
     "aura"
     "genesis"
     "siti"
   ];
+
+  sopsHostsFile = "${sshSecretsPath}/hosts.yaml";
+
+  mkHostConfig = name: ''
+    Host ${name}
+      HostName ${secretPlaceholder name "hostname"}
+      User ${secretPlaceholder name "user"}
+      Port ${secretPlaceholder name "port"}
+      IdentityFile ${config.sops.secrets."ssh/hosts/${name}/private_key".path}
+      IdentitiesOnly yes
+  '';
 
   mkHostSecrets =
     name:
@@ -34,21 +45,19 @@ let
       ];
 
   secretPlaceholder = name: field: config.sops.placeholder."ssh/hosts/${name}/${field}";
-
-  mkHostConfig = name: ''
-    Host ${name}
-      HostName ${secretPlaceholder name "hostname"}
-      User ${secretPlaceholder name "user"}
-      Port ${secretPlaceholder name "port"}
-      IdentityFile ${config.sops.secrets."ssh/hosts/${name}/private_key".path}
-  '';
 in
 {
-  home.file = lib.listToAttrs (
-    map (
-      name: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeysPath}/vps/${name}.pub")
-    ) hostNames
-  );
+  home = {
+    file = lib.listToAttrs (
+      map (
+        name: lib.nameValuePair ".ssh/vps/${name}.pub" (mkPubKeyLink "${sshPubKeysPath}/vps/${name}.pub")
+      ) hostNames
+    );
+
+    sessionVariables = lib.mkIf (hostname == "nixu") {
+      SSH_ASKPASS = "${pkgs.seahorse}/libexec/seahorse/ssh-askpass";
+    };
+  };
 
   sops.secrets = lib.listToAttrs (lib.concatMap mkHostSecrets hostNames);
 

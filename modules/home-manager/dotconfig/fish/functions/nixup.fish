@@ -62,6 +62,14 @@ function nixup
         end
     end
 
+    function _nixup_flake_update
+        nix flake update --flake "$config_dir" $argv
+        if test $status -ne 0
+            echo (set_color red)"Flake update failed."(set_color normal)
+            return 1
+        end
+    end
+
     function _nixup_git_sync
         set -l commit_message $argv[1]
         set -l cfg_dir $argv[2]
@@ -91,11 +99,7 @@ function nixup
             end
             set secrets_hash (git -C "$sec_dir" rev-parse --short HEAD)
             echo (set_color yellow)"Updating secrets flake input..."(set_color normal)
-            sudo nix flake update --flake "$cfg_dir" secrets
-            if test $status -ne 0
-                echo (set_color red)"Flake update failed."(set_color normal)
-                return 1
-            end
+            _nixup_flake_update secrets
             git -C "$cfg_dir" add "$sec_dir" flake.lock
         end
         if git -C "$cfg_dir" diff --quiet --cached
@@ -234,7 +238,7 @@ function nixup
             if $should_update
                 echo ""
                 echo (set_color yellow)"Updating flake inputs..."(set_color normal)
-                sudo nix flake update --flake "$config_dir"
+                _nixup_flake_update
                 if test $status -ne 0
                     echo (set_color red)"Flake update failed. Aborting."(set_color normal)
                     return 1
@@ -326,7 +330,7 @@ function nixup
             end
             echo ""
             echo (set_color yellow)"Updating secrets flake input..."(set_color normal)
-            sudo nix flake update --flake "$config_dir" secrets
+            _nixup_flake_update secrets
             if test $status -ne 0
                 echo (set_color red)"Flake update failed."(set_color normal)
                 return 1

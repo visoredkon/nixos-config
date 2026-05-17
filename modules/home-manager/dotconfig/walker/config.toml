@@ -1,0 +1,18 @@
+theme = "catppuccin-mocha"
+
+[keybinds]
+next = ["Down", "ctrl j"]
+previous = ["Up", "ctrl k"]
+
+[providers.clipboard]
+max_items = 300
+
+[providers.actions]
+fallback = [
+  { action = "menus:open", label = "open", after = "Nothing" },
+  { action = "menus:default", label = "run", after = "Close" },
+  { action = "menus:parent", label = "back", bind = "Escape", after = "Nothing" },
+
+  { action = "decrease", label = "-5%", bind = "ctrl j", after = "AsyncClearReload" },
+  { action = "increase", label = "+5%", bind = "ctrl k", after = "AsyncClearReload" },
+]

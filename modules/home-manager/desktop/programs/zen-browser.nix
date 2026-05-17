@@ -8,18 +8,18 @@
 let
   zenPackage = inputs.zen-browser.packages.${pkgs.stdenv.hostPlatform.system}.beta;
 
-  # retrieveZenCatppuccin =
-  #   {
-  #     file,
-  #     sha256 ? "",
-  #   }:
-  #   builtins.readFile (
-  #     builtins.fetchurl {
-  #       inherit sha256;
-  #
-  #       url = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/Mocha/Green/${file}";
-  #     }
-  #   );
+  retrieveZenCatppuccin =
+    {
+      file,
+      sha256 ? "",
+    }:
+    builtins.readFile (
+      builtins.fetchurl {
+        inherit sha256;
+
+        url = "https://raw.githubusercontent.com/catppuccin/zen-browser/refs/heads/main/themes/Mocha/Green/${file}";
+      }
+    );
 in
 {
   imports = [ inputs.zen-browser.homeModules.beta ];
@@ -115,14 +115,14 @@ in
           user_pref("toolkit.telemetry.enabled", false);
         '';
 
-        # userChrome = retrieveZenCatppuccin {
-        #   file = "userChrome.css";
-        #   sha256 = "sha256:1nz7305bys8h8hycmwgifzc2lwvydzri3zqg9dxadd9jsm4800bn";
-        # };
-        # userContent = retrieveZenCatppuccin {
-        #   file = "userContent.css";
-        #   sha256 = "sha256:0l551lp5ds09lx0v83vz2kvzahvjg9iz090y8qm6pc06nnn1llx9";
-        # };
+        userChrome = retrieveZenCatppuccin {
+          file = "userChrome.css";
+          sha256 = "sha256:1nz7305bys8h8hycmwgifzc2lwvydzri3zqg9dxadd9jsm4800bn";
+        };
+        userContent = retrieveZenCatppuccin {
+          file = "userContent.css";
+          sha256 = "sha256:0l551lp5ds09lx0v83vz2kvzahvjg9iz090y8qm6pc06nnn1llx9";
+        };
       };
     };
   };

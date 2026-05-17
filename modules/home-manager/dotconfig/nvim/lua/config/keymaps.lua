@@ -33,6 +33,9 @@ vim.keymap.set("n", "<leader>pp", function()
     end
 
     local expanded_path = vim.fn.expand(filepath)
+    if not expanded_path:find("^/") and not expanded_path:find("^~") then
+      expanded_path = vim.fn.expand("%:p:h") .. "/" .. expanded_path
+    end
     local command = string.format("wl-paste > %s", vim.fn.shellescape(expanded_path))
 
     vim.fn.jobstart(command, {

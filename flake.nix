@@ -16,8 +16,8 @@
     };
 
     hyprland = {
-      url = "github:hyprwm/Hyprland";
-      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:hyprwm/Hyprland/v0.55.2";
+      # inputs.nixpkgs.follows = "nixpkgs";
     };
 
     sops-nix = {
@@ -43,6 +43,17 @@
     catppuccin = {
       url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    elephant = {
+      url = "github:abenz1267/elephant";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    walker = {
+      url = "github:abenz1267/walker";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.elephant.follows = "elephant";
     };
 
     stylix = {
@@ -99,11 +110,15 @@
             "https://attic.xuyh0120.win/lantian"
             "https://hyprland.cachix.org"
             "https://nix-community.cachix.org"
+            "https://walker.cachix.org"
+            "https://walker-git.cachix.org"
           ];
           extra-trusted-public-keys = [
             "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
             "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
             "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+            "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
+            "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
           ];
           fallback = true;
         };
@@ -218,6 +233,7 @@
                 username
                 hostname
                 ;
+              secretsPath = inputs.secrets;
             };
           };
           home-manager.users.${username} =

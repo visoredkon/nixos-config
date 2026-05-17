@@ -115,7 +115,7 @@ let
     ];
 
     office = with pkgs; [
-      obsidian
+      (obsidian.override { commandLineArgs = "--password-store=gnome-libsecret"; })
       zotero
     ];
 

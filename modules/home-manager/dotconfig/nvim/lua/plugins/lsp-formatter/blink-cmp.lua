@@ -119,8 +119,8 @@ return {
           opts = {
             trailing_slash = true,
             label_trailing_slash = true,
-            get_cwd = function(context)
-              return vim.fn.getcwd()
+            get_cwd = function(_)
+              return vim.fn.expand("%:p:h")
             end,
             show_hidden_files_by_default = false,
           },

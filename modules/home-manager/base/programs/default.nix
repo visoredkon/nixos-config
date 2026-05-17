@@ -11,6 +11,7 @@
     ./lazygit.nix
     ./neovim.nix
     ./nix-index.nix
+    ./nix.nix
     ./pay-respects.nix
     ./shell.nix
     ./ssh.nix

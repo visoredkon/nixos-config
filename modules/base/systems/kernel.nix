@@ -26,7 +26,9 @@
       "i915.enable_psr=0"
       "intel_idle.max_cstate=4"
       "intel_pstate=active"
-      "mitigations=off"
+      # mitigations=on: security over performance (5-10% penalty on pre-2020 CPUs)
+      "mitigations=on"
+      "usbcore.autosuspend=-1"
       "nowatchdog"
       "panic=5"
       "split_lock_detect=off"

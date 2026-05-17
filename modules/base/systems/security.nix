@@ -1,4 +1,6 @@
 {
+  config,
+  pkgs,
   username,
   ...
 }:
@@ -28,6 +30,14 @@
     gnupg = {
       agent = {
         enable = true;
+
+        pinentryPackage =
+          if config.services.displayManager.sddm.enable then pkgs.pinentry-qt else pkgs.pinentry-curses;
+
+        settings = {
+          "default-cache-ttl" = 86400;
+          "max-cache-ttl" = 86400;
+        };
       };
     };
 
@@ -35,10 +45,18 @@
   };
 
   services = {
-    gnome.gnome-keyring = {
-      enable = true;
+    gnome = {
+      gnome-keyring = {
+        enable = true;
+      };
+
+      gcr-ssh-agent = {
+        enable = true;
+      };
     };
   };
+
+  environment.systemPackages = with pkgs; [ libsecret ];
 
   users.users.${username} = {
     extraGroups = [

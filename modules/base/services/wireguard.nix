@@ -140,4 +140,12 @@ in
       };
     };
   };
+
+  systemd.services."wg-quick-wg0" = {
+    serviceConfig = {
+      PrivateTmp = true;
+      ProtectHome = true;
+      NoNewPrivileges = true;
+    };
+  };
 }

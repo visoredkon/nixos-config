@@ -1,5 +1,6 @@
 require("hyprland.keybinds.apps")
 require("hyprland.keybinds.multimedia")
 require("hyprland.keybinds.utilities")
+require("hyprland.keybinds.walker")
 require("hyprland.keybinds.windows")
 require("hyprland.keybinds.workspaces")

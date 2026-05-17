@@ -11,3 +11,9 @@ hl.layer_rule({
   match = { namespace = "^(rofi)$" },
   no_screen_share = true,
 })
+
+hl.layer_rule({
+  name = "no-screen-share-walker",
+  match = { namespace = "^(walker)$" },
+  no_screen_share = true,
+})
