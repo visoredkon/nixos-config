@@ -1,5 +1,7 @@
 {
   config,
+  lib,
+  pkgs,
   ...
 }:
 let
@@ -14,6 +16,11 @@ in
       settings = {
         user = {
           inherit (gitUser) name email;
+        };
+
+        ui = {
+          diff-formatter = ":git";
+          pager = "${lib.getExe pkgs.delta}";
         };
       };
     };

@@ -8,7 +8,6 @@
     ./direnv.nix
     ./eza.nix
     ./gh.nix
-    ./lazygit.nix
     ./neovim.nix
     ./nix-index.nix
     ./nix.nix

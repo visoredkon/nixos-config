@@ -17,15 +17,7 @@ return {
         end,
         fish = { "fish_indent" },
         lua = { "stylua" },
-        markdown = function(bufnr)
-          local fname = vim.api.nvim_buf_get_name(bufnr)
-
-          if fname:match("slides%.md") or fname:match("pages/.*%.md") then
-            return { "prettier" }
-          end
-
-          return { "dprint" }
-        end,
+        markdown = { "prettier" },
         nix = { "nixfmt" },
         php = { "pint" },
         python = { "ruff" },

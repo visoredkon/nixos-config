@@ -545,6 +545,7 @@ scan_wifi() {
 scan_wifi_with_retry() {
   local attempt
   local scan
+  local delay=$SCAN_RETRY_DELAY_SECONDS
 
   for ((attempt = 1; attempt <= SCAN_MAX_ATTEMPTS; attempt++)); do
     scan=$(scan_wifi || true)
@@ -555,8 +556,9 @@ scan_wifi_with_retry() {
     fi
 
     if ((attempt < SCAN_MAX_ATTEMPTS)); then
-      info "Scan attempt $attempt/$SCAN_MAX_ATTEMPTS returned no data; retrying..."
-      sleep "$SCAN_RETRY_DELAY_SECONDS"
+      info "Scan attempt $attempt/$SCAN_MAX_ATTEMPTS returned no data; retrying in ${delay}s..."
+      sleep "$delay"
+      delay=$((delay * 2))
     fi
   done
 

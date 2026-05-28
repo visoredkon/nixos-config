@@ -51,6 +51,16 @@ function nixup
         end
     end
 
+    function _nixup_flake_update
+        set -l cfg_dir $argv[1]
+        set -e argv[1]
+        nix flake update --flake "$cfg_dir" $argv
+        if test $status -ne 0
+            echo (set_color red)"Flake update failed."(set_color normal)
+            return 1
+        end
+    end
+
     function _nixup_fmt
         set -l cfg_dir $argv[1]
         echo ""
@@ -58,14 +68,6 @@ function nixup
         fish -c "cd '$cfg_dir'; and nix fmt"
         if test $status -ne 0
             echo (set_color red)"Formatting failed. Aborting."(set_color normal)
-            return 1
-        end
-    end
-
-    function _nixup_flake_update
-        nix flake update --flake "$config_dir" $argv
-        if test $status -ne 0
-            echo (set_color red)"Flake update failed."(set_color normal)
             return 1
         end
     end
@@ -99,7 +101,7 @@ function nixup
             end
             set secrets_hash (git -C "$sec_dir" rev-parse --short HEAD)
             echo (set_color yellow)"Updating secrets flake input..."(set_color normal)
-            _nixup_flake_update secrets
+            _nixup_flake_update "$cfg_dir" secrets
             git -C "$cfg_dir" add "$sec_dir" flake.lock
         end
         if git -C "$cfg_dir" diff --quiet --cached
@@ -119,7 +121,6 @@ function nixup
             return 1
         end
         if $should_push
-            echo ""
             git -C "$cfg_dir" push
             if test $status -ne 0
                 echo (set_color red)"Push failed. Aborting."(set_color normal)
@@ -238,7 +239,7 @@ function nixup
             if $should_update
                 echo ""
                 echo (set_color yellow)"Updating flake inputs..."(set_color normal)
-                _nixup_flake_update
+                _nixup_flake_update "$config_dir"
                 if test $status -ne 0
                     echo (set_color red)"Flake update failed. Aborting."(set_color normal)
                     return 1
@@ -330,7 +331,7 @@ function nixup
             end
             echo ""
             echo (set_color yellow)"Updating secrets flake input..."(set_color normal)
-            _nixup_flake_update secrets
+            _nixup_flake_update "$config_dir" secrets
             if test $status -ne 0
                 echo (set_color red)"Flake update failed."(set_color normal)
                 return 1

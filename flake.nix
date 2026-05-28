@@ -15,11 +15,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland = {
-      url = "github:hyprwm/Hyprland/v0.55.2";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -108,15 +103,15 @@
         nix.settings = {
           extra-substituters = [
             "https://attic.xuyh0120.win/lantian"
-            "https://hyprland.cachix.org"
             "https://nix-community.cachix.org"
+            "https://catppuccin.cachix.org"
             "https://walker.cachix.org"
             "https://walker-git.cachix.org"
           ];
           extra-trusted-public-keys = [
             "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-            "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
             "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+            "catppuccin.cachix.org-1:noG/4HkbhJb+lUAdKrph6LaozJvAeEEZj4N732IysmU="
             "walker.cachix.org-1:fG8q+uAaMqhsMxWjwvk0IMb4mFPFLqHjuvfwQxE4oJM="
             "walker-git.cachix.org-1:vmC0ocfPWh0S/vRAQGtChuiZBTAe4wiKDeyyXM0/7pM="
           ];
@@ -171,7 +166,7 @@
 
               (_final: prev: {
                 pvetui = inputs.pvetui.packages.${prev.stdenv.hostPlatform.system}.default.overrideAttrs (_: {
-                  vendorHash = "sha256-5dcnwOlai2OAC28GgO2IAi1W039+sut+9ThbntNadS0=";
+                  vendorHash = "sha256-isAJWEdUD2BS6gDWbVXC0sErZdIQmcZ0KnN1ET/bEjQ=";
                 });
               })
 

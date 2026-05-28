@@ -18,6 +18,16 @@
           fastfetch
         end
 
+        set -l HM_VARS /etc/profiles/per-user/pahril/etc/profile.d/hm-session-vars.fish
+        if test -f "$HM_VARS"
+          set -l target (readlink "$HM_VARS")
+          if test "$target" != "$__HM_SESS_VARS_TARGET"
+            set -g __HM_SESS_VARS_SOURCED ""
+            source "$HM_VARS"
+            set -gx __HM_SESS_VARS_TARGET "$target"
+          end
+        end
+
         batman --export-env | source
 
         mise activate fish | source

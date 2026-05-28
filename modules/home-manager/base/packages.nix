@@ -25,11 +25,12 @@
 
     ffmpeg
 
+    antigravity-cli
     claude-code
     codebase-memory-mcp
     copilot-cli
-    forgecode
     pkgs-unstable.gemini-cli
+    kiro
     kiro-cli
     opencode
 

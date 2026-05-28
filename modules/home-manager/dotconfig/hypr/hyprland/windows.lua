@@ -28,6 +28,13 @@ hl.window_rule({
 })
 
 hl.window_rule({
+  name = "float-zotero",
+  match = { class = "(Zotero)", title = "^$" },
+  float = true,
+  center = true,
+})
+
+hl.window_rule({
   name = "ignore-maximize",
   match = { class = ".*" },
   suppress_event = "maximize",

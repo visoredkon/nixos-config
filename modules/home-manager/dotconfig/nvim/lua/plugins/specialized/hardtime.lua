@@ -3,7 +3,7 @@ return {
   dependencies = { "MunifTanjim/nui.nvim" },
   event = "VeryLazy",
   opts = {
-    enabled = true,
+    enabled = false,
     max_count = 3,
     max_time = 1000,
 

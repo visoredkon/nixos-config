@@ -1,6 +1,8 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   init = function()
+    vim.treesitter.language.register("_", "yaml.jinja")
+
     require("vim.treesitter.query").add_predicate("is-mise?", function(_, _, bufnr, _)
       local filepath = vim.api.nvim_buf_get_name(tonumber(bufnr) or 0)
       local filename = vim.fn.fnamemodify(filepath, ":t")

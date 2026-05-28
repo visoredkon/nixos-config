@@ -43,6 +43,47 @@ return {
 
     completion = {
       keyword = { range = "full" },
+      menu = {
+        auto_show = true,
+        auto_show_delay_ms = 0,
+        max_height = 12,
+        min_width = 20,
+        border = "rounded",
+        scrollbar = true,
+        draw = {
+          components = {
+            kind_icon = {
+              text = function(ctx)
+                local icon = ctx.kind_icon
+                if ctx.item.source_name == "LSP" then
+                  local color_item =
+                    require("nvim-highlight-colors").format(ctx.item.documentation, { kind = ctx.kind })
+                  if color_item and color_item.abbr ~= "" then
+                    icon = color_item.abbr
+                  end
+                end
+                return icon .. ctx.icon_gap
+              end,
+              highlight = function(ctx)
+                local highlight = "BlinkCmpKind" .. ctx.kind
+                if ctx.item.source_name == "LSP" then
+                  local color_item =
+                    require("nvim-highlight-colors").format(ctx.item.documentation, { kind = ctx.kind })
+                  if color_item and color_item.abbr_hl_group then
+                    highlight = color_item.abbr_hl_group
+                  end
+                end
+                return highlight
+              end,
+            },
+          },
+          columns = {
+            { "kind_icon" },
+            { "label", "label_description", gap = 1 },
+            { "source_name" },
+          },
+        },
+      },
       trigger = {
         show_on_backspace = true,
         show_on_keyword = true,
@@ -61,21 +102,6 @@ return {
           enabled = true,
           kind_resolution = { enabled = true },
           semantic_token_resolution = { enabled = true },
-        },
-      },
-      menu = {
-        auto_show = true,
-        auto_show_delay_ms = 0,
-        max_height = 12,
-        min_width = 20,
-        border = "rounded",
-        scrollbar = true,
-        draw = {
-          columns = {
-            { "kind_icon" },
-            { "label", "label_description", gap = 1 },
-            { "source_name" },
-          },
         },
       },
       documentation = {

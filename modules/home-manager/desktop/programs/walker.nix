@@ -32,6 +32,9 @@ in
     ".config/walker/config.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/walker/config.toml";
 
+    ".config/elephant/clipboard.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/elephant/clipboard.toml";
+
     ".config/elephant/menus/brightness.lua".source =
       config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.config/nixos-config/modules/home-manager/dotconfig/elephant/menus/brightness.lua";
 

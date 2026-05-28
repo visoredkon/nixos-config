@@ -1,5 +1,6 @@
 {
   pkgs,
+  # username,
   ...
 }:
 let
@@ -37,4 +38,10 @@ in
       DOCKER_CLI_PLUGIN_DIRECTORY = "/run/current-system/sw/libexec/docker/cli-plugins";
     };
   };
+
+  # users.users.${username} = {
+  #   extraGroups = [
+  #     "docker"
+  #   ];
+  # };
 }

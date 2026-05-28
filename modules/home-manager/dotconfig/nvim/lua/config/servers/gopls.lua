@@ -9,6 +9,7 @@ return {
         nilness = true,
         unusedwrite = true,
         useany = true,
+        ST1000 = false,
       },
       hints = {
         assignVariableTypes = true,

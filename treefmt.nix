@@ -15,18 +15,13 @@
       ];
     };
 
-    dprint = {
+    prettier = {
       enable = true;
       includes = [
         "**/*.md"
       ];
       settings = {
-        lineWidth = 120;
-        plugins = pkgs.dprint-plugins.getPluginList (
-          p: with p; [
-            dprint-plugin-markdown
-          ]
-        );
+        printWidth = 120;
       };
     };
 

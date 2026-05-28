@@ -43,15 +43,11 @@ let
       '';
     };
 
-  antigravity-wrapped = mkFhsApp {
+  antigravity-wrapped = mkWrappedApp {
     name = "antigravity";
-    pkg = pkgs-unstable.antigravity.override {
-      commandLineArgs = [ "--password-store=gnome-libsecret" ];
-    };
+    pkg = pkgs.antigravity;
     extraPkgs = with pkgs; [
       google-chrome
-      nodejs_latest
-      uv
     ];
   };
 
@@ -71,23 +67,13 @@ let
   lmstudio-wrapped = mkFhsApp {
     name = "lm-studio";
     pkg = pkgs-unstable.lmstudio;
-    extraPkgs = with pkgs; [
-      nodejs_latest
-      uv
-    ];
   };
 
-  vscode-wrapped = mkWrappedApp {
+  vscode-wrapped = mkFhsApp {
     name = "code";
     pkg = pkgs-unstable.vscode.override {
       commandLineArgs = [ "--password-store=gnome-libsecret" ];
     };
-    extraPkgs = with pkgs; [
-      dotnetCorePackages.sdk_10_0-bin
-      gradle
-      javaPackages.compiler.temurin-bin.jdk-25
-      nodejs_latest
-    ];
   };
 
   pkgGroups = {

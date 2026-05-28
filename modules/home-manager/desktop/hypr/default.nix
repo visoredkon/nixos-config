@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   pkgs,
   ...
 }:
@@ -27,7 +26,7 @@
           };
           workspace = {
             library = [
-              "${inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland}/share/hypr/stubs"
+              "${pkgs.hyprland}/share/hypr/stubs"
             ];
           };
         };

@@ -68,7 +68,7 @@ in
     enableDefaultConfig = false;
     includes = [ config.sops.templates."ssh-hosts".path ];
 
-    matchBlocks."*" = {
+    settings."*" = {
       addKeysToAgent = "yes";
       compression = false;
       controlMaster = "auto";

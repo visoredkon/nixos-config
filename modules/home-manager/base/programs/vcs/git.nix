@@ -26,7 +26,7 @@ in
     };
   };
 
-  programs.ssh.matchBlocks."github.com" = {
+  programs.ssh.settings."github.com" = {
     hostname = "github.com";
     identityFile = config.sops.secrets."ssh/github/authentication".path;
   };
@@ -41,6 +41,10 @@ in
     settings = {
       commit = {
         gpgsign = true;
+      };
+
+      merge = {
+        conflictStyle = "zdiff3";
       };
 
       init = {

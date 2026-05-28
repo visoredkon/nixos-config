@@ -10,15 +10,14 @@ vim.keymap.set("n", "<leader>fk", ":Telescope keymaps<CR>", {
   desc = "Find keymaps",
 })
 
-vim.keymap.set("n", "d", '"_d', {
-  noremap = true,
-  silent = true,
-})
+vim.keymap.set("n", "c", '"_c', { noremap = true, silent = true })
+vim.keymap.set("n", "d", '"_d', { noremap = true, silent = true })
 
-vim.keymap.set("v", "d", '"_d', {
-  noremap = true,
-  silent = true,
-})
+vim.keymap.set("v", "c", '"_c', { noremap = true, silent = true })
+vim.keymap.set("v", "d", '"_d', { noremap = true, silent = true })
+
+vim.keymap.set("x", "p", '"_dP', { noremap = true, silent = true })
+vim.keymap.set("x", "P", '"_dP', { noremap = true, silent = true })
 
 vim.keymap.set("n", "<leader>pp", function()
   local input_opts = {

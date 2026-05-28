@@ -4,9 +4,6 @@ theme = "catppuccin-mocha"
 next = ["Down", "ctrl j"]
 previous = ["Up", "ctrl k"]
 
-[providers.clipboard]
-max_items = 300
-
 [providers.actions]
 fallback = [
   { action = "menus:open", label = "open", after = "Nothing" },

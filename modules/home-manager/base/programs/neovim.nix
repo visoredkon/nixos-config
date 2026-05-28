@@ -43,6 +43,7 @@
       hyprls
       intelephense
       jdt-language-server
+      jinja-lsp
       lua-language-server
       nixd
       terraform-ls
@@ -54,7 +55,6 @@
       # Linters
       actionlint
       deadnix
-      markdownlint-cli2
       selene
       shellcheck
       statix
@@ -65,11 +65,11 @@
 
       # Formatters
       biome
-      dprint
       taplo
       yamlfmt
       gofumpt
       nixfmt
+      prettier
       shfmt
       stylua
 

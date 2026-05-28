@@ -32,24 +32,7 @@ in
       tridactyl-native
     ];
 
-    policies = {
-      DisableAppUpdate = true;
-      DisableTelemetry = true;
-      DisablePocket = true;
-      DisableFirefoxStudies = true;
-      DisableFeedbackCommands = true;
-      DontCheckDefaultBrowser = true;
-      NoDefaultBookmarks = true;
-      OfferToSaveLogins = false;
-      AutofillAddressEnabled = true;
-      AutofillCreditCardEnabled = false;
-      EnableTrackingProtection = {
-        Value = true;
-        Locked = true;
-        Cryptomining = true;
-        Fingerprinting = true;
-      };
-    };
+    policies = lib.mkForce { };
 
     profiles = {
       default = {
@@ -60,6 +43,7 @@ in
         # Alternative: `profiles.default.settings` can replace extraConfig with a more idiomatic attrset syntax
         extraConfig = ''
           // Declutter & UX
+          user_pref("app.update.enabled", false);
           user_pref("browser.aboutConfig.showWarning", true);
           user_pref("browser.compactmode.show", true);
           user_pref("browser.download.open_pdf_attachments_inline", true);
@@ -88,31 +72,69 @@ in
           user_pref("layers.gpu-process.enabled", true);
 
           // Privacy & Security
+          user_pref("app.normandy.enabled", false);
+          user_pref("app.shield.optoutstudies.enabled", false);
           user_pref("beacon.enabled", false);
-          user_pref("browser.contentblocking.category", "strict");
+          user_pref("browser.contentblocking.category", "custom");
+          user_pref("browser.places.speculativeConnect.enabled", false);
+          user_pref("browser.safebrowsing.downloads.enabled", true);
+          user_pref("browser.safebrowsing.downloads.remote.enabled", true);
+          user_pref("browser.safebrowsing.enabled", true);
+          user_pref("browser.safebrowsing.malware.enabled", true);
+          user_pref("browser.safebrowsing.phishing.enabled", true);
           user_pref("browser.safebrowsing.remoteLookups", false);
           user_pref("browser.send_pings", false);
           user_pref("datareporting.healthreport.uploadEnabled", false);
+          user_pref("datareporting.policy.dataSubmissionEnabled", false);
           user_pref("device.sensors.enabled", false);
           user_pref("dom.battery.enabled", false);
           user_pref("dom.security.https_only_mode", true);
           user_pref("dom.security.https_only_mode_ever_enabled", true);
+          user_pref("dom.security.https_only_mode_send_http_background_request", false);
+          user_pref("extensions.formautofill.addresses.enabled", true);
+          user_pref("extensions.formautofill.creditCards.available", false);
+          user_pref("extensions.formautofill.creditCards.enabled", false);
           user_pref("geo.enabled", false);
           user_pref("media.video_stats.enabled", false);
+          user_pref("network.captive-portal-service.enabled", false);
+          user_pref("network.connectivity-service.enabled", false);
           user_pref("network.cookie.cookieBehavior", 5);
           user_pref("network.dns.disablePrefetch", true);
+          user_pref("network.dns.disablePrefetchFromHTTPS", true);
           user_pref("network.http.referer.XOriginTrimmingPolicy", 2);
+          user_pref("network.http.speculative-parallel-limit", 0);
           user_pref("network.IDN_show_punycode", true);
           user_pref("network.predictor.enabled", false);
           user_pref("network.prefetch-next", false);
+          user_pref("network.trr.bootstrapAddress", "1.1.1.2");
+          user_pref("network.trr.custom_uri", "https://security.cloudflare-dns.com/dns-query");
+          user_pref("network.trr.mode", 1);
           user_pref("privacy.firstparty.isolate", false);
           user_pref("privacy.partition.network_state", true);
           user_pref("privacy.partition.serviceWorkers", true);
-          user_pref("privacy.trackingprotection.socialtracking.enabled", true);
+          user_pref("privacy.trackingprotection.cryptomining.enabled", true);
+          user_pref("privacy.trackingprotection.fingerprinting.enabled", true);
+          // threads.com breaks when true
+          user_pref("privacy.trackingprotection.socialtracking.enabled", false);
           user_pref("security.mixed_content.block_display_content", true);
+          user_pref("security.OCSP.require", true);
+          user_pref("security.pki.crlite_mode", 2);
+          user_pref("security.remote_settings.crlite_filters.enabled", true);
           user_pref("security.ssl.require_safe_negotiation", true);
+          user_pref("security.tls.enable_0rtt_data", false);
           user_pref("security.tls.version.min", 3);
+          user_pref("signon.autofillForms", false);
+          user_pref("signon.formlessCapture.enabled", false);
+          user_pref("signon.rememberSignons", false);
+          user_pref("toolkit.telemetry.archive.enabled", false);
+          user_pref("toolkit.telemetry.bhrPing.enabled", false);
           user_pref("toolkit.telemetry.enabled", false);
+          user_pref("toolkit.telemetry.firstShutdownPing.enabled", false);
+          user_pref("toolkit.telemetry.newProfilePing.enabled", false);
+          user_pref("toolkit.telemetry.server", "data:,");
+          user_pref("toolkit.telemetry.shutdownPingSender.enabled", false);
+          user_pref("toolkit.telemetry.unified", false);
+          user_pref("toolkit.telemetry.updatePing.enabled", false);
         '';
 
         userChrome = retrieveZenCatppuccin {
